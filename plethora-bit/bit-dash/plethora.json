@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "runtime": "plethora-bit@2",
+  "entry": "main.js",
+  "title": "Bit Dash",
+  "description": "Dash down the datastream, dodge corrupted 0s, and grab clean 1s before bitespeed overloads you. Tap a lane to dash there. How far can you push the clock?",
+  "tags": ["arcade", "reflex", "runner", "one-tap", "highscore", "retro"],
+  "permissions": ["haptics", "backgroundMusic"],
+  "dependencies": [],
+  "memory": {
+    "records": {
+      "bits_collected": {
+        "label": "Bits Collected",
+        "valueType": "number",
+        "order": "desc",
+        "format": "integer",
+        "period": "all_time",
+        "scope": "global",
+        "dedupe": "best_per_user"
+      }
+    }
+  }
+}
