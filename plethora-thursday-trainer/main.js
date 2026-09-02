@@ -431,9 +431,9 @@
 
   TRACKS.cheer = {
     good: [
-      { t: 0.00, p: pose({ torso: 0, y: 0.05, nlt: 16, nls: -18, flt: -16, fls: 18, nau: -150, naf: -168, fau: 150, faf: 168 }) },
-      { t: 0.45, p: pose({ torso: 0, y: -0.14, neck: -6, nlt: 14, nls: 24, flt: -14, fls: -24, nau: -168, naf: -176, fau: 168, faf: 176 }) },
-      { t: 1.00, p: pose({ torso: 0, y: 0.05, nlt: 16, nls: -18, flt: -16, fls: 18, nau: -150, naf: -168, fau: 150, faf: 168 }) }
+      { t: 0.00, p: pose({ torso: 0, y: 0.05, nlt: 16, nls: -18, flt: -16, fls: 18, nau: 128, naf: 150, fau: -128, faf: -150 }) },
+      { t: 0.45, p: pose({ torso: 0, y: -0.14, neck: -6, nlt: 14, nls: 24, flt: -14, fls: -24, nau: 146, naf: 160, fau: -146, faf: -160 }) },
+      { t: 1.00, p: pose({ torso: 0, y: 0.05, nlt: 16, nls: -18, flt: -16, fls: 18, nau: 128, naf: 150, fau: -128, faf: -150 }) }
     ]
   };
 
@@ -1377,8 +1377,8 @@
 
         else if (name === 'brief') {
           scene.mode = 'split'; scene.ex = e; scene.phase = 0; scene.mir = 1;
-          elHd.innerHTML = headerFor(e, e.target + '  ·  ' + setsTotal(e) + ' sets of ' +
-            (e.mode === 'time' ? e.seconds + 's' : e.reps));
+          elHd.innerHTML = headerFor(e, e.target + '  ·  ' + e.sets + ' sets of ' +
+            (e.mode === 'time' ? e.seconds + 's' : e.reps) + (e.perSide ? ' per side' : ''));
           var w = e.weight ? '<div class="card"><div class="k">Today’s load</div><div class="v">' + esc(weightText(e)) + '</div>' +
             '<div class="n">' + (S.weights[e.id] != null ? 'Adjusted from your last set.' : 'Starting point — leave two reps in the tank.') + '</div></div>' : '';
           elPanel.innerHTML =
@@ -1499,9 +1499,10 @@
 
       function afterSet() {
         var e = WORKOUT[S.ex];
+        var per = e.perSide ? ' / side' : '';
         var detail = e.mode === 'time'
-          ? setsTotal(e) + ' × ' + e.seconds + 's'
-          : setsTotal(e) + ' × ' + e.reps + (e.weight && S.profile.kit !== 'bodyweight' && suggestedWeight(e).kg != null
+          ? e.sets + ' × ' + e.seconds + 's' + per
+          : e.sets + ' × ' + e.reps + per + (e.weight && S.profile.kit !== 'bodyweight' && suggestedWeight(e).kg != null
             ? ' @ ' + suggestedWeight(e).kg + 'kg' : '');
         S.set += 1;
         try { ctx.platform.setProgress(progress()); } catch (err) { /* ignore */ }
@@ -1677,21 +1678,25 @@
         if (!r.w || !r.h) return;
 
         if (scene.mode === 'split' && scene.ex) {
-          var gap = Math.max(10, r.w * 0.03);
-          var pw = (r.w - gap) / 2;
-          var ph = Math.min(r.h - 18, pw * 1.45);
+          var margin = 14;
+          var bx = r.x + margin, bw = r.w - margin * 2;
+          var gap = Math.max(10, bw * 0.035);
+          var pw = (bw - gap) / 2;
+          var ph = Math.min(r.h - 22, pw * 1.9);
           var py = r.y + (r.h - ph) / 2 + 6;
-          panelFrame(g, r.x, py, pw, ph, C.good, 'RIGHT', 0);
-          panelFrame(g, r.x + pw + gap, py, pw, ph, C.bad, 'WRONG', 0);
-          drawFigureInPanel(g, scene.ex, 'good', scene.phase, r.x, py, pw, ph, timeMs, 1);
-          drawFigureInPanel(g, scene.ex, 'bad', scene.phase, r.x + pw + gap, py, pw, ph, timeMs, 1);
+          panelFrame(g, bx, py, pw, ph, C.good, 'RIGHT', 0);
+          panelFrame(g, bx + pw + gap, py, pw, ph, C.bad, 'WRONG', 0);
+          drawFigureInPanel(g, scene.ex, 'good', scene.phase, bx, py, pw, ph, timeMs, 1);
+          drawFigureInPanel(g, scene.ex, 'bad', scene.phase, bx + pw + gap, py, pw, ph, timeMs, 1);
         } else if (scene.mode === 'single' && scene.ex) {
-          drawFigureInPanel(g, scene.ex, 'good', scene.phase, r.x, r.y, r.w, r.h, timeMs, scene.mir);
+          var iw = Math.min(r.w * 0.34, 150);
+          var ih = iw * 1.3;
+          /* the inset owns the top-right corner, so the main figure moves down */
+          var top = S.showFault ? r.y + ih + 16 : r.y;
+          drawFigureInPanel(g, scene.ex, 'good', scene.phase, r.x, top, r.w, r.h - (top - r.y), timeMs, scene.mir);
           if (S.showFault) {
-            var iw = Math.min(r.w * 0.34, 150);
-            var ih = iw * 1.3;
             var ix = r.x + r.w - iw - 6;
-            var iy = r.y + 8;
+            var iy = r.y + 10;
             panelFrame(g, ix, iy, iw, ih, C.bad, 'WRONG', 0);
             drawFigureInPanel(g, scene.ex, 'bad', scene.phase, ix, iy, iw, ih, timeMs, 1);
           }
