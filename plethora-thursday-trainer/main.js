@@ -437,6 +437,139 @@
     ]
   };
 
+
+  /* ------------------------------------------------------------------ *
+   * Setup sequences: how you get into position and pick the weight up,
+   * before the first rep. Each is one looping animation with captions
+   * keyed to the phase, so the steps highlight as she performs them.
+   * ------------------------------------------------------------------ */
+
+  var SETUPS = {
+    rdl: {
+      dur: 11000,
+      steps: [
+        { until: 0.26, text: 'Feet hip-width, bar against your shins. Bend the knees and grip it just outside your legs.' },
+        { until: 0.46, text: 'Chest up, back flat, then push the floor away to bring it up with you.' },
+        { until: 0.66, text: 'Stand it up — knees and hips together, back flat. This pickup is a deadlift, not the exercise.' },
+        { until: 0.82, text: 'Standing tall, bar resting on your thighs. THIS is your start position.' },
+        { until: 1.00, text: 'Every rep goes down from here and comes back here. You only lift it off the floor once.' }
+      ],
+      track: [
+        { t: 0.00, p: pose({ y: 0.267, torso: 45, curve: -6, neck: -20, nau: 0, naf: 0, fau: 0, faf: 0, nlt: 55, nls: -65, nlf: 84, flt: 58, fls: -68, flf: 84 }) },
+        { t: 0.26, p: pose({ y: 0.267, torso: 45, curve: -6, neck: -20, nau: 0, naf: 0, fau: 0, faf: 0, nlt: 55, nls: -65, nlf: 84, flt: 58, fls: -68, flf: 84 }) },
+        { t: 0.46, p: pose({ y: 0.20, torso: 40, curve: -6, neck: -16, nau: 0, naf: 0, fau: 0, faf: 0, nlt: 42, nls: -54, nlf: 86, flt: 45, fls: -57, flf: 86 }) },
+        { t: 0.66, p: pose({ torso: 3, curve: -2, nau: 2, naf: 2, fau: 2, faf: 2, nlt: 1, nls: 1, flt: -4, fls: 5 }) },
+        { t: 0.82, p: pose({ torso: 3, curve: -2, nau: 2, naf: 2, fau: 2, faf: 2, nlt: 1, nls: 1, flt: -4, fls: 5 }) },
+        { t: 0.93, p: pose({ torso: 26, curve: -3, neck: -6, x: -0.012, nau: 1, naf: 1, fau: 1, faf: 1, nlt: -4, nls: 3, flt: -9, fls: 8 }) },
+        { t: 1.00, p: pose({ torso: 3, curve: -2, nau: 2, naf: 2, fau: 2, faf: 2, nlt: 1, nls: 1, flt: -4, fls: 5 }) }
+      ]
+    },
+    legcurl: {
+      dur: 9000,
+      steps: [
+        { until: 0.30, text: 'Set the ankle pad so it sits just above your heels, knees at the edge of the bench.' },
+        { until: 0.58, text: 'Lie face down and press your hips flat into the pad. Hold the handles.' },
+        { until: 0.80, text: 'Legs straight, no arch in your low back. That is the start.' },
+        { until: 1.00, text: 'Curl from there — heels to glutes, hips never leaving the pad.' }
+      ],
+      track: [
+        { t: 0.00, p: pose({ torso: -70, curve: -10, neck: 16, x: 0.08, y: -0.02, fau: -80, faf: -78, nau: -80, naf: -78, flt: 110, fls: 110, flf: 194, nlt: 110, nls: 110, nlf: 194 }) },
+        { t: 0.30, p: pose({ torso: -70, curve: -6, neck: 14, x: 0.08, y: 0.01, fau: -80, faf: -78, nau: -80, naf: -78, flt: 110, fls: 110, flf: 194, nlt: 110, nls: 110, nlf: 194 }) },
+        { t: 0.58, p: pose({ torso: -70, curve: 0, neck: 10, x: 0.08, y: 0.06, fau: -80, faf: -78, nau: -80, naf: -78, flt: 110, fls: 110, flf: 194, nlt: 110, nls: 110, nlf: 194 }) },
+        { t: 0.80, p: pose({ torso: -70, curve: 0, neck: 10, x: 0.08, y: 0.06, fau: -80, faf: -78, nau: -80, naf: -78, flt: 110, fls: 110, flf: 194, nlt: 110, nls: 110, nlf: 194 }) },
+        { t: 1.00, p: pose({ torso: -70, curve: 0, neck: 10, x: 0.08, y: 0.06, fau: -80, faf: -78, nau: -80, naf: -78, flt: 110, fls: 152, flf: 232, nlt: 110, nls: 150, nlf: 230 }) }
+      ]
+    },
+    bss: {
+      dur: 10000,
+      steps: [
+        { until: 0.25, text: 'Stand about one long stride in front of the bench, a weight in each hand.' },
+        { until: 0.52, text: 'Reach back and rest the top of your rear foot on the bench.' },
+        { until: 0.76, text: 'Check the distance: at the bottom your front shin should stay near vertical.' },
+        { until: 1.00, text: 'Chest tall, most of your weight in the front heel. Now sink straight down.' }
+      ],
+      track: [
+        { t: 0.00, p: pose({ torso: 2, nlt: 12, nls: 4, nlf: 92, flt: -14, fls: 2, flf: 90, nau: 2, naf: 3, fau: -2, faf: -3 }) },
+        { t: 0.25, p: pose({ torso: 2, nlt: 12, nls: 4, nlf: 92, flt: -14, fls: 2, flf: 90, nau: 2, naf: 3, fau: -2, faf: -3 }) },
+        { t: 0.52, p: pose({ torso: 3, nlt: 12, nls: 4, nlf: 92, flt: -34, fls: -96, flf: -24, nau: 2, naf: 3, fau: -2, faf: -3 }) },
+        { t: 0.76, p: pose({ torso: 3, nlt: 12, nls: 4, nlf: 92, flt: -34, fls: -96, flf: -24, nau: 2, naf: 3, fau: -2, faf: -3 }) },
+        { t: 1.00, p: pose({ torso: 14, neck: -6, y: 0.14, nlt: 30, nls: -4, nlf: 92, flt: -46, fls: -92, flf: -20, nau: 1, naf: 2, fau: -1, faf: -2 }) }
+      ]
+    },
+    sumo: {
+      dur: 9500,
+      steps: [
+        { until: 0.28, text: 'Start with the weight on the floor between your feet.' },
+        { until: 0.54, text: 'Step your feet wider than your shoulders and turn your toes out about 30°.' },
+        { until: 0.76, text: 'Bend your knees, take the weight in both hands and stand up tall with it.' },
+        { until: 1.00, text: 'Chest up, brace, then sit straight down between your knees.' }
+      ],
+      track: [
+        { t: 0.00, p: pose({ nlt: 7, nls: 5, nlf: 96, flt: -7, fls: -5, flf: 84, nau: 3, naf: -4, fau: -3, faf: 4 }) },
+        { t: 0.28, p: pose({ nlt: 7, nls: 5, nlf: 96, flt: -7, fls: -5, flf: 84, nau: 3, naf: -4, fau: -3, faf: 4 }) },
+        { t: 0.54, p: pose({ nlt: 20, nls: 18, nlf: 118, flt: -20, fls: -18, flf: 62, nau: 2, naf: -6, fau: -2, faf: 6 }) },
+        { t: 0.68, p: pose({ y: 0.15, torso: 6, nlt: 33, nls: 4, nlf: 118, flt: -33, fls: -4, flf: 62, nau: 2, naf: -5, fau: -2, faf: 5 }) },
+        { t: 0.82, p: pose({ nlt: 20, nls: 18, nlf: 118, flt: -20, fls: -18, flf: 62, nau: 2, naf: -6, fau: -2, faf: 6 }) },
+        { t: 1.00, p: pose({ y: 0.16, torso: 3, nlt: 32, nls: 3, nlf: 118, flt: -32, fls: -3, flf: 62, nau: 2, naf: -5, fau: -2, faf: 5 }) }
+      ]
+    },
+    mtn: {
+      dur: 8500,
+      steps: [
+        { until: 0.30, text: 'Crouch down and put your hands flat on the floor, directly under your shoulders.' },
+        { until: 0.58, text: 'Step both feet back until you are one straight line from head to heels.' },
+        { until: 0.80, text: 'Squeeze your glutes so the hips cannot sag. Arms straight.' },
+        { until: 1.00, text: 'Now drive one knee toward your chest, then swap. The hips stay level.' }
+      ],
+      track: [
+        { t: 0.00, p: plank({ y: 0.30, torso: 80, neck: -44, nlt: -20, nls: -85, nlf: -100, flt: -24, fls: -88, flf: -100 }) },
+        { t: 0.30, p: plank({ y: 0.30, torso: 80, neck: -44, nlt: -20, nls: -85, nlf: -100, flt: -24, fls: -88, flf: -100 }) },
+        { t: 0.58, p: plank({}) },
+        { t: 0.80, p: plank({}) },
+        { t: 1.00, p: plank({ nlt: 104, nls: 32, nlf: 100 }) }
+      ]
+    },
+    tap: {
+      dur: 8500,
+      steps: [
+        { until: 0.30, text: 'Set up in the same high plank: hands under shoulders, body in one line.' },
+        { until: 0.56, text: 'Take your feet wider than your hips — the wider they are, the steadier you are.' },
+        { until: 0.78, text: 'Squeeze the glutes and brace before the first tap.' },
+        { until: 1.00, text: 'Lift one hand to the opposite shoulder. Nothing else is allowed to move.' }
+      ],
+      track: [
+        { t: 0.00, p: plank({}) },
+        { t: 0.30, p: plank({}) },
+        { t: 0.56, p: plank({ flt: -78, fls: -78 }) },
+        { t: 0.78, p: plank({ flt: -78, fls: -78 }) },
+        { t: 1.00, p: plank({ flt: -78, fls: -78, nau: -58, naf: -132 }) }
+      ]
+    },
+    suitcase: {
+      dur: 9000,
+      steps: [
+        { until: 0.28, text: 'Put one heavy weight on the floor beside your foot.' },
+        { until: 0.54, text: 'Bend your knees, grip it, and stand up tall — do not round your back to reach it.' },
+        { until: 0.78, text: 'Arm hangs straight, shoulders level, ribs down.' },
+        { until: 1.00, text: 'Now just stand and refuse to lean. Switch hands when the timer flips.' }
+      ],
+      track: [
+        { t: 0.00, p: pose({ y: 0.21, torso: 13, neck: -8, nau: 4, naf: 4, fau: -8, faf: -10, nlt: 24, nls: -26, nlf: 96, flt: -21, fls: 23, flf: 84 }) },
+        { t: 0.28, p: pose({ y: 0.21, torso: 13, neck: -8, nau: 4, naf: 4, fau: -8, faf: -10, nlt: 24, nls: -26, nlf: 96, flt: -21, fls: 23, flf: 84 }) },
+        { t: 0.54, p: pose({ torso: 0, nau: 3, naf: 3, fau: -5, faf: -7, nlt: 3, nls: -2, flt: -3, fls: 2 }) },
+        { t: 0.78, p: pose({ torso: 0, nau: 3, naf: 3, fau: -5, faf: -7, nlt: 3, nls: -2, flt: -3, fls: 2 }) },
+        { t: 1.00, p: pose({ torso: 0.6, neck: -0.5, nau: 3, naf: 3, fau: -6, faf: -8, nlt: 3, nls: -2, flt: -3, fls: 2 }) }
+      ]
+    }
+  };
+
+  function setupStep(id, phase) {
+    var st = SETUPS[id];
+    if (!st) return 0;
+    for (var i = 0; i < st.steps.length; i++) if (phase <= st.steps[i].until) return i;
+    return st.steps.length - 1;
+  }
+
   /* ------------------------------------------------------------------ *
    * Rendering
    * ------------------------------------------------------------------ */
@@ -776,14 +909,16 @@
         g.fill(); g.stroke();
       });
     } else if (ex.id === 'bss') {
-      var far = P.farLeg.ankle;
+      /* a bench is about knee height and stands behind her, wherever her foot is */
+      var bxr = P.nearLeg.ankle.x - S * 0.62;
+      var byr = P.nearLeg.ankle.y - S * 0.30;
       g.fillStyle = 'rgba(24,30,64,0.92)';
       g.strokeStyle = C.steelDark;
       g.lineWidth = Math.max(2, S * 0.011);
-      g.beginPath(); g.rect(far.x - S * 0.26, far.y + S * 0.02, S * 0.34, S * 0.05); g.fill(); g.stroke();
+      g.beginPath(); g.rect(bxr - S * 0.02, byr, S * 0.42, S * 0.05); g.fill(); g.stroke();
       g.beginPath();
-      g.rect(far.x - S * 0.21, far.y + S * 0.07, S * 0.045, S * 0.30);
-      g.rect(far.x - S * 0.02, far.y + S * 0.07, S * 0.045, S * 0.30);
+      g.rect(bxr + S * 0.03, byr + S * 0.05, S * 0.045, S * 0.28);
+      g.rect(bxr + S * 0.30, byr + S * 0.05, S * 0.045, S * 0.28);
       g.fill(); g.stroke();
       dumbbell(g, P.nearArm.wrist, S, false);
       dumbbell(g, P.farArm.wrist, S, false);
@@ -851,6 +986,7 @@
   }
 
   function drawAnnotation(g, ex, P, S, variant, timeMs, mir) {
+    if (variant === 'setup') return;
     var col = variant === 'good' ? C.good : C.bad;
     var k = ex.align;
     if (k === 'plank') {
@@ -908,15 +1044,20 @@
   var fitCache = {};
 
   function trackFor(id, variant) {
+    if (variant === 'setup') {
+      if (SETUPS[id]) return SETUPS[id].track;
+      return (TRACKS[id] || TRACKS.idle).good;
+    }
     var t = TRACKS[id];
     if (!t) return TRACKS.idle.good;
     return t[variant] || t.good;
   }
 
-  function fitBox(id, view) {
-    if (fitCache[id]) return fitCache[id];
+  function fitBox(id, view, group) {
+    var key = id + '|' + (group || 'rep');
+    if (fitCache[key]) return fitCache[key];
     var box = { x0: 1e9, y0: 1e9, x1: -1e9, y1: -1e9, floor: -1e9 };
-    ['good', 'bad'].forEach(function (v) {
+    (group === 'setup' ? ['setup'] : ['good', 'bad']).forEach(function (v) {
       var track = trackFor(id, v);
       for (var i = 0; i <= 16; i++) {
         var s = solve(sampleTrack(track, i / 16), view);
@@ -928,7 +1069,7 @@
           box.x0 = Math.min(box.x0, pts[j].x); box.x1 = Math.max(box.x1, pts[j].x);
           box.y0 = Math.min(box.y0, pts[j].y); box.y1 = Math.max(box.y1, pts[j].y);
         }
-        if (v === 'good') {
+        if (v === 'good' || v === 'setup') {
           /* one fixed floor per exercise, set by the planted hands */
           box.floor = Math.max(box.floor, s.nearArm.wrist.y, s.farArm.wrist.y);
         }
@@ -936,7 +1077,7 @@
     });
     /* padding for head, props and annotations */
     box.x0 -= 0.13; box.x1 += 0.13; box.y0 -= 0.14; box.y1 += 0.07;
-    fitCache[id] = box;
+    fitCache[key] = box;
     return box;
   }
 
@@ -1032,7 +1173,9 @@
   function drawFigureInPanel(g, ex, variant, phase, x, y, w, h, timeMs, mir, opts) {
     var view = ex ? ex.view : 'front';
     var id = ex ? ex.id : 'idle';
-    var box = fitBox(id, view);
+    var group = 'rep';
+    if (variant === 'setup') group = 'setup';
+    var box = fitBox(id, view, group);
     var bw = box.x1 - box.x0, bh = box.y1 - box.y0;
     var pad = 0.96;
     var S = Math.min(w / bw, h / bh) * pad;
@@ -1085,15 +1228,18 @@
         lastSession: null,
         log: [],
         quoteBag: [],
+        doneSets: [0, 0, 0, 0, 0, 0, 0],
+        used: {},
         started: false,
         musicOn: canMusic,
         showFault: false,
+        tab: 'how',
         speed: 1
       };
 
       var engine = {
         running: false, t: 0, reps: 0, phase: 0,
-        seconds: 0, done: false, lastBeat: -1
+        seconds: 0, done: false, lastBeat: -1, lastStep: -1
       };
 
       var scene = { mode: 'idle', phase: 0, ex: null, variant: 'good', mir: 1 };
@@ -1121,13 +1267,14 @@
           if (data.profile) S.profile = data.profile;
           if (data.weights) S.weights = data.weights;
           if (typeof data.sessions === 'number') S.sessions = data.sessions;
+          if (typeof data.musicOn === 'boolean') S.musicOn = data.musicOn && canMusic;
           if (data.lastSession) S.lastSession = data.lastSession;
         }
       }
 
       async function saveState() {
         var payload = {
-          profile: S.profile, weights: S.weights,
+          profile: S.profile, weights: S.weights, musicOn: S.musicOn,
           sessions: S.sessions, lastSession: S.lastSession
         };
         try { if (canStore) await ctx.storage.set(STORE_KEY, payload); } catch (e) { /* viewer-local only */ }
@@ -1203,20 +1350,61 @@
       }
 
       function sting(name) {
-        if (!music || !S.musicOn) return;
+        if (!canMusic || !S.musicOn) return;
         try { ctx.music.sting(name); } catch (e) { /* optional */ }
       }
 
-      async function musicPreset(name, tempo) {
+      var wantName = 'lofi';
+      var wantTempo = 88;
+
+      /* Called straight from a tap so the WebView treats it as a user gesture. */
+      function musicPreset(name, tempo) {
+        wantName = name;
+        wantTempo = tempo || 100;
         if (!canMusic || !S.musicOn) return;
+        try { ctx.music.unlock(); } catch (e0) { /* optional */ }
         try {
           if (!music) {
-            music = await ctx.music.play({ preset: name, volume: 0.4, tempo: tempo || 100, fadeInMs: 900 });
+            music = ctx.music.play({ preset: name, volume: 0.4, tempo: tempo || 100, fadeInMs: 900 });
           } else {
             ctx.music.setPreset(name, { fadeMs: 700 });
             if (tempo) ctx.music.setTempo(tempo);
           }
         } catch (e) { music = music || null; }
+      }
+
+      function toggleSound() {
+        S.musicOn = !S.musicOn;
+        var b = elHd.querySelector('#soundbtn');
+        if (b) b.textContent = S.musicOn ? '♪' : '✕';
+        if (S.musicOn) {
+          music = null;
+          var n = wantName, t = wantTempo;
+          musicPreset(n, t);
+          sting('coin');
+        } else {
+          try { ctx.music.stop({ fadeOutMs: 350 }); } catch (e) { /* optional */ }
+          music = null;
+        }
+        saveState();
+      }
+
+      function levelLine(e) {
+        return e.sets + ' × ' + (e.mode === 'time' ? e.seconds + 's' : e.reps + ' reps') +
+          (e.perSide ? ' / side' : '');
+      }
+
+      function levelMinutes(e) {
+        var sets = setsTotal(e);
+        var work = e.mode === 'time' ? e.seconds * 1000 : e.reps * cycleMs(e);
+        var rest = (e.weight ? 60000 : 40000);
+        return (sets * work + sets * rest) / 60000;
+      }
+
+      function sessionMinutes() {
+        var m = 0;
+        for (var i = 0; i < WORKOUT.length; i++) m += levelMinutes(WORKOUT[i]);
+        return Math.round(m);
       }
 
       function progress() {
@@ -1241,10 +1429,13 @@
         '.hdrow{display:flex;align-items:center;gap:10px;}',
         '.chip{font:700 11px/1 ' + FONT_UI + ';letter-spacing:1.4px;text-transform:uppercase;',
         'padding:6px 10px;border-radius:999px;background:rgba(255,46,136,0.18);color:' + C.hotSoft + ';border:1px solid rgba(255,46,136,0.45);white-space:nowrap;}',
-        '.hdname{font:700 17px/1.15 ' + FONT_UI + ';flex:1;min-width:0;}',
-        '.hdsub{font:500 11.5px/1.3 ' + FONT_UI + ';color:' + C.dim + ';margin-top:3px;}',
-        '.iconbtn{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid rgba(244,246,255,0.22);',
-        'background:rgba(255,255,255,0.06);color:' + C.ink + ';font:700 15px/1 ' + FONT_UI + ';display:flex;align-items:center;justify-content:center;}',
+        '.hdname{font:700 17px/1.2 ' + FONT_UI + ';flex:1;min-width:0;}',
+        '.hdname>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+        '.hdsub{font:500 11px/1.3 ' + FONT_UI + ';color:' + C.dim + ';margin-top:4px;}',
+        '.hdsub b{color:' + C.hotSoft + ';font-weight:800;letter-spacing:0.6px;}',
+        '.iconbtn{flex:0 0 auto;width:29px;height:29px;border-radius:50%;border:1px solid rgba(244,246,255,0.22);',
+        'background:rgba(255,255,255,0.06);color:' + C.ink + ';font:700 13px/1 ' + FONT_UI + ';display:flex;align-items:center;justify-content:center;padding:0;}',
+        '.hdrow{gap:7px;}',
         '.bar{height:5px;border-radius:99px;background:rgba(255,255,255,0.10);margin-top:9px;overflow:hidden;}',
         '.barfill{height:100%;border-radius:99px;background:linear-gradient(90deg,' + C.hot + ',' + C.glow + ');transition:width .35s ease;}',
         '.stage{flex:1 1 auto;min-height:0;position:relative;}',
@@ -1279,7 +1470,9 @@
         '.speed{display:flex;align-items:center;gap:10px;margin-top:12px;}',
         '.speed span{font:700 10px/1 ' + FONT_UI + ';letter-spacing:1.2px;text-transform:uppercase;color:' + C.faint + ';}',
         'input[type=range]{flex:1;accent-color:' + C.glow + ';height:26px;}',
-        '.sheet{position:absolute;inset:0;background:rgba(6,8,22,0.94);padding:22px 20px;overflow:auto;z-index:5;}',
+        '.sheet{position:absolute;inset:0;background:#070915;padding:18px 18px 28px;overflow:auto;z-index:5;',
+        'font-family:' + FONT_UI + ';color:' + C.ink + ';-webkit-user-select:none;user-select:none;}',
+        '.sheet *{box-sizing:border-box;}',
         '.sheet h3{font:800 22px/1.1 ' + FONT_DISPLAY + ';letter-spacing:1.5px;text-transform:uppercase;margin:0 0 12px;}',
         '.sheet li{font:500 13.5px/1.55 ' + FONT_UI + ';color:' + C.dim + ';margin-bottom:9px;}',
         '.hidden{display:none;}',
@@ -1288,7 +1481,31 @@
         'font:600 12.5px/1.2 ' + FONT_UI + ';}',
         '.rline i{font-style:normal;color:' + C.good + ';font-weight:800;}',
         '.rline u{margin-left:auto;text-decoration:none;color:' + C.faint + ';font-weight:600;}',
-        '.note{font:500 10.5px/1.45 ' + FONT_UI + ';color:' + C.faint + ';margin-top:10px;}'
+        '.note{font:500 10.5px/1.45 ' + FONT_UI + ';color:' + C.faint + ';margin-top:10px;}',
+        '.tabs{display:flex;gap:6px;padding:4px;border-radius:14px;background:rgba(255,255,255,0.06);margin-top:4px;}',
+        '.tab{flex:1;text-align:center;padding:10px 6px;border-radius:11px;font:700 12.5px/1.1 ' + FONT_UI + ';color:' + C.dim + ';}',
+        '.tab.on{background:rgba(45,226,230,0.18);color:#dffcff;box-shadow:inset 0 0 0 1px rgba(45,226,230,0.55);}',
+        '.dots{display:flex;gap:6px;justify-content:center;margin-top:9px;}',
+        '.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.18);}',
+        '.dots i.on{background:' + C.glow + ';box-shadow:0 0 8px rgba(45,226,230,0.8);}',
+        '.step{display:flex;gap:10px;align-items:flex-start;padding:12px 13px;border-radius:13px;margin-top:10px;min-height:74px;',
+        'background:rgba(255,255,255,0.04);border:1px solid rgba(244,246,255,0.10);',
+        'font:600 12.5px/1.4 ' + FONT_UI + ';color:' + C.dim + ';transition:background .2s,color .2s;}',
+        '.step b{flex:0 0 20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.12);color:' + C.ink + ';',
+        'font:800 11px/20px ' + FONT_UI + ';text-align:center;}',
+        '.step.on{background:rgba(45,226,230,0.14);border-color:rgba(45,226,230,0.5);color:#eafcff;}',
+        '.step.on b{background:' + C.glow + ';color:#08111a;}',
+        '.plan{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:12px;margin-bottom:6px;',
+        'background:rgba(255,255,255,0.05);border:1px solid rgba(244,246,255,0.12);}',
+        '.plan b{flex:0 0 24px;height:24px;border-radius:8px;background:rgba(255,255,255,0.10);',
+        'font:800 12px/24px ' + FONT_UI + ';text-align:center;color:' + C.ink + ';}',
+        '.plan .pn{flex:1;min-width:0;font:700 13px/1.2 ' + FONT_UI + ';}',
+        '.plan .pn span{display:block;font:500 10.5px/1.3 ' + FONT_UI + ';color:' + C.faint + ';margin-top:3px;}',
+        '.plan u{text-decoration:none;font:700 10px/1.25 ' + FONT_UI + ';color:' + C.dim + ';text-align:right;flex:0 0 auto;max-width:33%;}',
+        '.plan.now{border-color:' + C.glow + ';background:rgba(45,226,230,0.12);}',
+        '.plan.now b{background:' + C.glow + ';color:#08111a;}',
+        '.plan.done b{background:' + C.good + ';color:#08111a;}',
+        '.plan.part b{background:' + C.hot + ';color:#fff;}'
       ].join('');
       root.appendChild(style);
 
@@ -1306,6 +1523,8 @@
       var sheet = document.createElement('div');
       sheet.className = 'sheet hidden';
       sheet.id = 'sheet';
+      sheet.style.paddingTop = ((safe.top || 0) + 18) + 'px';
+      sheet.style.paddingBottom = ((safe.bottom || 0) + 28) + 'px';
       root.appendChild(sheet);
 
       var elHd = wrap.querySelector('#hd');
@@ -1322,26 +1541,37 @@
 
       function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
+      function headBtns() {
+        return '<button class="iconbtn" data-act="sound" id="soundbtn">' + (S.musicOn ? '♪' : '✕') + '</button>' +
+          '<button class="iconbtn" data-act="help">?</button>' +
+          '<button class="iconbtn" data-act="menu">☰</button>';
+      }
+
       function headerFor(e, extra) {
         var pct = Math.round(progress() * 100);
         return '' +
           '<div class="hdrow">' +
-            '<div class="chip">Level ' + (S.ex + 1) + '/7</div>' +
-            '<div class="hdname">' + esc(e.name) + '<div class="hdsub">' + esc(extra || e.target) + '</div></div>' +
-            '<button class="iconbtn" data-act="help">?</button>' +
+            '<div class="hdname"><span>' + esc(e.name) + '</span></div>' +
+            headBtns() +
           '</div>' +
+          '<div class="hdsub"><b>Level ' + (S.ex + 1) + '/7</b>  ·  ' + esc(extra || e.target) + '</div>' +
           '<div class="bar"><div class="barfill" style="width:' + pct + '%"></div></div>';
+      }
+
+      function plainHeader(chip) {
+        return '<div class="hdrow"><div class="chip">' + chip + '</div><div class="hdname"></div>' +
+          headBtns() + '</div>';
       }
 
       function show(name) {
         S.screen = name;
         engine.running = false;
+        closeSheet();
         var e = WORKOUT[S.ex];
 
         if (name === 'intro') {
           scene.mode = 'idle'; scene.ex = null;
-          elHd.innerHTML = '<div class="hdrow"><div class="chip">Thursday</div><div class="hdname"></div>' +
-            '<button class="iconbtn" data-act="help">?</button></div>';
+          elHd.innerHTML = plainHeader('Thursday');
           elPanel.innerHTML =
             '<div class="title">Thursday<br>Trainer</div>' +
             '<div class="lede">Seven levels. Legs, then core. I demonstrate every rep, show you the mistake to avoid, and count you through it.' +
@@ -1353,8 +1583,7 @@
 
         else if (name === 'setup') {
           scene.mode = 'idle'; scene.ex = null;
-          elHd.innerHTML = '<div class="hdrow"><div class="chip">Before we lift</div><div class="hdname"></div>' +
-            '<button class="iconbtn" data-act="help">?</button></div>';
+          elHd.innerHTML = plainHeader('Before we lift');
           var lv = S.profile.level, kit = S.profile.kit;
           elPanel.innerHTML =
             '<div class="card"><div class="k">How long have you been lifting?</div>' +
@@ -1369,22 +1598,57 @@
                 '<div class="opt' + (kit === 'dumbbell' ? ' on' : '') + '" data-act="kit" data-v="dumbbell">Dumbbells<small>home setup</small></div>' +
                 '<div class="opt' + (kit === 'bodyweight' ? ' on' : '') + '" data-act="kit" data-v="bodyweight">Nothing<small>bodyweight</small></div>' +
               '</div></div>' +
-            '<button class="btn" data-act="begin">Start level 1</button>' +
+            '<button class="btn" data-act="toplan">See today’s session</button>' +
             '<div class="note">' + (Object.keys(S.weights).length
               ? 'Loaded your weights from last Thursday. They adjust after every set.'
               : 'I will suggest a starting weight for each lift, then adjust it from how each set felt.') + '</div>';
         }
 
+        else if (name === 'plan') {
+          scene.mode = 'idle'; scene.ex = null;
+          elHd.innerHTML = plainHeader('Today’s session');
+          var rows = WORKOUT.map(function (x, i) {
+            return '<div class="plan" data-act="goto" data-v="' + i + '">' +
+              '<b>' + (i + 1) + '</b>' +
+              '<div class="pn">' + esc(x.name) + '<span>' + esc(x.target) + '</span></div>' +
+              '<u>' + esc(levelLine(x)) + '</u></div>';
+          }).join('');
+          elPanel.innerHTML =
+            '<div class="title" style="font-size:30px">Thursday<br>seven levels</div>' +
+            '<div class="lede">Four for the legs, then three for the core. About ' + sessionMinutes() +
+            ' minutes including rest. Tap any level to jump to it.</div>' +
+            '<div class="recap" style="max-height:44vh">' + rows + '</div>' +
+            '<button class="btn" data-act="begin">Start level 1 — ' + esc(WORKOUT[0].name) + '</button>' +
+            '<div class="note">You can open ☰ at any time to skip a set, skip a level, or come back to this list.</div>';
+        }
+
         else if (name === 'brief') {
-          scene.mode = 'split'; scene.ex = e; scene.phase = 0; scene.mir = 1;
+          scene.ex = e; scene.phase = 0; scene.mir = 1;
+          scene.mode = S.tab === 'how' ? 'setup' : 'split';
+          engine.lastStep = -1;
           elHd.innerHTML = headerFor(e, e.target + '  ·  ' + e.sets + ' sets of ' +
             (e.mode === 'time' ? e.seconds + 's' : e.reps) + (e.perSide ? ' per side' : ''));
           var w = e.weight ? '<div class="card"><div class="k">Today’s load</div><div class="v">' + esc(weightText(e)) + '</div>' +
             '<div class="n">' + (S.weights[e.id] != null ? 'Adjusted from your last set.' : 'Starting point — leave two reps in the tank.') + '</div></div>' : '';
-          elPanel.innerHTML =
-            '<div class="cue g"><div><b>Do this</b>' + esc(e.goodCue) + '</div></div>' +
-            '<div class="cue b"><div><b>Not this — ' + esc(e.fault) + '</b>' + esc(e.faultCue) + '</div></div>' +
-            w +
+          var tabs =
+            '<div class="tabs">' +
+              '<div class="tab' + (S.tab === 'how' ? ' on' : '') + '" data-act="tab" data-v="how">How to start</div>' +
+              '<div class="tab' + (S.tab === 'how' ? '' : ' on') + '" data-act="tab" data-v="form">Right vs wrong</div>' +
+            '</div>';
+          var body;
+          if (S.tab === 'how') {
+            var st = SETUPS[e.id];
+            body = '<div class="step on" id="stepcard"><b id="stepno">1</b>' +
+              '<span id="steptext">' + esc(st.steps[0].text) + '</span></div>' +
+              '<div class="dots" id="dots">' + st.steps.map(function (x, i) {
+                return '<i data-i="' + i + '"></i>';
+              }).join('') + '</div>';
+          } else {
+            body =
+              '<div class="cue g"><div><b>Do this</b>' + esc(e.goodCue) + '</div></div>' +
+              '<div class="cue b"><div><b>Not this — ' + esc(e.fault) + '</b>' + esc(e.faultCue) + '</div></div>';
+          }
+          elPanel.innerHTML = tabs + body + w +
             '<button class="btn" data-act="startset">Start set ' + setNumber(e, S.set) + (e.perSide ? ' · ' + sideLabel(e, S.set) : '') + '</button>';
         }
 
@@ -1442,20 +1706,49 @@
 
         else if (name === 'finish') {
           scene.mode = 'cheer'; scene.ex = null;
-          elHd.innerHTML = '<div class="hdrow"><div class="chip">Session complete</div><div class="hdname"></div>' +
-            '<button class="iconbtn" data-act="help">?</button></div>' +
+          elHd.innerHTML = plainHeader('Session complete') +
             '<div class="bar"><div class="barfill" style="width:100%"></div></div>';
-          var lines = S.log.map(function (l) {
-            return '<div class="rline"><i>✓</i>' + esc(l.name) + '<u>' + esc(l.detail) + '</u></div>';
+          var cleared = 0;
+          var lines = WORKOUT.map(function (x, i) {
+            var total = setsTotal(x);
+            var done = S.doneSets[i] || 0;
+            if (done >= total) cleared++;
+            var per = x.perSide ? ' / side' : '';
+            var detail;
+            if (done === 0) detail = 'skipped';
+            else if (done < total) detail = done + ' of ' + total + ' sets';
+            else detail = (x.mode === 'time'
+              ? x.sets + ' × ' + x.seconds + 's' + per
+              : x.sets + ' × ' + x.reps + per) + (S.used[x.id] != null ? ' @ ' + S.used[x.id] + 'kg' : '');
+            return '<div class="rline"><i style="color:' + (done >= total ? C.good : C.faint) + '">' +
+              (done >= total ? '✓' : done > 0 ? '◐' : '·') + '</i>' + esc(x.name) +
+              '<u>' + esc(detail) + '</u></div>';
           }).join('');
           elPanel.innerHTML =
             '<div class="title" style="font-size:34px">You did<br>good.</div>' +
-            '<div class="lede">All seven levels, done. That is the whole Thursday — hamstrings, glutes and core, every set honest.</div>' +
+            '<div class="lede">' + (cleared === 7
+              ? 'All seven levels, done. That is the whole Thursday — hamstrings, glutes and core, every set honest.'
+              : cleared + ' of 7 levels cleared. That still counts — showing up is most of it. The rest will be here next Thursday.') + '</div>' +
             '<div class="recap">' + lines + '</div>' +
             '<button class="btn hot" data-act="replay">Run Thursday again</button>';
         }
 
         measure();
+      }
+
+      function resetSession() {
+        S.ex = 0; S.set = 0; S.showFault = false; S.tab = 'how';
+        S.doneSets = [0, 0, 0, 0, 0, 0, 0];
+        S.used = {};
+        S.log = [];
+      }
+
+      function nextLevel() {
+        S.ex += 1;
+        S.set = 0;
+        S.tab = 'how';
+        if (S.ex >= WORKOUT.length) return finishSession();
+        show('brief');
       }
 
       function nextUpText() {
@@ -1499,27 +1792,29 @@
 
       function afterSet() {
         var e = WORKOUT[S.ex];
-        var per = e.perSide ? ' / side' : '';
-        var detail = e.mode === 'time'
-          ? e.sets + ' × ' + e.seconds + 's' + per
-          : e.sets + ' × ' + e.reps + per + (e.weight && S.profile.kit !== 'bodyweight' && suggestedWeight(e).kg != null
-            ? ' @ ' + suggestedWeight(e).kg + 'kg' : '');
         S.set += 1;
+        S.doneSets[S.ex] = Math.max(S.doneSets[S.ex], S.set);
+        if (e.weight && S.profile.kit !== 'bodyweight') {
+          var sw = suggestedWeight(e);
+          if (sw && sw.kg != null) S.used[e.id] = sw.kg;
+        }
         try { ctx.platform.setProgress(progress()); } catch (err) { /* ignore */ }
 
         if (S.set >= setsTotal(e)) {
-          S.log.push({ name: e.name, detail: detail });
           haptic('heavy');
+          sting('powerup');
           try { ctx.platform.milestone('level_clear', { level: S.ex + 1, exercise: e.id }); } catch (err2) { /* ignore */ }
           S.ex += 1;
           S.set = 0;
+          S.tab = 'how';
           if (S.ex >= WORKOUT.length) return finishSession();
           restLeft = 60;
           musicPreset('lofi', 84);
           show('rest');
           return;
         }
-        restLeft = WORKOUT[S.ex].weight ? 60 : 40;
+        S.tab = 'form';
+        restLeft = e.weight ? 60 : 40;
         musicPreset('drift', 88);
         show('rest');
       }
@@ -1540,10 +1835,7 @@
         if (S.started) return;
         S.started = true;
         try { ctx.platform.start(); } catch (e) { /* ignore */ }
-        if (canMusic) {
-          try { ctx.music.unlock(); } catch (e2) { /* ignore */ }
-          musicPreset('lofi', 88);
-        }
+        musicPreset('lofi', 88);
       }
 
       /* ---------------- input ---------------- */
@@ -1555,21 +1847,57 @@
         'Tap <b>Count a rep</b> if you are ahead of her, or drag the speed slider to match your own pace.',
         'After every weighted set, tell me how it felt. That is what picks your weight for the next set and for next Thursday.',
         'Green dashed lines are your alignment guides. Red circles mark the joint that is about to go wrong.',
-        'Pause any time. Nothing expires while you rest.'
+        'Pause any time. Nothing expires while you rest.',
+        'Tap <b>☰</b> for the session menu: jump to any level, skip a set, or finish early.',
+        'There is no spoken coaching — Plethora Bits have music and sound effects but no voice, so every cue is on screen. Music is the ♪ button; it can only start from a tap, and Plethora mutes it while the Bit is in the background.'
       ];
 
-      function toggleSheet(force) {
-        var open = force !== undefined ? force : sheet.classList.contains('hidden');
-        if (open) {
-          sheet.innerHTML = '<h3>How this works</h3><ol>' +
-            INSTRUCTIONS.map(function (t) { return '<li>' + t + '</li>'; }).join('') +
-            '</ol><button class="btn" data-act="closehelp">Got it</button>' +
-            '<div class="note">Weight suggestions are a starting point, not coaching or medical advice. If a rep hurts, stop it.</div>';
-          sheet.classList.remove('hidden');
-        } else {
-          sheet.classList.add('hidden');
-        }
+      function soundLine() {
+        if (!canMusic) return 'Sound is not available in this build.';
+        var state = 'unknown', err = null;
+        try { state = ctx.music.state(); } catch (e) { /* optional */ }
+        try { err = ctx.music.error(); } catch (e2) { /* optional */ }
+        var msg = 'Sound: ' + (S.musicOn ? state : 'muted');
+        if (err && err.message) msg += ' — ' + err.message;
+        if (state === 'host_paused') msg += ' (Plethora paused audio because the Bit is in the background)';
+        return msg + '. Tap ♪ in the corner to toggle it.';
       }
+
+      function openHelp() {
+        sheet.innerHTML = '<h3>How this works</h3><ol>' +
+          INSTRUCTIONS.map(function (t) { return '<li>' + t + '</li>'; }).join('') +
+          '</ol><div class="note">' + esc(soundLine()) + '</div>' +
+          '<button class="btn" data-act="closesheet">Got it</button>' +
+          '<div class="note">Weight suggestions are a starting point, not coaching or medical advice. If a rep hurts, stop it.</div>';
+        sheet.classList.remove('hidden');
+      }
+
+      function openMenu() {
+        var rows = WORKOUT.map(function (x, i) {
+          var total = setsTotal(x);
+          var done = S.doneSets[i] || 0;
+          var status = done >= total ? 'done' : (i === S.ex ? 'now' : (done > 0 ? 'part' : ''));
+          var badge = done >= total ? '✓ done'
+            : i === S.ex ? 'you are here'
+            : done > 0 ? done + '/' + total + ' sets'
+            : levelLine(x);
+          return '<div class="plan ' + status + '" data-act="goto" data-v="' + i + '">' +
+            '<b>' + (i + 1) + '</b>' +
+            '<div class="pn">' + esc(x.name) + '<span>' + esc(x.target) + '</span></div>' +
+            '<u>' + esc(badge) + '</u></div>';
+        }).join('');
+        var inSet = S.screen === 'set';
+        sheet.innerHTML = '<h3>Session menu</h3>' +
+          '<div class="note" style="margin:0 0 10px">Tap a level to jump straight to it. Nothing is lost — you can come back.</div>' +
+          rows +
+          (inSet ? '<button class="btn alt" data-act="skipset">Skip this set</button>' : '') +
+          '<button class="btn alt" data-act="skiplevel">Skip the rest of this level</button>' +
+          '<button class="btn alt" data-act="endsession">End here and see my summary</button>' +
+          '<button class="btn" data-act="closesheet">Back to my workout</button>';
+        sheet.classList.remove('hidden');
+      }
+
+      function closeSheet() { sheet.classList.add('hidden'); }
 
       ctx.listen(root, 'click', function (ev) {
         var t = ev.target;
@@ -1581,12 +1909,39 @@
         haptic('light');
         try { ctx.platform.interact({ act: act }); } catch (e) { /* ignore */ }
 
-        if (act === 'help') { toggleSheet(true); return; }
-        if (act === 'closehelp') { toggleSheet(false); return; }
+        if (act === 'help') { openHelp(); return; }
+        if (act === 'menu') { openMenu(); return; }
+        if (act === 'closesheet') { closeSheet(); return; }
+        if (act === 'sound') { toggleSound(); return; }
         if (act === 'tosetup') { show('setup'); return; }
+        if (act === 'toplan') { show('plan'); return; }
+        if (act === 'goto') {
+          closeSheet();
+          S.ex = parseInt(v, 10);
+          S.set = Math.min(S.doneSets[S.ex] || 0, setsTotal(WORKOUT[S.ex]) - 1);
+          S.tab = (S.doneSets[S.ex] || 0) > 0 ? 'form' : 'how';
+          show('brief');
+          return;
+        }
+        if (act === 'skipset') {
+          closeSheet();
+          engine.running = false;
+          S.set += 1;
+          if (S.set >= setsTotal(WORKOUT[S.ex])) { S.set = 0; return nextLevel(); }
+          show('brief');
+          return;
+        }
+        if (act === 'skiplevel') {
+          closeSheet();
+          engine.running = false;
+          S.set = 0;
+          return nextLevel();
+        }
+        if (act === 'endsession') { closeSheet(); return finishSession(); }
         if (act === 'lv') { S.profile.level = parseInt(v, 10); saveState(); show('setup'); return; }
         if (act === 'kit') { S.profile.kit = v; saveState(); show('setup'); return; }
-        if (act === 'begin') { S.ex = 0; S.set = 0; S.log = []; show('brief'); return; }
+        if (act === 'begin') { resetSession(); show('brief'); return; }
+        if (act === 'tab') { S.tab = v; show('brief'); return; }
         if (act === 'startset') { startSet(); return; }
         if (act === 'pause') {
           engine.running = !engine.running;
@@ -1614,11 +1969,7 @@
           return;
         }
         if (act === 'skiprest') { restLeft = 0; return; }
-        if (act === 'replay') {
-          S.ex = 0; S.set = 0; S.log = []; S.showFault = false;
-          show('setup');
-          return;
-        }
+        if (act === 'replay') { resetSession(); show('setup'); return; }
       });
 
       ctx.listen(root, 'input', function (ev) {
@@ -1654,6 +2005,7 @@
             if (reps > engine.reps) {
               engine.reps = reps;
               haptic('light');
+              if (e.reps - engine.reps <= 2 && engine.reps < e.reps) sting('tap');
               refreshCounters();
               if (engine.reps >= e.reps) { completeSet(); return; }
             }
@@ -1666,6 +2018,22 @@
             sting('tap');
             show('brief');
           }
+        } else if (S.screen === 'brief' && S.tab === 'how') {
+          var ex0 = WORKOUT[S.ex];
+          var st0 = SETUPS[ex0.id];
+          scene.phase = (timeMs % st0.dur) / st0.dur;
+          var idx = setupStep(ex0.id, scene.phase);
+          if (idx !== engine.lastStep) {
+            engine.lastStep = idx;
+            var no = elPanel.querySelector('#stepno');
+            var tx = elPanel.querySelector('#steptext');
+            if (no) no.textContent = idx + 1;
+            if (tx) tx.textContent = st0.steps[idx].text;
+            var dots = elPanel.querySelectorAll('.dots i');
+            for (var i = 0; i < dots.length; i++) {
+              if (i === idx) dots[i].classList.add('on'); else dots[i].classList.remove('on');
+            }
+          }
         } else {
           scene.phase = (timeMs / 2600) % 1;
         }
@@ -1677,7 +2045,9 @@
         var r = stageRect;
         if (!r.w || !r.h) return;
 
-        if (scene.mode === 'split' && scene.ex) {
+        if (scene.mode === 'setup' && scene.ex) {
+          drawFigureInPanel(g, scene.ex, 'setup', scene.phase, r.x, r.y, r.w, r.h, timeMs, 1);
+        } else if (scene.mode === 'split' && scene.ex) {
           var margin = 14;
           var bx = r.x + margin, bw = r.w - margin * 2;
           var gap = Math.max(10, bw * 0.035);

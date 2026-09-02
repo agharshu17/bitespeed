@@ -137,7 +137,7 @@ window.__log = [];
   window.__startRaf = function () { requestAnimationFrame(raf); };
 
   var s = document.createElement('script');
-  s.src = '../main.js';
+  s.src = (location.search.indexOf('build') >= 0) ? '../build/main.js' : '../main.js';
   s.onload = function () {
     window.plethoraBit.init(ctx).then(function () {
       window.__ready = true;

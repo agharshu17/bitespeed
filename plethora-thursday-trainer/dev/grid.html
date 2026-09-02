@@ -25,7 +25,7 @@ window.__drawGrid = function (phases, only) {
     g.textAlign = 'left';
     g.fillText(ex.name + '  (' + ex.view + ')', 12, y + 17);
     var col = 0;
-    ['good', 'bad'].forEach(function (variant) {
+    (window.__variants || ['good', 'bad']).forEach(function (variant) {
       phases.forEach(function (ph) {
         var x = 10 + col * cw;
         TT.panelFrame(g, x + 4, y + labelH, cw - 8, ch - 8,

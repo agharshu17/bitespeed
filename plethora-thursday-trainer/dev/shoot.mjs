@@ -6,7 +6,7 @@ import path from 'path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const out = process.argv[2] || path.join(here, 'shots');
-const url = 'file://' + path.join(here, 'harness.html');
+const url = 'file://' + path.join(here, 'harness.html') + (process.env.BUILT ? '?build' : '');
 const names = ['rdl', 'legcurl', 'bss', 'sumo', 'mtn', 'tap', 'suitcase'];
 
 const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
@@ -33,10 +33,17 @@ const panel = () => page.evaluate('window.__screen()');
 const levelOf = (t) => { const m = /Level (\d)\/7/.exec(t); return m ? +m[1] : 0; };
 
 await shot('01-intro');
-await click('help'); await shot('02-help'); await click('closehelp');
+await click('help'); await shot('02-help'); await click('closesheet');
 await click('tosetup'); await shot('03-setup');
 await click('kit', 'barbell');
+await click('toplan');
+await shot('04-plan');
 await click('begin');
+await page.waitForTimeout(400);
+await shot('05-howto');
+await click('menu');
+await shot('06-menu');
+await click('closesheet');
 
 const briefed = new Set(), setShot = new Set();
 let level = 0;
@@ -48,7 +55,12 @@ for (let guard = 0; guard < 300; guard++) {
   const tag = `${level}-${names[level - 1] || 'x'}`;
 
   if (txt.includes('Start set')) {
-    if (!briefed.has(level)) { briefed.add(level); await shot(`10-${tag}-brief`); }
+    if (!briefed.has(level)) {
+      briefed.add(level);
+      await shot(`10-${tag}-howto`);
+      await click('tab', 'form');
+      await shot(`10-${tag}-brief`);
+    }
     await click('startset');
     await page.evaluate('window.__pump(900)');
     if (!setShot.has(level)) {
