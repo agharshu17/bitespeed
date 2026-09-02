@@ -1,0 +1,5 @@
+node_modules/
+shots/
+_main.dev.js
+package-lock.json
+package.json
