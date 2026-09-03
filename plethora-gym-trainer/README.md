@@ -41,17 +41,29 @@ are listed so the week reads as a whole, but they are placeholders.
 
 The draft validator has a source budget of roughly 80 KB — the same code passes
 under it and is rejected above it with a generic "unsupported remote resources"
-error. `dev/build.py` strips comments and indentation to stay inside it:
+error. The whole week does not fit as written, so three things keep it inside:
 
+    npm install terser       # optional, but needed for the full week
     python3 dev/build.py     # main.js -> build/main.js, then node --check
 
-Monday alone builds to about 62 KB, so the remaining four days will not fit in
-the current encoding. Poses are already stored as a compact string:
+1. **Minification.** `dev/build.py` runs terser, which takes the artifact to
+   about 61% of source. Without terser it falls back to a comment and indent
+   strip (82%), which is enough for a partial week but not the full one.
+2. **A compact pose DSL.** A pose is a string, not an object literal:
 
-    tr('0|to4 na72 nb-58 nt2 ns1', '0.5|y0.20 to16 nt44 ns-52 no86')
+       tr('0|to4 na72 nb-58 nt2 ns1', '0.5|y0.20 to16 nt44 ns-52 no86')
 
-Codes are listed in `CODES` near the top of `main.js`. The next days will need
-the coaching text compacting too, or splitting the week across Bits.
+   Codes are listed in `CODES` near the top of `main.js`.
+3. **Shared setup reels.** Picking two dumbbells up off the floor is the same
+   movement whatever you are about to do with them, so `RIG` holds the pickup
+   once and each exercise contributes only its closing "set position" step via
+   `sxs` (caption) and `sxt` (keyframe).
+
+Measured, by cloning Monday out to a stand-in full week: **35 exercises
+minify to 71.8 KB, about 8 KB under the ceiling.** The week fits in one Bit.
+`dev/build.py` prints the remaining headroom on every build.
+
+Only the artifact is squeezed — `main.js` stays readable in the repo.
 
 ## The rig
 
