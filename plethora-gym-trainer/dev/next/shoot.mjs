@@ -1,0 +1,16 @@
+import { createRequire } from 'module';
+const { chromium } = createRequire('/opt/node22/lib/node_modules/')('playwright');
+const ids = process.argv[2].split(',');
+const phases = (process.argv[3] || '0,0.5,1').split(',').map(Number);
+const out = process.argv[4] || 'grid.png';
+const variants = (process.argv[5] || 'setup,train').split(',');
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const page = await b.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1.4 });
+page.on('pageerror', e => console.log('PAGE ERROR:', e.message));
+await page.goto('file:///home/user/bitespeed/plethora-gym-trainer/dev/next/grid.html');
+await page.waitForFunction('window.__GT !== undefined', null, { timeout: 10000 });
+await page.evaluate(([i,p,v]) => window.__drawGrid(i,p,v), [ids, phases, variants]);
+await page.waitForTimeout(250);
+await page.screenshot({ path: out, fullPage: true });
+console.log('wrote', out);
+process.exit(0);
