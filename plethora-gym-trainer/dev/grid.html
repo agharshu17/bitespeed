@@ -6,31 +6,30 @@
 <script src="_main.dev.js"></script>
 <script>
 window.__drawGrid = function (phases, only) {
-  var TT = window.__TT;
-  var list = TT.WORKOUT.filter(function (e) { return !only || e.id === only; });
-  var cols = phases.length * 2;
-  var cw = 180, ch = 250, labelH = 26;
+  var T = window.__GT;
+  var ids = Object.keys(T.EX).filter(function (k) {
+    return k !== 'idle' && k !== 'cheer' && (!only || k === only);
+  });
+  var variants = window.__variants || ['setup', 'train'];
+  var cols = phases.length * variants.length, cw = 168, ch = 236, lh = 24;
   var c = document.getElementById('c');
-  var W = cols * cw + 20, H = list.length * (ch + labelH) + 20;
-  c.width = W * 1; c.height = H;
-  c.style.width = W + 'px'; c.style.height = H + 'px';
+  var W = cols * cw + 20, H = ids.length * (ch + lh) + 20;
+  c.width = W; c.height = H; c.style.width = W + 'px'; c.style.height = H + 'px';
   var g = c.getContext('2d');
-  TT.drawBackground(g, W, H, 1000);
+  T.drawBackground(g, W, H, 1000);
   g.fillStyle = 'rgba(6,8,22,0.55)'; g.fillRect(0, 0, W, H);
-
-  list.forEach(function (ex, row) {
-    var y = 10 + row * (ch + labelH);
-    g.fillStyle = '#f4f6ff';
-    g.font = '700 14px system-ui';
-    g.textAlign = 'left';
-    g.fillText(ex.name + '  (' + ex.view + ')', 12, y + 17);
+  ids.forEach(function (id, row) {
+    var e = T.EX[id];
+    var y = 10 + row * (ch + lh);
+    g.fillStyle = '#f4f6ff'; g.font = '700 13px system-ui'; g.textAlign = 'left';
+    g.fillText(e.nm + '  (' + e.vw + ')', 12, y + 16);
     var col = 0;
-    (window.__variants || ['good', 'bad']).forEach(function (variant) {
+    variants.forEach(function (v) {
       phases.forEach(function (ph) {
         var x = 10 + col * cw;
-        TT.panelFrame(g, x + 4, y + labelH, cw - 8, ch - 8,
-          variant === 'good' ? TT.C.good : TT.C.bad, variant.toUpperCase() + ' ' + ph, 0);
-        TT.drawFigureInPanel(g, ex, variant, ph, x + 4, y + labelH, cw - 8, ch - 8, 1000, 1);
+        T.panelFrame(g, x + 4, y + lh, cw - 8, ch - 8,
+          v === 'setup' ? T.C.glow : T.C.good, v + ' ' + ph, 0);
+        T.drawFigureInPanel(g, e, v, ph, x + 4, y + lh, cw - 8, ch - 8, 1000, 1);
         col++;
       });
     });

@@ -1,112 +1,94 @@
-# Thursday Trainer — a Plethora Bit
+# Gym Trainer — a Plethora Bit
 
-A seven-level Thursday leg-and-core session with an animated coach. She
-demonstrates every movement, shows the exact mistake next to the correct form,
-paces your reps, suggests a starting weight and adjusts it from how each set
-felt.
+A training week with an animated coach who shows you how to do it *right*.
 
-Built against the Plethora creator contract
-`plethora-agent-context-2026-08-13.1` (`context.md`, `sdk.md`, `schema.json`
-and `libraries.json` all agreed on that version at build time).
+Every exercise plays as **one continuous demonstration in two parts**:
 
-## The flow
+- **Setup** — how you stand, and how you pick the weight up off the floor.
+- **Train** — the working posture, looped three times, then back to setup.
 
-1. **Intro** → a short setup (experience, equipment).
-2. **Today's session** — all seven levels, sets and reps, with an estimated
-   duration. Tap any level to jump to it.
-3. **Each level** opens on two tabs: *How to start* (an animated setup
-   walkthrough — where the weight begins, how you pick it up, what the start
-   position is) and *Right vs wrong* (the correct rep beside the mistake).
-4. **The set** — she paces the reps, the mistake is one tap away.
-5. **RPE tap** after weighted sets, then rest with a motivational line.
-6. **Finish** — recap of what was cleared, part-done or skipped.
+There are no rep counters and no countdowns. Your sets, reps and suggested load
+are written under the video, along with **how far each rep should travel** —
+the exact landmark it starts and stops at. You tap **Done** when you have
+finished, and it moves you to the next exercise. Finish every exercise in a day
+and that date is ticked on your calendar.
 
-The **☰ menu** is available on every screen: jump to any level, skip a set,
-skip a level, or end the session early.
+There is deliberately **no wrong-form variant**. The Bit only ever shows the
+correct movement; the teaching is in the setup reel, the travel endpoints and
+the alignment guides.
 
-## The session
+## Status
 
-| Level | Exercise | Sets | Fault demonstrated |
-|-------|----------|------|--------------------|
-| 1 | Romanian Deadlift | 3 × 10 | Back rounds, bar drifts away |
-| 2 | Leg Curl | 3 × 12 | Hips lift off the pad |
-| 3 | Bulgarian Split Squat | 3 × 10 / side | Knee dives past the toes, chest folds |
-| 4 | Sumo Squat | 3 × 12 | Knees pinch in, heels lift |
-| 5 | Mountain Climbers | 3 × 30s | Hips sag or pike up |
-| 6 | Shoulder Taps | 3 × 20 | Hips rock side to side |
-| 7 | Suitcase Hold | 3 × 30s / side | Leaning toward the weight |
+Monday is built — seven exercises, fully authored and QA'd. Tuesday to Friday
+are listed so the week reads as a whole, but they are placeholders.
 
-## How it is built
+| day | focus | state |
+| --- | --- | --- |
+| Monday | Legs · Shoulders · Biceps | built (7 exercises) |
+| Tuesday | Back · Triceps | placeholder |
+| Wednesday | Chest · Forearms · Cardio | placeholder |
+| Thursday | Hamstrings · Glutes · HIIT | placeholder |
+| Friday | Back · Chest · Shoulders · Arms | placeholder |
 
-Packaged assets are disabled (`maxAssets: 0`) and remote images are blocked, so
-nothing is loaded — the trainer is drawn from scratch every frame.
+## Layout
 
-- **The rig** (`solve`) is a 2D skeleton driven by *absolute* segment angles, so
-  a pose is a plain table of numbers. `0°` points straight down, `+90°` right.
-- **Every exercise is a keyframe track** (`TRACKS`) with a `good` and a `bad`
-  variant, sampled and eased per rep phase.
-- **`SETUPS`** holds a second track per exercise for the get-into-position
-  walkthrough, with captions keyed to the phase so the on-screen step
-  highlights as she performs it.
-- **`fitBox`** samples both variants to frame the figure identically in the
-  right-hand and wrong-hand panels, so the two are directly comparable, and
-  fixes the floor line at the height of her planted hands.
-- **Annotations** (`drawAnnotation`) draw the alignment guide for each movement:
-  spine line, hip line, knee-over-foot line, plank line, plumb line — green when
-  correct, red with an arrow on the joint that is going wrong.
-- Weight suggestions live in `WORKOUT[].weight`, keyed by equipment and
-  experience, and are adjusted by the RPE tap after each set. They persist
-  through `ctx.storage` with a `ctx.memory.local` fallback.
+    main.js         the Bit - single source of truth
+    plethora.json   manifest
+    build/main.js   upload artifact, generated
+    dev/            local harness and QA tooling, never uploaded
 
-## Local preview
+## The size ceiling
 
-`dev/` is for development only and is never uploaded.
+The draft validator has a source budget of roughly 80 KB — the same code passes
+under it and is rejected above it with a generic "unsupported remote resources"
+error. `dev/build.py` strips comments and indentation to stay inside it:
 
-```
-cd dev
-npm i playwright
-node shoot.mjs          # walks the whole session, screenshots every level
-BUILT=1 node shoot.mjs  # same, against build/main.js
-node posegrid.mjs shots/posegrid.png 0,0.5,1        # every pose, both variants
-node posegrid.mjs shots/one.png 0,0.5,1 bss         # one exercise
-```
+    python3 dev/build.py     # main.js -> build/main.js, then node --check
 
-`dev/harness.html` mocks the `ctx` surface from `sdk.md` and drives the frame
-loop manually so a full session can be fast-forwarded. `posegrid.mjs` writes a
-throwaway `_main.dev.js` that exports the drawing internals — the shipped
-`main.js` stays clean.
+Monday alone builds to about 62 KB, so the remaining four days will not fit in
+the current encoding. Poses are already stored as a compact string:
 
-## Building and uploading
+    tr('0|to4 na72 nb-58 nt2 ns1', '0.5|y0.20 to16 nt44 ns-52 no86')
 
-    python3 dev/build.py     # main.js -> build/main.js
+Codes are listed in `CODES` near the top of `main.js`. The next days will need
+the coaching text compacting too, or splitting the week across Bits.
 
-The draft validator has a source-size budget. The identical code is accepted
-at ~78 KB and rejected above ~90 KB with a generic "unsupported remote
-resources" error — the size, not any particular construct, is what trips it
-(verified by padding a known-good source with comments until it failed).
-`dev/build.py` strips comments and collapses indentation, nothing else, so
-`main.js` stays readable here while the uploaded source stays inside the
-budget.
+## The rig
 
-One construct genuinely was rejected: an argument to `ctx.music.play()` that
-was a member expression (`wantPreset.tempo`) rather than a literal or plain
-local. Loader-style arguments have to stay simple.
+The trainer is a keyframed 2D figure drawn procedurally — packaged assets are
+disabled (`maxAssets` is 0) and remote images are blocked, so there is nothing
+to load. Angles are absolute and in degrees: **0 points straight down, +90
+points right, -90 points left**, and the torso runs the other way from the
+pelvis so 0 is upright.
 
-Upload `build/main.js` as `source` with `plethora.json` as `manifest` to
-`POST /v1/agent/bits/drafts`, after pairing once at
-https://create.plethora.studio/agent-pair. Publishing stays manual.
+### Authoring rules, learned by getting them wrong
 
-## Sound
+1. **She faces +x.** Anything travelling forward is a *positive* angle. A
+   negative forearm angle curls the bar up behind her head.
+2. **A foot's toe must end below the ankle.** Invert it and she is standing on
+   her heels instead of up on her toes.
+3. **Seated only reads in side view.** The rig has no depth, so a seated front
+   view has nowhere to put the thighs and renders as a splayed float.
+4. **Every setup reel must move**: squat to the floor, grip, stand, set
+   position. Three standing frames teach nothing, and the setup reel is the
+   whole point of the Bit.
+5. **Exaggerate small movements.** A true-scale calf raise is invisible at
+   phone size, and it needs a step prop so the heel has something to drop
+   below.
 
-There is no speech synthesis in the Plethora SDK, so there is no spoken
-coaching — every cue is on screen. Music and stings come from `ctx.music`
-under the `backgroundMusic` permission; audio can only start from a user
-gesture, so `musicPreset()` calls `unlock()` and `play()` synchronously inside
-the tap handler. The ♪ button toggles it and the help sheet reports
-`ctx.music.state()` and any error, including `host_paused` (Plethora mutes a
-backgrounded Bit).
+None of these are detectable by reading the numbers — every one was found by
+rendering. Author a day, then shoot a contact sheet before trusting it.
 
-## Note
+## QA
 
-Weight suggestions are a conservative starting point, not coaching or medical
-advice. The Bit says so on the first screen and in the instructions sheet.
+    node dev/shots.mjs              # walk the whole UI, screenshot each screen
+    BUILT=1 node dev/shots.mjs      # same, against build/main.js
+    node dev/posegrid.mjs out.png 0,0.34,0.66,1          # every exercise
+    node dev/posegrid.mjs out.png 0,0.5,1 goblet         # just one
+
+`dev/shots.mjs` fails loudly on a page error and prints the platform lifecycle
+events, so a broken `ready()` shows up without reading the screenshots.
+
+## Notes
+
+Not medical advice. Weight suggestions are a starting point only.
