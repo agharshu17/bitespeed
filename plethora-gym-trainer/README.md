@@ -39,33 +39,45 @@ are listed so the week reads as a whole, but they are placeholders.
     build/main.js   upload artifact, generated
     dev/            local harness and QA tooling, never uploaded
 
-## The size ceiling
+## Uploading, and what the validator actually enforces
 
-The draft validator has a source budget of roughly 80 KB — the same code passes
-under it and is rejected above it with a generic "unsupported remote resources"
-error. The whole week does not fit as written, so three things keep it inside:
+    python3 dev/build.py     # main.js -> build/main.js, strip + node --check
 
-    npm install terser       # optional, but needed for the full week
-    python3 dev/build.py     # main.js -> build/main.js, then node --check
+Three things were measured against the live draft endpoint, because all three
+were previously guessed wrong:
 
-1. **Minification.** `dev/build.py` runs terser, which takes the artifact to
-   about 61% of source. Without terser it falls back to a comment and indent
-   strip (82%), which is enough for a partial week but not the full one.
-2. **A compact pose DSL.** A pose is a string, not an object literal:
+1. **Never minify.** terser output is rejected at any size with the generic
+   error *"This bit uses unsupported remote resources"*. The identical code
+   unminified is accepted. The validator statically analyses the source and
+   mangling defeats it. `dev/build.py` therefore only strips comments and
+   indentation.
+2. **No URLs anywhere in the source**, not even inside a comment. A GitHub
+   link in a build banner was enough to trip the same error. `dev/build.py`
+   fails the build if it finds one.
+3. **The size ceiling is not ~80 KB.** A padded 100 KB source was accepted, as
+   was 73.9 KB of real source. Around 160 KB the request fails with
+   *"Request deadline exceeded"* — a server timeout, not validation. Uploads
+   can also time out transiently well under that, so retry before concluding
+   anything about size.
 
-       tr('0|to4 na72 nb-58 nt2 ns1', '0.5|y0.20 to16 nt44 ns-52 no86')
+That generic remote-resources message says nothing about size. An earlier note
+in this repo blamed it on an ~80 KB budget and sent a redesign down the wrong
+path. Trust the message and bisect against the endpoint.
 
-   Codes are listed in `CODES` near the top of `main.js`.
-3. **Shared setup reels.** Picking two dumbbells up off the floor is the same
-   movement whatever you are about to do with them, so `RIG` holds the pickup
-   once and each exercise contributes only its closing "set position" step via
-   `sxs` (caption) and `sxt` (keyframe).
+The week still fits comfortably: Monday builds to 60.6 KB, and the compaction
+below leaves room for the remaining four days.
 
-Measured, by cloning Monday out to a stand-in full week: **35 exercises
-minify to 71.8 KB, about 8 KB under the ceiling.** The week fits in one Bit.
-`dev/build.py` prints the remaining headroom on every build.
+### Keeping it small anyway
 
-Only the artifact is squeezed — `main.js` stays readable in the repo.
+- **A compact pose DSL.** A pose is a string, not an object literal:
+
+      tr('0|to4 na72 nb-58 nt2 ns1', '0.5|y0.20 to16 nt44 ns-52 no86')
+
+  Codes are listed in `CODES` near the top of `main.js`.
+- **Shared setup reels.** Picking two dumbbells up off the floor is the same
+  movement whatever you are about to do with them, so `RIG` holds each pickup
+  once and an exercise contributes only its closing "set position" step via
+  `sxs` (caption) and `sxt` (keyframe).
 
 ## The rig
 
