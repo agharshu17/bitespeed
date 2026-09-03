@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "runtime": "plethora-bit@2",
+  "entry": "main.js",
+  "title": "Thursday Trainer",
+  "description": "A seven-level Thursday leg-and-core session with an animated coach. She demonstrates every movement, shows the exact mistake next to the correct form, paces your reps, suggests your weights and adjusts them from how each set felt.",
+  "tags": ["fitness", "workout", "gym", "trainer", "coach", "exercise", "health", "form"],
+  "permissions": ["haptics", "storage", "backgroundMusic"],
+  "dependencies": [],
+  "memory": {
+    "local": {
+      "thursday_state": {
+        "label": "Thursday progress"
+      }
+    },
+    "records": {
+      "thursday_streak": {
+        "label": "Thursdays",
+        "valueType": "number",
+        "order": "desc",
+        "format": "integer",
+        "dedupe": "best_per_user"
+      }
+    }
+  }
+}
