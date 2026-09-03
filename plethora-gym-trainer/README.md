@@ -17,6 +17,8 @@ There is deliberately **no wrong-form variant**. The Bit only ever shows the
 correct movement; the teaching is in the setup reel, the travel endpoints and
 the alignment guides.
 
+![the week, a day, the two reels and the tracker](docs/screens/train-reel.png)
+
 ## Status
 
 Monday is built — seven exercises, fully authored and QA'd. Tuesday to Friday
@@ -99,7 +101,9 @@ rendering. Author a day, then shoot a contact sheet before trusting it.
     node dev/posegrid.mjs out.png 0,0.5,1 goblet         # just one
 
 `dev/shots.mjs` fails loudly on a page error and prints the platform lifecycle
-events, so a broken `ready()` shows up without reading the screenshots.
+events, so a broken `ready()` shows up without reading the screenshots. Current
+screens are in `docs/screens`: `home`, `day-menu`, `setup-reel`, `train-reel`,
+`progress`, plus `monday-qa` — the pose contact sheet for all seven exercises.
 
 ## Notes
 
