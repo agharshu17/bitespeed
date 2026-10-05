@@ -40,6 +40,47 @@
   #tools button { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 8px 12px; font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); }
   #tools button:hover { border-color: var(--accent); }
   #tools button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .btn { border: 0; background: var(--accent); color: #fff; border-radius: 10px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .res .price { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--ink); }
+  .res .plus { border: 0; background: var(--accent); color: #fff; border-radius: 8px; width: 26px; height: 26px; font-size: 16px; line-height: 1; cursor: pointer; flex: none; }
+  #cart { top: 84px; right: 16px; width: 320px; max-height: calc(100% - 200px); display: flex; flex-direction: column; gap: 10px; padding: 14px; }
+  #cart h2 { margin: 0; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
+  #scanrow { display: flex; gap: 6px; }
+  #scan { flex: 1; min-width: 0; padding: 9px 11px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; font-size: 13px; outline: none; }
+  #scan:focus { border-color: var(--accent); }
+  #lines { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; min-height: 40px; }
+  .line { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: 13px; padding: 6px 8px; border-radius: 10px; background: #fff; border: 1px solid var(--line); }
+  .line .n { font-weight: 600; cursor: pointer; } .line .c { color: var(--muted); font-size: 11px; }
+  .qty { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+  .qty button { width: 22px; height: 22px; border-radius: 7px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 14px; line-height: 1; }
+  .tot { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+  .tot.big { font-size: 17px; font-weight: 800; color: var(--ink); }
+  #empty { color: var(--muted); font-size: 12px; text-align: center; padding: 10px; }
+  #cam { position: fixed; inset: 0; background: rgba(15,20,28,.8); display: none; place-items: center; z-index: 20; }
+  #cam.show { display: grid; } #cam .box { background: #fff; border-radius: 18px; padding: 14px; width: min(440px, 92vw); text-align: center; }
+  #cam video { width: 100%; border-radius: 12px; background: #000; aspect-ratio: 4/3; object-fit: cover; }
+  #flash { position: fixed; left: 50%; top: 22px; transform: translateX(-50%); background: #27b24f; color: #fff; padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: 13px; z-index: 30; opacity: 0; transition: opacity .25s; pointer-events: none; }
+  #flash.show { opacity: 1; }
+  #pay { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; place-items: center; z-index: 25; }
+  #pay.show { display: grid; }
+  #pay .box { background: #fff; border-radius: 20px; padding: 20px; width: min(420px, 92vw); max-height: 90vh; overflow: auto; }
+  #pay h3 { margin: 0 0 10px; } .methods { display: flex; gap: 8px; margin: 12px 0; } .methods button { flex: 1; padding: 12px 6px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; font: inherit; font-size: 13px; cursor: pointer; }
+  .methods button.on { border-color: var(--accent); background: #fff3ed; font-weight: 700; }
+  .rline { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .ok { text-align: center; } .ok .tick { font-size: 46px; }
+  #chatbtn { left: 50%; transform: translateX(-50%); bottom: 16px; padding: 12px 16px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); font: inherit; font-weight: 700; color: var(--ink); }
+  #chat { left: 50%; transform: translateX(-50%); bottom: 16px; width: 380px; height: 330px; display: none; flex-direction: column; padding: 12px; gap: 8px; }
+  #chat.show { display: flex; }
+  #chat header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; }
+  #chat header span small { font-weight: 600; color: var(--muted); font-size: 11px; display: block; }
+  #msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+  .m { max-width: 86%; padding: 8px 11px; border-radius: 14px; font-size: 13px; line-height: 1.45; white-space: pre-wrap; }
+  .m.u { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+  .m.a { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  #chatform { display: flex; gap: 6px; } #chatq { flex: 1; min-width: 0; padding: 9px 11px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; font-size: 13px; outline: none; }
   #tip { position: fixed; pointer-events: none; padding: 6px 10px; border-radius: 10px; background: rgba(31,42,55,.92); color: #fff; font-size: 12px; line-height: 1.4; display: none; transform: translate(12px, 12px); z-index: 5; white-space: nowrap; }
   #tip b { font-size: 13px; }
   #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #dfe9f3; font-weight: 700; color: var(--muted); z-index: 10; transition: opacity .5s; }
@@ -47,8 +88,9 @@
   @media (max-width: 760px) {
     #side { width: auto; right: 16px; max-height: 46%; }
     #info { width: auto; right: 16px; }
-    #tools { top: auto; bottom: 16px; right: 16px; left: auto; }
-    #info.show ~ #tools { bottom: 140px; }
+    #tools { display: none; }
+    #cart { top: auto; bottom: 70px; width: auto; left: 16px; max-height: 40%; }
+    #chat { width: auto; left: 16px; right: 16px; transform: none; }
   }
 </style>
 </head>
@@ -65,13 +107,31 @@
 <div id="info" class="panel">
   <div class="t"><span id="i-name"></span><span id="i-code" style="font-size:12px;color:var(--accent)"></span></div>
   <div class="m" id="i-meta"></div>
-  <button id="i-clear">Clear route</button>
+  <button id="i-add" style="background:var(--accent)">+ Add to cart</button> <button id="i-clear">Clear route</button>
 </div>
 
 <div id="tools" class="panel">
   <button id="b-rotate">⟳ Auto-rotate</button>
   <button id="b-top">⬒ Top view</button>
   <button id="b-reset">⌂ Reset</button>
+</div>
+
+<div id="cart" class="panel">
+  <h2><span>🧾 My cart <small id="ccount" style="color:var(--muted);font-weight:600"></small></span><button class="btn ghost" id="cclear" style="padding:4px 9px;font-size:11px">Clear</button></h2>
+  <div id="scanrow"><input id="scan" placeholder="Scan / type barcode or code…" autocomplete="off"><button class="btn" id="camBtn" title="Scan with camera">📷</button></div>
+  <div id="lines"></div>
+  <div class="tot"><span>Subtotal</span><span id="csub">₹0</span></div>
+  <div class="tot big"><span>Total</span><span id="ctot">₹0</span></div>
+  <button class="btn" id="checkout" disabled>Checkout</button>
+</div>
+<div id="cam"><div class="box"><video id="camv" playsinline muted></video><p style="font-size:13px;color:var(--muted)">Point the camera at a product barcode</p><button class="btn ghost" id="camClose">Close</button></div></div>
+<div id="pay"><div class="box" id="paybox"></div></div>
+<div id="flash"></div>
+<button id="chatbtn" class="panel">💬 Ask the store assistant</button>
+<div id="chat" class="panel">
+  <header><span>🤖 Store assistant<small id="mode"></small></span><button class="btn ghost" id="chatx" style="padding:3px 9px">✕</button></header>
+  <div id="msgs"></div>
+  <form id="chatform"><input id="chatq" placeholder="e.g. where is the sugar?" autocomplete="off"><button class="btn">Send</button></form>
 </div>
 <div id="tip"></div>
 
@@ -239,7 +299,7 @@ function buildDoor(key, label) {
   const L = box(w / 2, 3.2, .18, glass, cx - w / 4, 1.6, px2z(r.y + r.h - 2), scene, false);
   const R = box(w / 2, 3.2, .18, glass, cx + w / 4, 1.6, px2z(r.y + r.h - 2), scene, false);
   box(w + .6, .35, .5, std('#2b3544'), cx, 3.4, px2z(r.y + r.h - 2));
-  doorPanels.push({ L, R, cx, w, phase: key === 'entry' ? 0 : 2 });
+  doorPanels.push({ L, R, cx, w, key, phase: key === 'entry' ? 0 : 2 });
   const s = labelSprite(label, { icon: key === 'entry' ? '➡️' : '🚪', bg: '#27b24f', fg: '#fff', scale: .8 });
   s.position.set(cx, 5.4, px2z(r.y + r.h - 2)); scene.add(s);
 }
@@ -345,7 +405,7 @@ function selectProduct(code, fly = true) {
   const sec = secById[p.section];
   document.getElementById('i-name').textContent = p.name;
   document.getElementById('i-code').textContent = p.code;
-  document.getElementById('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${info.row} from the top · position ${info.col} of ${sec.cols}`;
+  document.getElementById('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${info.row} from the top · position ${info.col} of ${sec.cols}<br>₹${p.price} · barcode ${p.barcode}`;
   document.getElementById('info').classList.add('show');
   document.querySelectorAll('.res').forEach(e => e.classList.toggle('on', e.dataset.code === code));
   if (fly) flyTo(new THREE.Vector3(info.pos.x * .7 + 0, 42, info.pos.z * .7 + 52), new THREE.Vector3(info.pos.x, 0, info.pos.z));
@@ -371,12 +431,13 @@ function render(sectionFilter) {
   if (!list.length) { $res.innerHTML = '<div id="hint">No product found. Try another name.</div>'; return; }
   list.slice(0, 80).forEach(p => {
     const sec = secById[p.section], b = document.createElement('button'); b.className = 'res'; b.dataset.code = p.code;
-    b.innerHTML = `<span class="code">${p.code}</span><span><div class="nm">${p.name}</div><div class="sc">${sec.icon} ${sec.label}</div></span>`;
-    b.onclick = () => selectProduct(p.code); $res.appendChild(b);
+    b.innerHTML = `<span class="code">${p.code}</span><span><div class="nm">${p.name}</div><div class="sc">${sec.icon} ${sec.label}</div></span><span class="price">₹${p.price}</span><span class="plus" role="button" title="Add to cart">+</span>`;
+    b.onclick = e => { if (e.target.classList.contains('plus')) { addToCart(p.code); return; } selectProduct(p.code); }; $res.appendChild(b);
   });
 }
 $q.addEventListener('input', () => render());
 render();
+document.getElementById('i-add').onclick = () => selected && addToCart(selected);
 document.getElementById('i-clear').onclick = () => { clearRoute(); flyTo(HOME.pos.clone(), HOME.target.clone()); };
 const bRot = document.getElementById('b-rotate');
 bRot.onclick = () => { controls.autoRotate = !controls.autoRotate; bRot.classList.toggle('on', controls.autoRotate); };
@@ -404,14 +465,14 @@ renderer.domElement.addEventListener('pointerup', e => {
 addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 
 /* ---------- animate ---------- */
-let last = performance.now(), time = 0;
+let last = performance.now(), time = 0, exitHold = 0;
 const sp = { pos: new THREE.Vector3(), dir: new THREE.Vector3() };
 renderer.setAnimationLoop(now => {
   const dt = Math.min(.05, (now - last) / 1000); last = now; time += dt;
   if (fly) { fly.t += dt / fly.dur; const k = ease(Math.min(1, fly.t)); camera.position.lerpVectors(fly.p0, fly.p1, k); controls.target.lerpVectors(fly.t0, fly.t1, k); if (fly.t >= 1) fly = null; }
   controls.update();
   floatingSigns.forEach(s => { s.position.y = s.userData.baseY + Math.sin(time * 1.4 + s.userData.phase) * .25; });
-  doorPanels.forEach(d => { const open = (Math.sin(time * .9 + d.phase) + 1) / 2; const k = ease(Math.min(1, open * 1.6)) * d.w * .36; d.L.position.x = d.cx - d.w / 4 - k; d.R.position.x = d.cx + d.w / 4 + k; });
+  doorPanels.forEach(d => { const open = d.key === 'exit' && time < exitHold ? 1 : (Math.sin(time * .9 + d.phase) + 1) / 2; const k = ease(Math.min(1, open * 1.6)) * d.w * .36; d.L.position.x = d.cx - d.w / 4 - k; d.R.position.x = d.cx + d.w / 4 + k; });
   walkers.forEach(w => {
     w.d += w.speed * dt; placeOnPath(w.path, w.lens, w.total, w.d, sp);
     w.mesh.position.copy(sp.pos); w.mesh.position.y = Math.abs(Math.sin(w.d * 2.2)) * .08; w.mesh.rotation.y = Math.atan2(sp.dir.x, sp.dir.z);
@@ -426,9 +487,108 @@ renderer.setAnimationLoop(now => {
   renderer.render(scene, camera);
 });
 
+
+/* ---------- cart + scanner + checkout ---------- */
+const $ = id => document.getElementById(id);
+const byBarcode = Object.fromEntries(products.map(p => [p.barcode, p]));
+const inr = n => '₹' + n.toLocaleString('en-IN');
+const GST = 0.05;                                   // placeholder tax rate
+let cart = {}; try { cart = JSON.parse(localStorage.getItem('bsm-cart') || '{}'); } catch {}
+for (const c of Object.keys(cart)) if (!byCode[c]) delete cart[c];
+let flashT; function flash(msg, bad) { const f = $('flash'); f.textContent = msg; f.style.background = bad ? '#e5484d' : '#27b24f'; f.classList.add('show'); clearTimeout(flashT); flashT = setTimeout(() => f.classList.remove('show'), 1600); }
+const subtotal = () => Object.entries(cart).reduce((s, [c, q]) => s + byCode[c].price * q, 0);
+function saveCart() { try { localStorage.setItem('bsm-cart', JSON.stringify(cart)); } catch {} renderCart(); }
+function addToCart(code, qty = 1, quiet) { if (!byCode[code]) return; cart[code] = (cart[code] || 0) + qty; if (cart[code] <= 0) delete cart[code]; saveCart(); if (!quiet) flash(`Added ${byCode[code].name}`); }
+function renderCart() {
+  const entries = Object.entries(cart), n = entries.reduce((s, [, q]) => s + q, 0);
+  $('ccount').textContent = n ? `(${n} item${n > 1 ? 's' : ''})` : '';
+  $('lines').innerHTML = entries.length ? '' : '<div id="empty">Cart is empty – scan an item or add one from search.</div>';
+  for (const [c, q] of entries) {
+    const p = byCode[c], d = document.createElement('div'); d.className = 'line';
+    d.innerHTML = `<span class="n">${p.name}</span><span class="qty"><button data-d="-1">−</button>${q}<button data-d="1">+</button></span><span class="c">${c} · ${inr(p.price)}</span><span class="c" style="text-align:right">${inr(p.price * q)}</span>`;
+    d.querySelector('.n').onclick = () => selectProduct(c);
+    d.querySelectorAll('button').forEach(b => b.onclick = () => addToCart(c, +b.dataset.d, true));
+    $('lines').appendChild(d);
+  }
+  $('csub').textContent = inr(subtotal()); $('ctot').textContent = inr(Math.round(subtotal() * (1 + GST)));
+  $('checkout').disabled = !entries.length;
+}
+$('cclear').onclick = () => { cart = {}; saveCart(); };
+function scanValue(v) {
+  v = v.trim(); if (!v) return false;
+  const p = byBarcode[v] || byCode[v.toUpperCase()] || products.find(x => x.name.toLowerCase() === v.toLowerCase());
+  if (!p) { flash('Item not found: ' + v, true); return false; }
+  addToCart(p.code); return true;
+}
+$('scan').addEventListener('keydown', e => { if (e.key === 'Enter') { if (scanValue(e.target.value)) e.target.value = ''; } });
+
+// camera barcode scanning (Chrome/Edge/Android via BarcodeDetector)
+let camStream = null, camOn = false, lastScan = '', lastAt = 0;
+if (!('BarcodeDetector' in window)) { $('camBtn').disabled = true; $('camBtn').title = 'Camera scanning needs a browser with BarcodeDetector (Chrome / Edge)'; }
+$('camBtn').onclick = async () => {
+  try {
+    const det = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'code_128'] });
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    $('camv').srcObject = camStream; await $('camv').play(); $('cam').classList.add('show'); camOn = true;
+    (async function loop() {
+      while (camOn) {
+        try { const r = await det.detect($('camv')); for (const b of r) { const now = performance.now(); if (b.rawValue !== lastScan || now - lastAt > 2500) { lastScan = b.rawValue; lastAt = now; scanValue(b.rawValue); } } } catch {}
+        await new Promise(r => setTimeout(r, 200));
+      }
+    })();
+  } catch (e) { flash('Camera unavailable', true); }
+};
+function closeCam() { camOn = false; camStream?.getTracks().forEach(t => t.stop()); $('cam').classList.remove('show'); }
+$('camClose').onclick = closeCam;
+
+// checkout (simulated payment)
+function openPay() {
+  const sub = subtotal(), tax = Math.round(sub * GST), tot = sub + tax; let method = 'UPI';
+  const lines = Object.entries(cart).map(([c, q]) => `<div class="rline"><span>${q} × ${byCode[c].name}</span><span>${inr(q * byCode[c].price)}</span></div>`).join('');
+  $('paybox').innerHTML = `<h3>🧾 Checkout</h3>${lines}<hr style="border:0;border-top:1px solid var(--line)"><div class="rline"><span>Subtotal</span><span>${inr(sub)}</span></div><div class="rline"><span>GST (5%)</span><span>${inr(tax)}</span></div><div class="rline" style="font-weight:800;font-size:17px"><span>Total</span><span>${inr(tot)}</span></div>
+    <div class="methods"><button data-m="UPI" class="on">📱 UPI</button><button data-m="Card">💳 Card</button><button data-m="Wallet">👛 Wallet</button></div>
+    <div style="display:flex;gap:8px"><button class="btn ghost" id="payCancel">Back</button><button class="btn" id="payGo" style="flex:1">Pay ${inr(tot)}</button></div>
+    <p style="font-size:11px;color:var(--muted);margin:10px 0 0">Demo only – no real payment is taken.</p>`;
+  $('pay').classList.add('show');
+  $('paybox').querySelectorAll('.methods button').forEach(b => b.onclick = () => { method = b.dataset.m; $('paybox').querySelectorAll('.methods button').forEach(x => x.classList.toggle('on', x === b)); });
+  $('payCancel').onclick = () => $('pay').classList.remove('show');
+  $('payGo').onclick = () => {
+    $('payGo').disabled = true; $('payGo').textContent = 'Processing…';
+    setTimeout(() => {
+      const id = 'BSM-' + Date.now().toString(36).toUpperCase(), when = new Date().toLocaleString();
+      $('paybox').innerHTML = `<div class="ok"><div class="tick">✅</div><h3>Payment successful</h3><p style="color:var(--muted);font-size:13px">Order ${id}<br>${when} · paid ${inr(tot)} via ${method}</p><p>🚪 Exit gate is open – thank you for shopping!</p><button class="btn" id="payDone">Done</button></div>`;
+      exitHold = time + 8; cart = {}; saveCart(); clearRoute();
+      flyTo(new THREE.Vector3(30, 40, 70), new THREE.Vector3(px2x(layout.doors.exit.rect.x + 140), 0, 25));
+      $('payDone').onclick = () => $('pay').classList.remove('show');
+    }, 1200);
+  };
+}
+$('checkout').onclick = openPay;
+renderCart();
+
+/* ---------- chat assistant ---------- */
+let history = []; try { history = JSON.parse(sessionStorage.getItem('bsm-chat') || '[]'); } catch {}
+function bubble(text, who) { const d = document.createElement('div'); d.className = 'm ' + who; d.textContent = text; $('msgs').appendChild(d); $('msgs').scrollTop = 1e9; return d; }
+bubble('Hi! Ask me where anything is, what to cook, or tell me what to add to your cart 🛒', 'a');
+$('chatbtn').onclick = () => { $('chat').classList.add('show'); $('chatbtn').style.display = 'none'; $('chatq').focus(); };
+$('chatx').onclick = () => { $('chat').classList.remove('show'); $('chatbtn').style.display = ''; };
+$('chatform').onsubmit = async e => {
+  e.preventDefault(); const text = $('chatq').value.trim(); if (!text) return; $('chatq').value = ''; bubble(text, 'u');
+  const wait = bubble('…', 'a');
+  try {
+    const r = await fetch('/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ messages: history, text, cart }) });
+    if (!r.ok && r.status !== 500) throw new Error('no api');
+    const j = await r.json(); wait.textContent = j.reply; history = j.messages || history;
+    try { sessionStorage.setItem('bsm-chat', JSON.stringify(history)); } catch {}
+    $('mode').textContent = j.mode === 'claude' ? 'powered by Claude' : 'offline mode (no API key)';
+    for (const a of j.actions || []) { if (a.type === 'add') addToCart(a.code, a.qty, true); if (a.type === 'route') selectProduct(a.code); }
+  } catch { wait.textContent = 'The assistant needs the Node server – run `npm start` in store-map (see README) instead of a plain static server.'; }
+  $('msgs').scrollTop = 1e9;
+};
+
 document.getElementById('loading').classList.add('hide');
 const qs = new URLSearchParams(location.search).get('item'); if (qs && byCode[qs.toUpperCase()]) selectProduct(qs.toUpperCase());
-window.__store = { selectProduct, clearRoute, camera, controls, scene, productInfo };
+window.__store = { addToCart, openPay, selectProduct, clearRoute, camera, controls, scene, productInfo };
 </script>
 </body>
 </html>
