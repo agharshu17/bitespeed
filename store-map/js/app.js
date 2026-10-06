@@ -1,5 +1,5 @@
 // BiteSpeed Mart app shell: Home, Shop, Map, Trolley.
-import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, lineCalc, emojiFor, tint, recipeImg,
+import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, lineCalc, emojiFor, tint,
   addToCart, clearCart, setUsePoints, isFav, toggleFav, isSaved, toggleSaved, cartCount, buyAgain, totals, completeOrder } from './store.js';
 import { createScene } from './scene.js';
 import { initScanner } from './scanner.js';
@@ -114,7 +114,7 @@ const diffN = r => ({ Easy: 2, Medium: 3, Hard: 4 }[r.level] || 2);
 const prepOf = r => Math.max(5, Math.round(r.minutes * 0.3 / 5) * 5), cookOf = r => Math.max(5, r.minutes - prepOf(r));
 const mins = m => m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? ` ${m % 60}m` : ''}` : `${m}m`;
 const estServe = r => Math.round(r.ingredients.reduce((s, i) => s + lineCalc(i.code, 1).total, 0) / r.serves);
-const rPhoto = (r, alt = true) => recipeImg(r.id) ? `<img src="${recipeImg(r.id)}" alt="${alt ? r.title : ''}" loading="lazy">` : `<div class="ph">${ICON.utensils}</div>`;
+const rPhoto = r => `<div class="remo" style="background:${r.color}26">${r.emoji}</div>`;
 const bookmark = r => `<button class="bm${isSaved(r.id) ? ' on' : ''}" data-save="${r.id}" aria-label="${isSaved(r.id) ? 'Remove from saved' : 'Save recipe'}">${ICON.bookmark}</button>`;
 const wideCard = r => `<article class="wcard" data-recipe="${r.id}" tabindex="0"><div class="wimg">${rPhoto(r)}</div><div class="wbody"><b>${r.title}</b><div class="wfacts"><div class="fx"><small>Prep</small><b>${mins(prepOf(r))}</b></div><div class="fx"><small>Cook</small><b>${mins(cookOf(r))}</b></div><div class="fx"><small>Difficulty</small>${dots(diffN(r))}</div></div><span class="est">Est. ${inr(estServe(r))} per serve</span></div></article>`;
 const tallCard = r => `<article class="pcard" data-recipe="${r.id}" tabindex="0"><div class="pimg">${rPhoto(r)}${bookmark(r)}</div><div class="pb"><b>${r.title}</b><div class="pm"><span>${mins(r.minutes)}</span>${dots(diffN(r))}</div><span class="est">Est. ${inr(estServe(r))} per serve</span></div></article>`;
@@ -123,7 +123,7 @@ const RIDEAS = [['quick', 'Quick & easy'], ['Breakfast', 'Breakfast'], ['Dinner'
 function renderRecipeHome() {
   const dinners = D.recipes.filter(r => r.course === 'Dinner'), week = Math.floor(Date.now() / 6048e5), pick = [0, 1, 2].map(i => dinners[(week + i) % dinners.length]);
   $('h-dinner').innerHTML = pick.map(wideCard).join('');
-  $('h-circs').innerHTML = RIDEAS.map(([k, l]) => { const r = D.recipes.find(x => (x.tags.includes(k) || x.course === k) && recipeImg(x.id)) || D.recipes.find(x => x.tags.includes(k) || x.course === k); return r ? `<button class="circ" data-rf="${k}"><span class="cimg">${rPhoto(r, false)}</span>${l}</button>` : ''; }).join('');
+  $('h-circs').innerHTML = RIDEAS.map(([k, l]) => { const r = D.recipes.find(x => x.tags.includes(k) || x.course === k); return r ? `<button class="circ" data-rf="${k}"><span class="cimg">${rPhoto(r)}</span>${l}</button>` : ''; }).join('');
   $('h-popular').innerHTML = POPULAR.map(id => D.recipes.find(r => r.id === id)).filter(Boolean).map(tallCard).join('');
   const saved = state.saved.map(id => D.recipes.find(r => r.id === id)).filter(Boolean);
   $('h-saved-sec').hidden = !saved.length; $('h-saved').innerHTML = saved.map(tallCard).join('');
@@ -173,14 +173,6 @@ $('recipepage').addEventListener('click', e => {
   }
 });
 $('recipepage').addEventListener('change', e => { const c = e.target.dataset?.c; if (!c) return; e.target.checked ? cur.on.add(c) : cur.on.delete(c); drawRecipe(); });
-
-/* ---------- image credits ---------- */
-$('credBtn').onclick = () => {
-  const rows = Object.entries(D.images).filter(([, v]) => !v.none).map(([k, v]) => { const name = k.startsWith('recipe:') ? D.recipes.find(r => r.id === k.slice(7))?.title : D.byCode[k]?.name; return `<li><span>${name || k}</span><span><a href="${v.page}" target="_blank" rel="noopener">${v.src === 'off' ? 'Open Food Facts' : 'Wikipedia'}</a> · ${v.license}</span></li>`; }).join('');
-  $('creditsbox').innerHTML = `<h3>Image credits</h3><p>Recipe photos are from Wikipedia / Wikimedia Commons under the licence shown for each image.</p><ul>${rows}</ul>`;
-  $('credits').classList.add('show');
-};
-$('credits').addEventListener('click', e => { if (e.target === $('credits')) $('credits').classList.remove('show'); });
 
 /* ---------- map ---------- */
 function onHover(code, x, y) {

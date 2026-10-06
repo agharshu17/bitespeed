@@ -43,12 +43,9 @@ sorting, search), a centre **Scan** button, **Map** (3D store with route to any 
 The ♥ on a product adds it to "Buy again"; items you pay for are added there automatically. Code layout:
 `index.html` (shell + styles), `js/app.js` (screens), `js/store.js` (data, prices, trolley, points), `js/scene.js` (3D), `js/scanner.js`, `js/chat.js`.
 
-## Photos
-Product and recipe photos live in `assets/products/<code>.jpg` and `assets/recipes/<id>.jpg`; `data/images.json` and `data/recipe-images.json`
-record the source and licence of each (shown under Home → Image credits). Missing photos show a neutral placeholder.
-`node scripts/fetch-images.mjs` (needs `npm i` for sharp) fills in packaged products from Open Food Facts (CC BY-SA) and fresh produce / fish from
-Wikipedia; it is resumable and rate-limited, and stops cleanly if Open Food Facts returns errors. `node scripts/fetch-images.mjs --recipes` does the recipe photos.
-Photos are community images, not studio shots: add your own as `assets/products/<code>.jpg` to override.
+## Icons
+Products, aisles and recipes use emoji icons (picked by keyword in `js/store.js`, recipes carry their own in `data/recipes.json`), so there are no image files to manage.
+`scripts/fetch-images.mjs` is an optional, unused helper that downloads free-licence photos if you ever want them.
 
 ## Trolley route
 Trolley → **🧭 Plan my route** opens the Map, drops a marker on every item's shelf and walks the orange cart from the entry past

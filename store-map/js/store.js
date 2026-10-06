@@ -4,10 +4,7 @@ export const D = { layout: null, products: [], offers: [], recipes: [], images: 
 export async function loadData() {
   const get = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
   const [layout, products, offers, recipes] = await Promise.all([get('data/store-layout.json'), get('data/products.json'), get('data/offers.json'), get('data/recipes.json')]);
-  const images = {};
-  const rimgs = await get('data/recipe-images.json').catch(() => ({}));
-  for (const [id, v] of Object.entries(rimgs)) images['recipe:' + id] = v;
-  Object.assign(D, { layout, products, offers, recipes, images });
+  Object.assign(D, { layout, products, offers, recipes });
   D.byCode = Object.fromEntries(products.map(p => [p.code, p]));
   D.byBarcode = Object.fromEntries(products.map(p => [p.barcode, p]));
   D.offerBy = Object.fromEntries(offers.map(o => [o.code, o]));
@@ -62,9 +59,6 @@ const hash = s => { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0
 export const tint = p => `hsl(${hash(p.name) % 360} 75% 92%)`;
 
 
-/* ---------- recipe photos (data/recipe-images.json, files in assets/recipes) ---------- */
-export const imgSrc = () => null;
-export const recipeImg = id => (D.images['recipe:' + id] && !D.images['recipe:' + id].none) ? `assets/recipes/${id}.jpg` : null;
 
 /* ---------- persistent state ---------- */
 const load = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } };
