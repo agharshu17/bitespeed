@@ -10,7 +10,10 @@
     --ink: #1f2a37; --muted: #6b7684; --card: rgba(255,255,255,.88); --line: rgba(31,42,55,.10);
     --accent: #ff6b35; --accent-2: #ffb703;
   }
+  :root { color-scheme: light; }
   * { box-sizing: border-box; }
+  input { color: var(--ink); background: #fff; -webkit-text-fill-color: var(--ink); }
+  input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
   html, body { margin: 0; height: 100%; overflow: hidden; background: #dfe9f3; color: var(--ink);
     font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   canvas { display: block; }
@@ -45,7 +48,7 @@
   .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
   .btn:disabled { opacity: .45; cursor: not-allowed; }
   .res .price { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--ink); }
-  .res .plus { border: 0; background: var(--accent); color: #fff; border-radius: 8px; width: 26px; height: 26px; font-size: 16px; line-height: 1; cursor: pointer; flex: none; }
+  .res .plus { display: grid; place-items: center; padding: 0; border: 0; background: var(--accent); color: #fff; border-radius: 8px; width: 26px; height: 26px; font-size: 16px; line-height: 1; cursor: pointer; flex: none; }
   #cart { top: 84px; right: 16px; width: 320px; max-height: calc(100% - 200px); display: flex; flex-direction: column; gap: 10px; padding: 14px; }
   #cart h2 { margin: 0; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
   #scanrow { display: flex; gap: 6px; }
@@ -85,12 +88,33 @@
   #tip b { font-size: 13px; }
   #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #dfe9f3; font-weight: 700; color: var(--muted); z-index: 10; transition: opacity .5s; }
   #loading.hide { opacity: 0; pointer-events: none; }
+  .iconbtn { width: 46px; flex: none; display: grid; place-items: center; padding: 0; }
+  .iconbtn svg { width: 22px; height: 22px; }
+  .payrow { display: flex; gap: 8px; }
+  #mnav { display: none; }
+  #cam .box { position: relative; }
+  #camstat { font-size: 13px; color: var(--muted); margin: 8px 0; min-height: 36px; }
+  #camstat b { color: var(--ink); }
+  #camrow { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  #camrow label.btn { display: inline-block; }
+  .reticle { position: absolute; left: 14%; right: 14%; top: 34%; height: 24%; border: 2px solid rgba(255,255,255,.85); border-radius: 12px; box-shadow: 0 0 0 999px rgba(0,0,0,.25); pointer-events: none; }
+  .vwrap { position: relative; border-radius: 12px; overflow: hidden; }
   @media (max-width: 760px) {
-    #side { width: auto; right: 16px; max-height: 46%; }
-    #info { width: auto; right: 16px; }
-    #tools { display: none; }
-    #cart { top: auto; bottom: 70px; width: auto; left: 16px; max-height: 40%; }
-    #chat { width: auto; left: 16px; right: 16px; transform: none; }
+    #side, #cart { display: none; left: 12px; right: 12px; top: auto; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 62%; }
+    #side.open, #cart.open { display: flex; }
+    #chatbtn { display: none; }
+    #chat { left: 12px; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: auto; height: 58%; transform: none; }
+    #tools { top: 10px; left: 12px; right: 12px; justify-content: space-between; padding: 6px; }
+    #tools button { padding: 7px 8px; font-size: 12px; flex: 1; }
+    #info { top: 66px; bottom: auto; left: 12px; right: 12px; width: auto; }
+    #mnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; display: flex; justify-content: space-around; align-items: flex-end; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+    #mnav button { border: 0; background: none; font: inherit; font-size: 11px; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 10px; position: relative; cursor: pointer; }
+    #mnav button svg { width: 22px; height: 22px; }
+    #mnav button.on { color: var(--accent); }
+    #mnav .scanfab { background: var(--accent); color: #fff; width: 64px; height: 64px; border-radius: 50%; margin-top: -26px; justify-content: center; box-shadow: 0 8px 20px rgba(255,107,53,.45); border: 4px solid #fff; }
+    #mnav .scanfab svg { width: 28px; height: 28px; }
+    #mnav .badge { position: absolute; top: -2px; right: 2px; background: var(--ink); color: #fff; border-radius: 999px; font-size: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
+    #flash { top: 66px; }
   }
 </style>
 </head>
@@ -118,13 +142,13 @@
 
 <div id="cart" class="panel">
   <h2><span>🧾 My cart <small id="ccount" style="color:var(--muted);font-weight:600"></small></span><button class="btn ghost" id="cclear" style="padding:4px 9px;font-size:11px">Clear</button></h2>
-  <div id="scanrow"><input id="scan" placeholder="Scan / type barcode or code…" autocomplete="off"><button class="btn" id="camBtn" title="Scan with camera">📷</button></div>
+  <div id="scanrow"><input id="scan" placeholder="Type barcode or item code…" autocomplete="off" inputmode="text"><button class="btn" id="scanAdd">Add</button></div>
   <div id="lines"></div>
   <div class="tot"><span>Subtotal</span><span id="csub">₹0</span></div>
   <div class="tot big"><span>Total</span><span id="ctot">₹0</span></div>
-  <button class="btn" id="checkout" disabled>Checkout</button>
+  <div class="payrow"><button class="btn iconbtn" id="camBtn" title="Scan items with the camera" aria-label="Scan items with the camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button><button class="btn" id="checkout" disabled style="flex:1">Checkout</button></div>
 </div>
-<div id="cam"><div class="box"><video id="camv" playsinline muted></video><p style="font-size:13px;color:var(--muted)">Point the camera at a product barcode</p><button class="btn ghost" id="camClose">Close</button></div></div>
+<div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
 <div id="pay"><div class="box" id="paybox"></div></div>
 <div id="flash"></div>
 <button id="chatbtn" class="panel">💬 Ask the store assistant</button>
@@ -133,8 +157,15 @@
   <div id="msgs"></div>
   <form id="chatform"><input id="chatq" placeholder="e.g. where is the sugar?" autocomplete="off"><button class="btn">Send</button></form>
 </div>
+<nav id="mnav">
+  <button id="n-side"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Find</button>
+  <button id="n-scan" class="scanfab" aria-label="Scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button>
+  <button id="n-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2.5l2.2 11h10.6l2-8H6.5"/></svg>Cart<span class="badge" id="nbadge" hidden>0</span></button>
+  <button id="n-ask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Ask</button>
+</nav>
 <div id="tip"></div>
 
+<script src="vendor/zxing.min.js"></script>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.js" } }
 </script>
@@ -169,7 +200,8 @@ document.body.prepend(renderer.domElement);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#dfe9f3');
 const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 400);
-const HOME = { pos: new THREE.Vector3(-14, 90, 104), target: new THREE.Vector3(-14, 0, 4) };
+const PORTRAIT = innerWidth < 760;
+const HOME = PORTRAIT ? { pos: new THREE.Vector3(0, 150, 118), target: new THREE.Vector3(0, 0, -2) } : { pos: new THREE.Vector3(-14, 90, 104), target: new THREE.Vector3(-14, 0, 4) };
 camera.position.copy(HOME.pos);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.copy(HOME.target);
@@ -407,6 +439,7 @@ function selectProduct(code, fly = true) {
   document.getElementById('i-code').textContent = p.code;
   document.getElementById('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${info.row} from the top · position ${info.col} of ${sec.cols}<br>₹${p.price} · barcode ${p.barcode}`;
   document.getElementById('info').classList.add('show');
+  if (isMobile()) closePanels();
   document.querySelectorAll('.res').forEach(e => e.classList.toggle('on', e.dataset.code === code));
   if (fly) flyTo(new THREE.Vector3(info.pos.x * .7 + 0, 42, info.pos.z * .7 + 52), new THREE.Vector3(info.pos.x, 0, info.pos.z));
 }
@@ -511,7 +544,7 @@ function renderCart() {
     $('lines').appendChild(d);
   }
   $('csub').textContent = inr(subtotal()); $('ctot').textContent = inr(Math.round(subtotal() * (1 + GST)));
-  $('checkout').disabled = !entries.length;
+  $('checkout').disabled = !entries.length; $('nbadge').textContent = n; $('nbadge').hidden = !n;
 }
 $('cclear').onclick = () => { cart = {}; saveCart(); };
 function scanValue(v) {
@@ -522,24 +555,48 @@ function scanValue(v) {
 }
 $('scan').addEventListener('keydown', e => { if (e.key === 'Enter') { if (scanValue(e.target.value)) e.target.value = ''; } });
 
-// camera barcode scanning (Chrome/Edge/Android via BarcodeDetector)
-let camStream = null, camOn = false, lastScan = '', lastAt = 0;
-if (!('BarcodeDetector' in window)) { $('camBtn').disabled = true; $('camBtn').title = 'Camera scanning needs a browser with BarcodeDetector (Chrome / Edge)'; }
-$('camBtn').onclick = async () => {
+// camera barcode scanning: native BarcodeDetector where available, ZXing everywhere else (iPhone Safari, Firefox)
+const FORMATS = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'];
+let camOn = false, camStream = null, zxReader = null, lastScan = '', lastAt = 0, scanned = 0;
+function beep() { try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 1100; g.gain.value = .08; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + .08); } catch {} }
+function onCode(raw) {
+  const now = performance.now(); if (raw === lastScan && now - lastAt < 2200) return; lastScan = raw; lastAt = now;
+  const p = byBarcode[raw] || byCode[raw.toUpperCase()];
+  if (!p) { $('camstat').innerHTML = `Unknown barcode <b>${raw}</b>`; return; }
+  addToCart(p.code, 1, true); scanned++; beep(); navigator.vibrate?.(60);
+  $('camstat').innerHTML = `✅ <b>${p.name}</b> – ${inr(p.price)}<br>${scanned} item${scanned > 1 ? 's' : ''} scanned · keep scanning or tap Done`;
+}
+async function decodeImageFile(file) {
+  const url = URL.createObjectURL(file);
   try {
-    const det = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'code_128'] });
-    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-    $('camv').srcObject = camStream; await $('camv').play(); $('cam').classList.add('show'); camOn = true;
-    (async function loop() {
-      while (camOn) {
-        try { const r = await det.detect($('camv')); for (const b of r) { const now = performance.now(); if (b.rawValue !== lastScan || now - lastAt > 2500) { lastScan = b.rawValue; lastAt = now; scanValue(b.rawValue); } } } catch {}
-        await new Promise(r => setTimeout(r, 200));
-      }
-    })();
-  } catch (e) { flash('Camera unavailable', true); }
-};
-function closeCam() { camOn = false; camStream?.getTracks().forEach(t => t.stop()); $('cam').classList.remove('show'); }
-$('camClose').onclick = closeCam;
+    if ('BarcodeDetector' in window) { const img = await createImageBitmap(file); const r = await new BarcodeDetector({ formats: FORMATS }).detect(img); if (r[0]) return onCode(r[0].rawValue); }
+    else if (window.ZXing) { const r = await new ZXing.BrowserMultiFormatReader().decodeFromImageUrl(url); return onCode(r.getText()); }
+    $('camstat').textContent = 'No barcode found in that photo – try again, closer and steadier.';
+  } catch { $('camstat').textContent = 'No barcode found in that photo – try again, closer and steadier.'; }
+  finally { URL.revokeObjectURL(url); }
+}
+$('camfile').onchange = e => { const f = e.target.files[0]; if (f) decodeImageFile(f); e.target.value = ''; };
+async function openCam() {
+  scanned = 0; lastScan = ''; $('cam').classList.add('show');
+  $('camstat').textContent = 'Point the camera at a product barcode';
+  if (!navigator.mediaDevices?.getUserMedia || !window.isSecureContext) { $('camv').style.display = 'none'; $('camstat').innerHTML = 'Live camera needs a secure (https) connection. Use <b>Take / choose photo</b> to scan instead.'; return; }
+  $('camv').style.display = '';
+  try {
+    if ('BarcodeDetector' in window) {
+      const det = new BarcodeDetector({ formats: FORMATS });
+      camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+      $('camv').srcObject = camStream; await $('camv').play(); camOn = true;
+      (async function loop() { while (camOn) { try { for (const b of await det.detect($('camv'))) onCode(b.rawValue); } catch {} await new Promise(r => setTimeout(r, 150)); } })();
+    } else if (window.ZXing) {
+      const hints = new Map([[ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.CODE_128]]]);
+      zxReader = new ZXing.BrowserMultiFormatReader(hints, 200); camOn = true;
+      await zxReader.decodeFromConstraints({ video: { facingMode: { ideal: 'environment' } }, audio: false }, $('camv'), (r) => { if (r) onCode(r.getText()); });
+    } else { $('camv').style.display = 'none'; $('camstat').textContent = 'Live scanning is not available in this browser – use Take / choose photo.'; }
+  } catch (e) { $('camv').style.display = 'none'; $('camstat').innerHTML = 'Camera blocked or unavailable. Allow camera access, or use <b>Take / choose photo</b>.'; }
+}
+function closeCam() { camOn = false; try { zxReader?.reset(); } catch {} zxReader = null; camStream?.getTracks().forEach(t => t.stop()); camStream = null; $('camv').srcObject = null; $('cam').classList.remove('show'); }
+$('camBtn').onclick = openCam; $('camClose').onclick = closeCam;
+$('scanAdd').onclick = () => { if (scanValue($('scan').value)) $('scan').value = ''; };
 
 // checkout (simulated payment)
 function openPay() {
@@ -565,6 +622,16 @@ function openPay() {
 }
 $('checkout').onclick = openPay;
 renderCart();
+
+
+/* ---------- mobile bottom navigation ---------- */
+const isMobile = () => matchMedia('(max-width: 760px)').matches;
+function closePanels() { ['side', 'cart'].forEach(id => $(id).classList.remove('open')); $('chat').classList.remove('show'); ['n-side', 'n-cart', 'n-ask'].forEach(id => $(id).classList.remove('on')); }
+function togglePanel(id, btn) { const el = $(id), was = el.classList.contains('open') || el.classList.contains('show'); closePanels(); if (!was) { el.classList.add(id === 'chat' ? 'show' : 'open'); $(btn).classList.add('on'); } }
+$('n-side').onclick = () => togglePanel('side', 'n-side');
+$('n-cart').onclick = () => togglePanel('cart', 'n-cart');
+$('n-ask').onclick = () => togglePanel('chat', 'n-ask');
+$('n-scan').onclick = () => { closePanels(); openCam(); };
 
 /* ---------- chat assistant ---------- */
 let history = []; try { history = JSON.parse(sessionStorage.getItem('bsm-chat') || '[]'); } catch {}

@@ -8,6 +8,11 @@ plus the product/location data the app will use.
     # optional: ANTHROPIC_API_KEY=sk-ant-... npm start   -> Claude-powered assistant
     #           (without a key the chat uses a simple offline keyword search)
 
+**On a phone:** open the app on the same Wi-Fi at `http://<your-computer-ip>:8000`. Live camera scanning needs HTTPS
+(browsers only allow the camera on `https://` or `localhost`) – deploy it (e.g. Railway) or tunnel it (`npx localtunnel --port 8000`,
+ngrok). Over plain http the **Take / choose photo** button still scans a barcode from a photo.
+Chrome/Edge/Android use the built-in `BarcodeDetector`; iPhone Safari/Firefox use the bundled ZXing library (`vendor/zxing.min.js`, MIT).
+
 (`python3 -m http.server` also shows the 3D map and checkout, but the chat needs the Node server.)
 
 Deep link to a product: `http://localhost:8000/?item=2A17`
