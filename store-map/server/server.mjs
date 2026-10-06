@@ -95,7 +95,7 @@ function chatFallback(text, ctx) {
 
 /* ---------- http ---------- */
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.css': 'text/css' };
-const PUBLIC = ['index.html', 'data', 'assets', 'vendor'];
+const PUBLIC = ['index.html', 'js', 'data', 'assets', 'vendor'];
 http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   if (req.method === 'POST' && url.pathname === '/api/chat') {

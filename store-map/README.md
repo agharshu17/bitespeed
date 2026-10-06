@@ -37,6 +37,12 @@ Each product also has a `price` (₹, **placeholder values – replace with real
 - `3A48` renamed **Fried Moong Dal** (a snack, different from raw Moong Dal 2B02).
 - Frozen codes are now `FRZ-A01 … FRZ-A25`.
 
+## App layout
+Bottom tabs (top menu on a computer): **Home** (this week's specials, buy again), **Shop** (aisle tiles, product grids with emoji icons,
+sorting, search), a centre **Scan** button, **Map** (3D store with route to any item) and **Trolley** (items, savings, points, checkout).
+The ♥ on a product adds it to "Buy again"; items you pay for are added there automatically. Code layout:
+`index.html` (shell + styles), `js/app.js` (screens), `js/store.js` (data, prices, trolley, points), `js/scene.js` (3D), `js/scanner.js`, `js/chat.js`.
+
 ## Offers & points
 `data/offers.json` (sample deals, regenerate/edit freely): `percent` (`pct`), `multibuy` (`qty` for `price`) and `bogo`
 (`buy` + `free`). Specials show first (strip at the top of the Find panel + "All specials"), the cart shows was/now prices,

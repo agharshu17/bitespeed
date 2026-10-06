@@ -2,745 +2,250 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BiteSpeed Mart – 3D Store Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12905a">
+<title>BiteSpeed Mart</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛒%3C/text%3E%3C/svg%3E">
 <style>
   :root {
-    --ink: #1f2a37; --muted: #6b7684; --card: rgba(255,255,255,.88); --line: rgba(31,42,55,.10);
-    --accent: #ff6b35; --accent-2: #ffb703;
+    --brand: #12905a; --brand-dark: #0c6f45; --accent: #12905a; --deal: #d92d20;
+    --ink: #1f2a37; --muted: #667085; --bg: #f3f6f4; --card: #ffffff; --line: rgba(31,42,55,.10);
+    --tabh: 64px; color-scheme: light;
   }
-  :root { color-scheme: light; }
   [hidden] { display: none !important; }
   * { box-sizing: border-box; }
   input { color: var(--ink); background: #fff; -webkit-text-fill-color: var(--ink); }
   input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #dfe9f3; color: var(--ink);
-    font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  canvas { display: block; }
-  .panel { position: fixed; background: var(--card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 10px 30px rgba(31,42,55,.12); }
-  #side { top: 16px; left: 16px; width: 340px; max-height: calc(100% - 32px); display: flex; flex-direction: column; padding: 16px; gap: 12px; }
-  h1 { font-size: 18px; margin: 0; letter-spacing: .2px; display: flex; align-items: center; gap: 8px; }
-  h1 small { font-weight: 600; color: var(--muted); font-size: 12px; }
-  #q { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line); font: inherit; font-size: 15px; outline: none; background: #fff; }
-  #q:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(255,107,53,.15); }
-  #chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; padding: 5px 10px; font: inherit; font-size: 12px; cursor: pointer; transition: .15s; }
-  .chip:hover { border-color: var(--accent); transform: translateY(-1px); }
-  #results { overflow-y: auto; margin: 0 -6px; padding: 0 6px; display: flex; flex-direction: column; gap: 4px; min-height: 0; }
-  .res { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; background: transparent; font: inherit; text-align: left; color: inherit; }
-  .res:hover, .res.on { background: #fff; border-color: var(--line); }
-  .res .code { font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 700; color: #fff; background: var(--accent); padding: 3px 7px; border-radius: 7px; min-width: 46px; text-align: center; }
-  .res .nm { font-size: 14px; font-weight: 600; }
-  .res .sc { font-size: 11px; color: var(--muted); }
-  #hint { color: var(--muted); font-size: 12px; padding: 6px 2px; }
-  #info { left: 16px; bottom: 16px; width: 340px; padding: 14px 16px; display: none; }
-  #info.show { display: block; }
-  #info .t { font-size: 16px; font-weight: 800; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
-  #info .m { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
-  #info button { margin-top: 10px; border: 0; background: var(--ink); color: #fff; border-radius: 10px; padding: 7px 12px; font: inherit; font-size: 12px; cursor: pointer; }
-  #tools { top: 16px; right: 16px; display: flex; gap: 6px; padding: 8px; }
-  #tools button { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 8px 12px; font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); }
-  #tools button:hover { border-color: var(--accent); }
-  #tools button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink);
+    font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+  button { font: inherit; color: inherit; }
+  #app { height: 100%; display: flex; flex-direction: column; }
 
-  .btn { border: 0; background: var(--accent); color: #fff; border-radius: 10px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  /* header */
+  #top { order: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); background: var(--brand); color: #fff; }
+  .brand { font-weight: 800; font-size: 17px; white-space: nowrap; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  #gsearch { flex: 1; min-width: 0; padding: 10px 14px; border-radius: 999px; border: 0; font: inherit; font-size: 14px; outline: none; }
+  #ptsChip { border: 0; background: rgba(255,255,255,.18); color: #fff; border-radius: 999px; padding: 8px 12px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
+
+  /* views */
+  #views { order: 2; flex: 1; position: relative; min-height: 0; }
+  .view { position: absolute; inset: 0; overflow-y: auto; display: none; -webkit-overflow-scrolling: touch; }
+  .view.active { display: block; }
+  #v-map.active { overflow: hidden; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 16px 16px 28px; }
+  h2.sec { margin: 6px 0 10px; font-size: 18px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  h2.sec a, .linkbtn { color: var(--brand-dark); font-size: 13px; font-weight: 700; cursor: pointer; background: none; border: 0; padding: 0; }
+  .section { margin-bottom: 22px; }
+  .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 16px; padding: 18px; color: var(--muted); font-size: 13px; text-align: center; width: 100%; }
+
+  /* product tiles */
+  .row { display: flex; gap: 12px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x proximity; }
+  .row .tile { flex: none; width: 158px; scroll-snap-align: start; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 10px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .art { height: 96px; border-radius: 13px; display: grid; place-items: center; font-size: 46px; position: relative; }
+  .badge { position: absolute; left: 6px; top: 6px; background: var(--deal); color: #fff; font-size: 10px; font-weight: 800; border-radius: 6px; padding: 2px 6px; max-width: 70%; }
+  .fav { position: absolute; right: 5px; top: 5px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(255,255,255,.85); color: #b8c0cc; font-size: 15px; cursor: pointer; display: grid; place-items: center; padding: 0; }
+  .fav.on { color: #e5484d; }
+  .tn { font-weight: 700; font-size: 13px; line-height: 1.25; min-height: 33px; overflow-wrap: anywhere; }
+  .loc { align-self: flex-start; border: 0; background: none; color: var(--muted); font-size: 11px; padding: 0; cursor: pointer; text-align: left; }
+  .loc:hover { color: var(--brand-dark); text-decoration: underline; }
+  .tp { font-size: 15px; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  .was { color: var(--muted); font-weight: 500; font-size: 11px; } .now { font-weight: 800; }
+  .ctl { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 4px; }
+  .ctl button { border: 0; background: var(--brand); color: #fff; border-radius: 10px; min-width: 34px; height: 34px; font-weight: 800; font-size: 16px; cursor: pointer; }
+  .ctl .addbtn { width: 100%; font-size: 13px; }
+  .ctl span { font-weight: 800; }
+
+  /* shop */
+  #shopbar { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  #shopbar h2 { margin: 0; font-size: 20px; flex: 1; }
+  #shopback { border: 1px solid var(--line); background: #fff; border-radius: 10px; width: 36px; height: 36px; cursor: pointer; font-size: 16px; }
+  #sort { border: 1px solid var(--line); border-radius: 10px; padding: 8px; font: inherit; font-size: 13px; background: #fff; color: var(--ink); }
+  .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .cat { border: 0; border-radius: 18px; padding: 16px 12px; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-height: 112px; }
+  .cat .ce { font-size: 38px; line-height: 1; } .cat b { font-size: 15px; } .cat small { color: var(--muted); font-size: 12px; }
+
+  /* trolley */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+  #scanrow { display: flex; gap: 8px; margin-bottom: 12px; }
+  #scan { flex: 1; min-width: 0; padding: 11px 13px; border-radius: 12px; border: 1.5px solid var(--line); font: inherit; font-size: 14px; outline: none; }
+  #scan:focus, #gsearch:focus { box-shadow: 0 0 0 3px rgba(18,144,90,.25); }
+  .btn { border: 0; background: var(--brand); color: #fff; border-radius: 12px; padding: 10px 16px; font-weight: 700; font-size: 14px; cursor: pointer; }
   .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
   .btn:disabled { opacity: .45; cursor: not-allowed; }
-  .res .price { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--ink); }
-  .res .plus { display: grid; place-items: center; padding: 0; border: 0; background: var(--accent); color: #fff; border-radius: 8px; width: 26px; height: 26px; font-size: 16px; line-height: 1; cursor: pointer; flex: none; }
-  #cart { top: 84px; right: 16px; width: 320px; max-height: calc(100% - 200px); display: flex; flex-direction: column; gap: 10px; padding: 14px; }
-  #cart h2 { margin: 0; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
-  #scanrow { display: flex; gap: 6px; }
-  #scan { flex: 1; min-width: 0; padding: 9px 11px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; font-size: 13px; outline: none; }
-  #scan:focus { border-color: var(--accent); }
-  #lines { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; min-height: 40px; }
-  .line { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: 13px; padding: 6px 8px; border-radius: 10px; background: #fff; border: 1px solid var(--line); }
-  .line .n { font-weight: 600; cursor: pointer; } .line .c { color: var(--muted); font-size: 11px; }
-  .qty { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
-  .qty button { width: 22px; height: 22px; border-radius: 7px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 14px; line-height: 1; }
-  .tot { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
-  .tot.big { font-size: 17px; font-weight: 800; color: var(--ink); }
-  #empty { color: var(--muted); font-size: 12px; text-align: center; padding: 10px; }
-  #cam { position: fixed; inset: 0; background: rgba(15,20,28,.8); display: none; place-items: center; z-index: 20; }
-  #cam.show { display: grid; } #cam .box { background: #fff; border-radius: 18px; padding: 14px; width: min(440px, 92vw); text-align: center; }
-  #cam video { width: 100%; border-radius: 12px; background: #000; aspect-ratio: 4/3; object-fit: cover; }
-  #flash { position: fixed; left: 50%; top: 22px; transform: translateX(-50%); background: #27b24f; color: #fff; padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: 13px; z-index: 30; opacity: 0; transition: opacity .25s; pointer-events: none; }
-  #flash.show { opacity: 1; }
-  #pay { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; place-items: center; z-index: 25; }
-  #pay.show { display: grid; }
-  #pay .box { background: #fff; border-radius: 20px; padding: 20px; width: min(420px, 92vw); max-height: 90vh; overflow: auto; }
-  #pay h3 { margin: 0 0 10px; } .methods { display: flex; gap: 8px; margin: 12px 0; } .methods button { flex: 1; padding: 12px 6px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; font: inherit; font-size: 13px; cursor: pointer; }
-  .methods button.on { border-color: var(--accent); background: #fff3ed; font-weight: 700; }
-  .rline { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
-  .ok { text-align: center; } .ok .tick { font-size: 46px; }
-  #chatbtn { left: 50%; transform: translateX(-50%); bottom: 16px; padding: 12px 16px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); font: inherit; font-weight: 700; color: var(--ink); }
-  #chat { left: 50%; transform: translateX(-50%); bottom: 16px; width: 380px; height: 330px; display: none; flex-direction: column; padding: 12px; gap: 8px; }
+  .iconbtn { width: 50px; flex: none; display: grid; place-items: center; padding: 0; }
+  .iconbtn svg { width: 22px; height: 22px; }
+  .payrow { display: flex; gap: 8px; margin-top: 12px; }
+  #lines { display: flex; flex-direction: column; gap: 8px; }
+  .line { display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; font-size: 14px; padding: 10px 12px; border-radius: 14px; background: #fff; border: 1px solid var(--line); }
+  .line .n { font-weight: 700; cursor: pointer; } .line .c { color: var(--muted); font-size: 12px; }
+  .line .deal-row { grid-column: 1 / -1; font-size: 12px; }
+  .qty { display: flex; align-items: center; gap: 8px; justify-content: flex-end; font-weight: 700; }
+  .qty button { width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 15px; line-height: 1; }
+  .tot { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); padding: 3px 0; }
+  .tot.big { font-size: 20px; font-weight: 800; color: var(--ink); }
+  .tot.save { color: #15803d; font-weight: 700; }
+  #usepts { display: flex; gap: 8px; align-items: center; font-size: 13px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 8px 10px; margin: 6px 0; }
+  .red { color: var(--deal); font-weight: 700; } .green { color: #15803d; font-weight: 700; }
+  #cartgrid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { #cartgrid { grid-template-columns: 1.4fr 1fr; align-items: start; } }
+
+  /* map */
+  #mapwrap { position: absolute; inset: 0; touch-action: none; }
+  #maptop { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 8px; pointer-events: none; z-index: 2; }
+  #maptop > * { pointer-events: auto; }
+  #mapchips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .chip { flex: none; border: 1px solid var(--line); background: rgba(255,255,255,.92); border-radius: 999px; padding: 6px 11px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+  .chip:hover { border-color: var(--brand); }
+  #tools { display: flex; gap: 6px; align-self: flex-end; }
+  #tools button { border: 1px solid var(--line); background: rgba(255,255,255,.92); border-radius: 10px; padding: 7px 11px; font-size: 12px; cursor: pointer; }
+  #tools button.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+  #info { position: absolute; left: 12px; bottom: 12px; width: min(380px, calc(100% - 24px)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; display: none; z-index: 3; box-shadow: 0 10px 30px rgba(31,42,55,.15); }
+  #info.show { display: block; }
+  #info .t { font-size: 16px; font-weight: 800; display: flex; justify-content: space-between; gap: 8px; }
+  #info .m { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.55; }
+  #info .acts { display: flex; gap: 8px; margin-top: 10px; }
+  #info .acts button { padding: 8px 12px; font-size: 13px; }
+
+  /* tabs */
+  #tabs { order: 3; display: flex; justify-content: space-around; align-items: flex-end; height: var(--tabh); padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); box-sizing: content-box; background: #fff; border-top: 1px solid var(--line); z-index: 6; }
+  #tabs button { border: 0; background: none; font-size: 11px; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 10px; position: relative; cursor: pointer; flex: 1; max-width: 120px; }
+  #tabs button svg { width: 23px; height: 23px; }
+  #tabs button.on { color: var(--brand); }
+  #tabs .scanfab { flex: none; background: var(--brand); color: #fff; width: 62px; height: 62px; max-width: none; border-radius: 50%; margin-top: -24px; justify-content: center; box-shadow: 0 8px 20px rgba(18,144,90,.45); border: 4px solid #fff; }
+  #tabs .scanfab svg { width: 27px; height: 27px; }
+  #tabs .badge2 { position: absolute; top: -1px; right: 18px; background: var(--deal); color: #fff; border-radius: 999px; font-size: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
+  @media (min-width: 900px) {
+    #tabs { order: 1; height: auto; padding: 0 16px; justify-content: center; gap: 4px; border-top: 0; border-bottom: 1px solid var(--line); }
+    #tabs button { flex-direction: row; gap: 7px; font-size: 14px; padding: 12px 18px; max-width: none; flex: none; border-bottom: 3px solid transparent; }
+    #tabs button.on { border-bottom-color: var(--brand); }
+    #tabs button svg { width: 20px; height: 20px; }
+    #tabs .scanfab { width: auto; height: auto; border-radius: 12px; margin: 6px 10px; padding: 8px 16px; border: 0; box-shadow: none; flex-direction: row; }
+    #tabs .scanfab svg { width: 20px; height: 20px; }
+    #tabs .scanfab::after { content: 'Scan'; font-size: 14px; }
+    #tabs .badge2 { right: 4px; top: 6px; }
+  }
+
+  /* floating assistant */
+  #chatbtn { position: fixed; right: 14px; bottom: calc(var(--tabh) + 24px + env(safe-area-inset-bottom, 0px)); z-index: 7; border: 0; background: #fff; box-shadow: 0 8px 22px rgba(31,42,55,.22); border-radius: 999px; padding: 12px 16px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  #chat { position: fixed; right: 14px; bottom: calc(var(--tabh) + 24px + env(safe-area-inset-bottom, 0px)); width: min(380px, calc(100vw - 28px)); height: min(460px, 62vh); background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 16px 40px rgba(31,42,55,.25); display: none; flex-direction: column; padding: 12px; gap: 8px; z-index: 9; }
   #chat.show { display: flex; }
   #chat header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; }
   #chat header span small { font-weight: 600; color: var(--muted); font-size: 11px; display: block; }
   #msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-  .m { max-width: 86%; padding: 8px 11px; border-radius: 14px; font-size: 13px; line-height: 1.45; white-space: pre-wrap; }
-  .m.u { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
-  .m.a { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 4px; }
-  #chatform { display: flex; gap: 6px; } #chatq { flex: 1; min-width: 0; padding: 9px 11px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; font-size: 13px; outline: none; }
-  .deal { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .2px; color: #d92d20; background: #fdecea; border: 1px solid #f7c6c2; border-radius: 6px; padding: 1px 6px; margin-top: 3px; }
-  .red { color: #d92d20; font-weight: 700; } .green { color: #15803d; font-weight: 700; }
-  .was { color: var(--muted); font-weight: 500; font-size: 11px; } .now { font-weight: 800; }
-  .res .price { text-align: right; line-height: 1.25; }
-  #pts { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); margin-top: -4px; }
-  #pts b { color: var(--ink); }
-  #spwrap h4 { margin: 2px 0 6px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
-  #spwrap h4 button { border: 0; background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; padding: 0; }
-  #specials { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x proximity; }
-  .sp { flex: none; width: 138px; scroll-snap-align: start; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; display: flex; flex-direction: column; gap: 3px; cursor: pointer; position: relative; }
-  .sp .tag { align-self: flex-start; font-size: 10px; font-weight: 800; color: #fff; background: #d92d20; border-radius: 6px; padding: 2px 6px; }
-  .sp .nm { font-size: 13px; font-weight: 700; line-height: 1.2; min-height: 32px; }
-  .sp .pr { display: flex; align-items: baseline; gap: 5px; }
-  .sp .add { position: absolute; right: 8px; bottom: 8px; width: 26px; height: 26px; border-radius: 8px; border: 0; background: var(--accent); color: #fff; font-size: 16px; cursor: pointer; display: grid; place-items: center; padding: 0; }
-  .line .deal-row { grid-column: 1 / -1; font-size: 11px; }
-  .tot.save { color: #15803d; font-weight: 700; }
-  #usepts { display: flex; gap: 8px; align-items: center; font-size: 12px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 6px 9px; }
-  #flash.deal { width: max-content; max-width: 88vw; border-radius: 16px; background: #fff; color: var(--ink); border: 1px solid #f7c6c2; box-shadow: 0 8px 24px rgba(31,42,55,.18); text-align: center; line-height: 1.45; }
-  #tip { position: fixed; pointer-events: none; padding: 6px 10px; border-radius: 10px; background: rgba(31,42,55,.92); color: #fff; font-size: 12px; line-height: 1.4; display: none; transform: translate(12px, 12px); z-index: 5; white-space: nowrap; }
-  #tip b { font-size: 13px; }
-  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #dfe9f3; font-weight: 700; color: var(--muted); z-index: 10; transition: opacity .5s; }
-  #loading.hide { opacity: 0; pointer-events: none; }
-  .iconbtn { width: 46px; flex: none; display: grid; place-items: center; padding: 0; }
-  .iconbtn svg { width: 22px; height: 22px; }
-  .payrow { display: flex; gap: 8px; }
-  #mnav { display: none; }
-  #cam .box { position: relative; }
-  #camstat { font-size: 13px; color: var(--muted); margin: 8px 0; min-height: 36px; }
-  #camstat b { color: var(--ink); }
-  #camrow { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  #camrow label.btn { display: inline-block; }
-  .reticle { position: absolute; left: 14%; right: 14%; top: 34%; height: 24%; border: 2px solid rgba(255,255,255,.85); border-radius: 12px; box-shadow: 0 0 0 999px rgba(0,0,0,.25); pointer-events: none; }
+  .m { max-width: 88%; padding: 8px 11px; border-radius: 14px; font-size: 13px; line-height: 1.45; white-space: pre-wrap; }
+  .m.u { align-self: flex-end; background: var(--brand); color: #fff; border-bottom-right-radius: 4px; }
+  .m.a { align-self: flex-start; background: #f2f5f3; border-bottom-left-radius: 4px; }
+  #chatform { display: flex; gap: 6px; } #chatq { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); font: inherit; font-size: 13px; outline: none; }
+  @media (min-width: 900px) { #chatbtn, #chat { bottom: 20px; } }
+
+  /* overlays */
+  #cam { position: fixed; inset: 0; background: rgba(15,20,28,.8); display: none; place-items: center; z-index: 20; }
+  #cam.show { display: grid; } #cam .box { background: #fff; border-radius: 18px; padding: 14px; width: min(440px, 92vw); text-align: center; }
+  #cam video { width: 100%; border-radius: 12px; background: #000; aspect-ratio: 4/3; object-fit: cover; display: block; }
   .vwrap { position: relative; border-radius: 12px; overflow: hidden; }
-  @media (max-width: 760px) {
-    #side, #cart { display: none; left: 12px; right: 12px; top: auto; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 62%; }
-    #side.open, #cart.open { display: flex; }
-    #chatbtn { display: none; }
-    #chat { left: 12px; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: auto; height: 58%; transform: none; }
-    #tools { top: 10px; left: 12px; right: 12px; justify-content: space-between; padding: 6px; }
-    #tools button { padding: 7px 8px; font-size: 12px; flex: 1; }
-    #info { top: 66px; bottom: auto; left: 12px; right: 12px; width: auto; }
-    #mnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; display: flex; justify-content: space-around; align-items: flex-end; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); background: rgba(255,255,255,.94); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
-    #mnav button { border: 0; background: none; font: inherit; font-size: 11px; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 10px; position: relative; cursor: pointer; }
-    #mnav button svg { width: 22px; height: 22px; }
-    #mnav button.on { color: var(--accent); }
-    #mnav .scanfab { background: var(--accent); color: #fff; width: 64px; height: 64px; border-radius: 50%; margin-top: -26px; justify-content: center; box-shadow: 0 8px 20px rgba(255,107,53,.45); border: 4px solid #fff; }
-    #mnav .scanfab svg { width: 28px; height: 28px; }
-    #mnav .badge { position: absolute; top: -2px; right: 2px; background: var(--ink); color: #fff; border-radius: 999px; font-size: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
-    #flash { top: 66px; }
+  .reticle { position: absolute; left: 14%; right: 14%; top: 34%; height: 24%; border: 2px solid rgba(255,255,255,.85); border-radius: 12px; box-shadow: 0 0 0 999px rgba(0,0,0,.25); pointer-events: none; }
+  #camstat { font-size: 13px; color: var(--muted); margin: 8px 0; min-height: 36px; } #camstat b { color: var(--ink); }
+  #camrow { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; } #camrow label.btn { display: inline-block; }
+  #pay { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; place-items: center; z-index: 25; }
+  #pay.show { display: grid; }
+  #pay .box { background: #fff; border-radius: 20px; padding: 20px; width: min(420px, 92vw); max-height: 90vh; overflow: auto; }
+  #pay h3 { margin: 0 0 10px; } .methods { display: flex; gap: 8px; margin: 12px 0; } .methods button { flex: 1; padding: 12px 6px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; font-size: 13px; cursor: pointer; }
+  .methods button.on { border-color: var(--brand); background: #ecfaf3; font-weight: 700; }
+  .rline { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .ok { text-align: center; } .ok .tick { font-size: 46px; }
+  #flash { position: fixed; left: 50%; top: 70px; transform: translateX(-50%); background: #15803d; color: #fff; padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: 13px; z-index: 30; opacity: 0; transition: opacity .25s; pointer-events: none; width: max-content; max-width: 88vw; text-align: center; }
+  #flash.show { opacity: 1; }
+  #flash.deal { border-radius: 16px; background: #fff; color: var(--ink); border: 1px solid #f7c6c2; box-shadow: 0 8px 24px rgba(31,42,55,.18); line-height: 1.45; }
+  #tip { position: fixed; pointer-events: none; padding: 6px 10px; border-radius: 10px; background: rgba(31,42,55,.92); color: #fff; font-size: 12px; line-height: 1.4; display: none; transform: translate(12px, 12px); z-index: 5; white-space: nowrap; }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); font-weight: 700; color: var(--muted); z-index: 40; transition: opacity .5s; }
+  #loading.hide { opacity: 0; pointer-events: none; }
+
+  @media (max-width: 899px) {
+    #chatbtn { padding: 0; width: 52px; height: 52px; justify-content: center; font-size: 0; }
+    #chatbtn::before { content: '💬'; font-size: 24px; }
+    #info { right: 78px; width: auto; }
+    .brand span { display: none; }
   }
 </style>
 </head>
 <body>
 <div id="loading">Stocking the shelves…</div>
 
-<div id="side" class="panel">
-  <h1>🛒 BiteSpeed Mart <small id="count"></small></h1>
-  <input id="q" type="search" placeholder="Search a product or code (e.g. sugar, 2A17)…" autocomplete="off">
-  <div id="pts"><span>⭐ <b id="ptsval">0</b> reward points</span><span>100 pts = ₹10 off</span></div>
-  <div id="spwrap"><h4><span>🏷 This week's specials</span><button id="spall">See all</button></h4><div id="specials"></div></div>
-  <div id="chips"></div>
-  <div id="results"></div>
+<div id="app">
+  <header id="top">
+    <div class="brand" id="brand">🛒 <span>BiteSpeed Mart</span></div>
+    <input id="gsearch" type="search" placeholder="Search products or codes…" autocomplete="off" aria-label="Search products">
+    <button id="ptsChip" title="Reward points">⭐ <span id="ptsval">0</span></button>
+  </header>
+
+  <main id="views">
+    <section class="view active" id="v-home"><div class="page">
+      <div class="section"><h2 class="sec"><span>🏷 This week's specials</span><a id="spall">See all</a></h2><div class="row" id="h-specials"></div></div>
+      <div class="section"><h2 class="sec"><span>♥ Buy again</span></h2><div class="row" id="h-again"></div></div>
+    </div></section>
+
+    <section class="view" id="v-shop"><div class="page">
+      <div id="shopbar"><button id="shopback" hidden aria-label="Back to aisles">←</button><h2 id="shoptitle">Shop by aisle</h2>
+        <select id="sort" hidden aria-label="Sort"><option value="default">Sort: Default</option><option value="deals">Specials first</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="az">Name A–Z</option></select></div>
+      <div id="shopbody"></div>
+    </div></section>
+
+    <section class="view" id="v-map">
+      <div id="mapwrap"></div>
+      <div id="maptop">
+        <div id="tools"><button id="b-rotate">⟳ Auto-rotate</button><button id="b-top">⬒ Top view</button><button id="b-reset">⌂ Reset</button></div>
+        <div id="mapchips"></div>
+      </div>
+      <div id="info">
+        <div class="t"><span id="i-name"></span><span id="i-code" style="font-size:12px;color:var(--brand)"></span></div>
+        <div class="m" id="i-meta"></div>
+        <div class="acts"><button class="btn" id="i-add">+ Add to trolley</button><button class="btn ghost" id="i-clear">Clear route</button></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-cart"><div class="page"><div id="cartgrid">
+      <div class="card">
+        <h2 class="sec" style="margin-top:0"><span>🧾 My trolley <small id="ccount" style="color:var(--muted);font-weight:600;font-size:13px"></small></span><button class="linkbtn" id="cclear">Clear</button></h2>
+        <div id="scanrow"><input id="scan" placeholder="Type barcode or item code…" autocomplete="off" inputmode="text"><button class="btn" id="scanAdd">Add</button></div>
+        <div id="lines"></div>
+      </div>
+      <div class="card">
+        <div class="tot"><span>Subtotal</span><span id="csub">₹0</span></div>
+        <div class="tot save" id="csaverow" hidden><span>Specials savings</span><span id="csave">−₹0</span></div>
+        <label id="usepts" hidden><input type="checkbox" id="usepts-cb"><span id="usepts-t"></span></label>
+        <div class="tot big"><span>Total</span><span id="ctot">₹0</span></div>
+        <div class="tot" style="font-size:12px"><span>Prices include GST</span><span id="cgst"></span></div>
+        <div class="tot" style="font-size:12px"><span>⭐ Earn on this shop</span><span id="cearn"></span></div>
+        <div class="payrow"><button class="btn iconbtn" id="camBtn" title="Scan items with the camera" aria-label="Scan items with the camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button><button class="btn" id="checkout" disabled style="flex:1">Checkout</button></div>
+      </div>
+    </div></div></section>
+  </main>
+
+  <nav id="tabs" aria-label="Main">
+    <button data-go="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</button>
+    <button data-go="shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Shop</button>
+    <button id="n-scan" class="scanfab" aria-label="Scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button>
+    <button data-go="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Map</button>
+    <button data-go="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2.5l2.2 11h10.6l2-8H6.5"/></svg>Trolley<span class="badge2" id="nbadge" hidden>0</span></button>
+  </nav>
 </div>
 
-<div id="info" class="panel">
-  <div class="t"><span id="i-name"></span><span id="i-code" style="font-size:12px;color:var(--accent)"></span></div>
-  <div class="m" id="i-meta"></div>
-  <button id="i-add" style="background:var(--accent)">+ Add to cart</button> <button id="i-clear">Clear route</button>
-</div>
-
-<div id="tools" class="panel">
-  <button id="b-rotate">⟳ Auto-rotate</button>
-  <button id="b-top">⬒ Top view</button>
-  <button id="b-reset">⌂ Reset</button>
-</div>
-
-<div id="cart" class="panel">
-  <h2><span>🧾 My cart <small id="ccount" style="color:var(--muted);font-weight:600"></small></span><button class="btn ghost" id="cclear" style="padding:4px 9px;font-size:11px">Clear</button></h2>
-  <div id="scanrow"><input id="scan" placeholder="Type barcode or item code…" autocomplete="off" inputmode="text"><button class="btn" id="scanAdd">Add</button></div>
-  <div id="lines"></div>
-  <div class="tot"><span>Subtotal</span><span id="csub">₹0</span></div>
-  <div class="tot save" id="csaverow" hidden><span>Specials savings</span><span id="csave">−₹0</span></div>
-  <label id="usepts" hidden><input type="checkbox" id="usepts-cb"><span id="usepts-t"></span></label>
-  <div class="tot big"><span>Total</span><span id="ctot">₹0</span></div>
-  <div class="tot" style="font-size:11px"><span>Prices include GST</span><span id="cgst"></span></div>
-  <div class="payrow"><button class="btn iconbtn" id="camBtn" title="Scan items with the camera" aria-label="Scan items with the camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button><button class="btn" id="checkout" disabled style="flex:1">Checkout</button></div>
-</div>
-<div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
-<div id="pay"><div class="box" id="paybox"></div></div>
-<div id="flash"></div>
-<button id="chatbtn" class="panel">💬 Ask the store assistant</button>
-<div id="chat" class="panel">
-  <header><span>🤖 Store assistant<small id="mode"></small></span><button class="btn ghost" id="chatx" style="padding:3px 9px">✕</button></header>
+<button id="chatbtn">💬 Ask the store assistant</button>
+<div id="chat">
+  <header><span>🤖 Store assistant<small id="mode"></small></span><button class="btn ghost" id="chatx" style="padding:3px 10px">✕</button></header>
   <div id="msgs"></div>
   <form id="chatform"><input id="chatq" placeholder="e.g. where is the sugar?" autocomplete="off"><button class="btn">Send</button></form>
 </div>
-<nav id="mnav">
-  <button id="n-side"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Find</button>
-  <button id="n-scan" class="scanfab" aria-label="Scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button>
-  <button id="n-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2.5l2.2 11h10.6l2-8H6.5"/></svg>Cart<span class="badge" id="nbadge" hidden>0</span></button>
-  <button id="n-ask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Ask</button>
-</nav>
+
+<div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
+<div id="pay"><div class="box" id="paybox"></div></div>
+<div id="flash"></div>
 <div id="tip"></div>
 
 <script src="vendor/zxing.min.js"></script>
-<script type="importmap">
-{ "imports": { "three": "./vendor/three.module.js" } }
-</script>
-<script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from './vendor/OrbitControls.js';
-
-/* ---------- data ---------- */
-const [layout, products, offers] = await Promise.all([
-  fetch('data/store-layout.json').then(r => r.json()),
-  fetch('data/products.json').then(r => r.json()),
-  fetch('data/offers.json').then(r => r.json()),
-]);
-const secById = Object.fromEntries(layout.sections.map(s => [s.id, s]));
-const byCode = Object.fromEntries(products.map(p => [p.code, p]));
-const offerBy = Object.fromEntries(offers.map(o => [o.code, o]));
-const inr = n => '₹' + n.toLocaleString('en-IN');
-const $ = id => document.getElementById(id);
-
-/* ---------- offers & pricing (prices include GST) ---------- */
-const dealLabel = o => o.type === 'percent' ? `${o.pct}% OFF` : o.type === 'multibuy' ? `${o.qty} for ${inr(o.price)}` : `Buy ${o.buy} get ${o.free} free`;
-const unitPrice = p => { const o = offerBy[p.code]; return o && o.type === 'percent' ? Math.round(p.price * (1 - o.pct / 100)) : p.price; };
-const priceHTML = p => { const o = offerBy[p.code]; return o && o.type === 'percent' ? `<s class="was">${inr(p.price)}</s> <b class="now">${inr(unitPrice(p))}</b>` : `<b class="now">${inr(p.price)}</b>`; };
-const badgeHTML = p => { const o = offerBy[p.code]; return o ? `<div class="deal">${dealLabel(o)}</div>` : ''; };
-/** price of `qty` of a product with its offer applied, plus a status line for the trolley */
-function lineCalc(code, qty) {
-  const p = byCode[code], o = offerBy[code], orig = p.price * qty;
-  if (!o) return { total: orig, orig, saving: 0, earned: '', remind: '' };
-  if (o.type === 'percent') { const total = unitPrice(p) * qty; return { total, orig, saving: orig - total, earned: `${o.pct}% off applied`, remind: '' }; }
-  if (o.type === 'multibuy') {
-    const sets = Math.floor(qty / o.qty), r = qty % o.qty, total = sets * o.price + r * p.price;
-    return { total, orig, saving: orig - total, earned: sets ? `${sets} × ${o.qty} for ${inr(o.price)} applied` : '',
-      remind: r ? `${o.qty} for ${inr(o.price)} – add ${o.qty - r} more to save ${inr(p.price * o.qty - o.price)}` : '' };
-  }
-  const g = o.buy + o.free, sets = Math.floor(qty / g), r = qty % g, total = (sets * o.buy + r) * p.price;
-  return { total, orig, saving: orig - total, earned: sets ? `${sets * o.free} free item${sets * o.free > 1 ? 's' : ''} applied` : '',
-    remind: r ? `🎁 Buy ${o.buy} get ${o.free} free – add ${g - r} more` : '' };
-}
-document.getElementById('count').textContent = `${products.length} products`;
-
-/* ---------- helpers ---------- */
-const CX = layout.map.originX + layout.map.width / 2, CZ = layout.map.originY + layout.map.height / 2;
-const px2x = v => (v - CX) / 10, px2z = v => (v - CZ) / 10;
-const hash = s => { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
-const lerp = (a, b, t) => a + (b - a) * t;
-const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-/* ---------- renderer / scene ---------- */
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setSize(innerWidth, innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFShadowMap;
-document.body.prepend(renderer.domElement);
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color('#dfe9f3');
-const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 400);
-const PORTRAIT = innerWidth < 760;
-const HOME = PORTRAIT ? { pos: new THREE.Vector3(0, 150, 118), target: new THREE.Vector3(0, 0, -2) } : { pos: new THREE.Vector3(-14, 90, 104), target: new THREE.Vector3(-14, 0, 4) };
-camera.position.copy(HOME.pos);
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.copy(HOME.target);
-controls.enableDamping = true;
-controls.maxPolarAngle = Math.PI / 2.05;
-controls.minDistance = 12; controls.maxDistance = 190;
-controls.autoRotateSpeed = 0.8;
-
-scene.add(new THREE.HemisphereLight('#ffffff', '#c9b79c', 1.35));
-const sun = new THREE.DirectionalLight('#fff4e0', 2.0);
-sun.position.set(-40, 80, 50);
-sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
-Object.assign(sun.shadow.camera, { left: -70, right: 70, top: 55, bottom: -55, near: 10, far: 220 });
-sun.shadow.bias = -0.0004;
-scene.add(sun);
-
-const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: .75, metalness: 0, ...o });
-function box(w, h, d, mat, x, y, z, parent = scene, shadow = true) {
-  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-  m.position.set(x, y, z); m.castShadow = shadow; m.receiveShadow = true; parent.add(m); return m;
-}
-
-/* ---------- floor + walls ---------- */
-const MW = layout.map.width / 10, MH = layout.map.height / 10;
-{
-  const c = document.createElement('canvas'); c.width = c.height = 128;
-  const g = c.getContext('2d'); g.fillStyle = '#f0e3b8'; g.fillRect(0, 0, 128, 128);
-  g.fillStyle = '#ead9a8'; g.fillRect(0, 0, 64, 64); g.fillRect(64, 64, 64, 64);
-  const tex = new THREE.CanvasTexture(c); tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(MW / 3, MH / 3); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
-  const floor = new THREE.Mesh(new THREE.BoxGeometry(MW, 1, MH), [0, 1, 2, 3, 4, 5].map(i => i === 2 ? new THREE.MeshStandardMaterial({ map: tex, roughness: .9 }) : std('#c9b588')));
-  floor.position.y = -0.5; floor.receiveShadow = true; scene.add(floor);
-  const base = new THREE.Mesh(new THREE.BoxGeometry(MW + 6, 1.2, MH + 6), std('#b7c4d4'));
-  base.position.y = -1.6; base.receiveShadow = true; scene.add(base);
-  const wallMat = std('#fbf7ee'), t = 0.8, wh = 1.4;
-  box(MW + t, wh, t, wallMat, 0, wh / 2, -MH / 2 - t / 2 + .1);          // back
-  box(t, wh, MH, wallMat, -MW / 2 - t / 2, wh / 2, 0);                   // left
-  box(t, wh, MH, wallMat, MW / 2 + t / 2, wh / 2, 0);                    // right
-  // front wall with door gaps (entry & exit)
-  const gaps = ['entry', 'exit', 'cart'].map(k => layout.doors[k].rect).filter((_, i) => i < 2).map(r => [px2x(r.x), px2x(r.x + r.w)]).sort((a, b) => a[0] - b[0]);
-  let cur = -MW / 2;
-  for (const [a, b] of [...gaps, [MW / 2, MW / 2]]) {
-    if (a > cur) box(a - cur, wh, t, wallMat, (a + cur) / 2, wh / 2, MH / 2 + t / 2 - .1);
-    cur = b;
-  }
-}
-
-/* ---------- label sprites ---------- */
-function labelSprite(text, { icon = '', badge = '', bg = '#ffffff', fg = '#1f2a37', scale = 1 } = {}) {
-  const c = document.createElement('canvas'); c.width = 640; c.height = 160;
-  const g = c.getContext('2d');
-  g.font = '700 54px ui-rounded, "Nunito", system-ui, sans-serif';
-  const label = (icon ? icon + ' ' : '') + text;
-  const tw = g.measureText(label).width, bw = badge ? 90 : 0;
-  const w = Math.min(620, tw + 70 + bw), x0 = (640 - w) / 2;
-  g.fillStyle = 'rgba(31,42,55,.18)'; g.beginPath(); g.roundRect(x0 + 4, 26, w, 100, 50); g.fill();
-  g.fillStyle = bg; g.beginPath(); g.roundRect(x0, 18, w, 100, 50); g.fill();
-  if (badge) { g.fillStyle = '#ff6b35'; g.beginPath(); g.roundRect(x0 + 12, 30, 76, 76, 38); g.fill();
-    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = '800 38px ui-rounded, system-ui, sans-serif'; g.fillText(badge, x0 + 50, 70); }
-  g.fillStyle = fg; g.font = '700 54px ui-rounded, "Nunito", system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(label, x0 + bw + (w - bw) / 2, 70);
-  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
-  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
-  s.scale.set(11 * scale, 2.75 * scale, 1); return s;
-}
-
-/* ---------- sections: shelves + products ---------- */
-const productMeshes = [];           // for raycasting
-const productInfo = new Map();      // code -> {mesh, pos(Vector3), walk:{x,y}, row, col}
-const sectionGroups = {};
-const floatingSigns = [];
-
-function buildSection(sec) {
-  const r = sec.rect, vertical = sec.facing === 'left' || sec.facing === 'right';
-  const sx = r.w / 10, sz = r.h / 10;
-  const H = sec.id === 'seafood' ? 2.6 : sec.id === 'bakery' ? 2.8 : vertical ? 3.8 : 4.4;
-  const cx = px2x(r.x + r.w / 2), cz = px2z(r.y + r.h / 2);
-  const group = new THREE.Group(); group.position.set(cx, 0, cz); scene.add(group); sectionGroups[sec.id] = group;
-  const dir = { left: [-1, 0], right: [1, 0], down: [0, 1] }[sec.facing];
-  const body = box(sx, H, sz, std(sec.fridge ? '#7fb6cf' : sec.color, { roughness: .6 }), 0, H / 2, 0, group);
-  box(sx + .15, .25, sz + .15, std(sec.fridge ? '#e6f6fb' : '#c98f68'), 0, H + .12, 0, group);   // cap
-
-  const len = vertical ? sz : sx, margin = .5, cellL = (len - 2 * margin) / sec.cols;
-  const tierH = (H - .5) / sec.tiers, ledgeD = .62, prodD = .46;
-  const ledgeMat = std(sec.fridge ? '#f4fbff' : '#f8efe4');
-  const list = products.filter(p => p.section === sec.id);
-  for (let t = 0; t < sec.tiers; t++) {
-    const y = .32 + (sec.tiers - 1 - t) * tierH;
-    const ledge = new THREE.Mesh(new THREE.BoxGeometry(vertical ? ledgeD : len, .1, vertical ? len : ledgeD), ledgeMat);
-    ledge.position.set(dir[0] * (sx / 2 + ledgeD / 2) * (vertical ? 1 : 0), y, dir[1] * (sz / 2 + ledgeD / 2) * (vertical ? 0 : 1));
-    ledge.receiveShadow = ledge.castShadow = true; group.add(ledge);
-  }
-  const geoms = [new THREE.BoxGeometry(1, 1, 1), new THREE.CylinderGeometry(.5, .5, 1, 14)];
-  for (const p of list) {
-    const t = Math.floor(p.slot / sec.cols), c = p.slot % sec.cols, h = hash(p.name);
-    const hue = (h % 360) / 360, color = new THREE.Color().setHSL(hue, .55 + (h >> 8) % 25 / 100, .58 + (h >> 12) % 14 / 100);
-    const bh = tierH * (.5 + (h >> 4) % 25 / 100), bl = cellL * .72;
-    const shape = (h >> 3) % 3 === 0 ? 1 : 0;
-    const m = new THREE.Mesh(geoms[shape], std(color, { roughness: .55 }));
-    const yb = .32 + (sec.tiers - 1 - t) * tierH + .05 + bh / 2;
-    const along = -len / 2 + margin + (c + .5) * cellL;
-    const off = (vertical ? sx : sz) / 2 + (shape ? ledgeD : ledgeD) / 2;
-    const w = vertical ? [prodD, bh, bl] : [bl, bh, prodD];
-    if (shape) { const d = Math.min(prodD, bl) * 1; m.scale.set(d, bh, d); } else m.scale.set(...w);
-    m.position.set(vertical ? dir[0] * off : along, yb, vertical ? along : dir[1] * off);
-    m.castShadow = true; m.receiveShadow = true; m.userData.code = p.code; m.userData.base = m.scale.clone(); m.userData.baseColor = color.clone();
-    group.add(m); productMeshes.push(m);
-    const wp = m.getWorldPosition(new THREE.Vector3());
-    const pxAlong = vertical ? r.y + (margin + (c + .5) * cellL) * 10 : r.x + (margin + (c + .5) * cellL) * 10;
-    productInfo.set(p.code, { mesh: m, pos: wp, row: t + 1, col: c + 1, topY: H,
-      walk: vertical ? { x: sec.walk, y: pxAlong } : { x: pxAlong, y: sec.walk } });
-  }
-  // floating sign
-  const sign = labelSprite(sec.label, { icon: sec.icon, badge: sec.number });
-  const sp = vertical ? new THREE.Vector3(cx, H + 3.2, cz + (sec.id === 'seafood' || sec.id === 'bakery' ? 0 : -sz / 2 + 2)) : new THREE.Vector3(cx, H + 3, cz + 5.5);
-  sign.position.copy(sp); sign.userData.baseY = sp.y; sign.userData.phase = hash(sec.id) % 6; scene.add(sign); floatingSigns.push(sign);
-}
-layout.sections.forEach(buildSection);
-
-/* ---------- doors & cart bay ---------- */
-const doorPanels = [];
-function buildDoor(key, label) {
-  const d = layout.doors[key], r = d.rect, w = r.w / 10, cx = px2x(r.x + r.w / 2), z = px2z(r.y);
-  box(w, .12, r.h / 10, std(d.color, { roughness: .9 }), cx, .06, px2z(r.y + r.h / 2), scene, false);   // floor mat
-  const glass = new THREE.MeshStandardMaterial({ color: '#bfe9ff', transparent: true, opacity: .45, roughness: .1 });
-  const L = box(w / 2, 3.2, .18, glass, cx - w / 4, 1.6, px2z(r.y + r.h - 2), scene, false);
-  const R = box(w / 2, 3.2, .18, glass, cx + w / 4, 1.6, px2z(r.y + r.h - 2), scene, false);
-  box(w + .6, .35, .5, std('#2b3544'), cx, 3.4, px2z(r.y + r.h - 2));
-  doorPanels.push({ L, R, cx, w, key, phase: key === 'entry' ? 0 : 2 });
-  const s = labelSprite(label, { icon: key === 'entry' ? '➡️' : '🚪', bg: '#27b24f', fg: '#fff', scale: .8 });
-  s.position.set(cx, 5.4, px2z(r.y + r.h - 2)); scene.add(s);
-}
-buildDoor('entry', 'ENTRY'); buildDoor('exit', 'EXIT');
-
-function makeCart(color = '#c9ced6') {
-  const g = new THREE.Group(), m = std(color, { metalness: .4, roughness: .4 });
-  const basket = new THREE.Mesh(new THREE.BoxGeometry(1.5, .8, 2.2), new THREE.MeshStandardMaterial({ color: '#e8edf3', transparent: true, opacity: .75, roughness: .4 }));
-  basket.position.y = 1.25; basket.castShadow = true; g.add(basket);
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(1.5, .1, 2.2), m); frame.position.y = .8; g.add(frame);
-  const handle = new THREE.Mesh(new THREE.BoxGeometry(1.5, .1, .1), std('#ff6b35')); handle.position.set(0, 1.9, 1.15); g.add(handle);
-  const post = new THREE.Mesh(new THREE.BoxGeometry(.1, .8, .1), m); post.position.set(0, 1.5, 1.1); g.add(post);
-  for (const [x, z] of [[-.6, -.9], [.6, -.9], [-.6, .9], [.6, .9]]) { const w = new THREE.Mesh(new THREE.CylinderGeometry(.16, .16, .1, 10), std('#333')); w.rotation.z = Math.PI / 2; w.position.set(x, .2, z); g.add(w); }
-  g.traverse(o => { if (o.isMesh) o.castShadow = true; }); return g;
-}
-{ // cart bay
-  const d = layout.doors.cart, r = d.rect;
-  box(r.w / 10, .12, r.h / 10, std(d.color, { roughness: .9 }), px2x(r.x + r.w / 2), .06, px2z(r.y + r.h / 2), scene, false);
-  for (let i = 0; i < 9; i++) { const c = makeCart(); c.position.set(px2x(r.x + 30 + i * 30), 0, px2z(r.y + 50)); c.rotation.y = Math.PI; scene.add(c); }
-  const s = labelSprite('Carts', { icon: '🛒', scale: .8 }); s.position.set(px2x(r.x + r.w / 2), 5, px2z(r.y + 20)); scene.add(s);
-}
-
-/* ---------- shoppers (ambient animation) ---------- */
-function makeShopper(color) {
-  const g = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.CapsuleGeometry(.38, .8, 4, 10), std(color)); body.position.y = 1.0; body.castShadow = true; g.add(body);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(.34, 14, 12), std('#f6d3b3')); head.position.y = 1.150 + .7; head.castShadow = true; g.add(head);
-  g.userData.body = [body, head]; return g;
-}
-const pathPx = pts => pts.map(([x, y]) => new THREE.Vector3(px2x(x), 0, px2z(y)));
-const walkers = [];
-function addWalker(color, pts, speed, offset = 0) {
-  const path = pathPx(pts), lens = []; let total = 0;
-  for (let i = 1; i < path.length; i++) { const l = path[i].distanceTo(path[i - 1]); lens.push(l); total += l; }
-  const mesh = makeShopper(color); const cart = makeCart('#9aa4b2'); cart.scale.setScalar(.7); cart.position.z = 1.0; mesh.add(cart);
-  scene.add(mesh); walkers.push({ mesh, path, lens, total, speed, d: offset });
-}
-addWalker('#4f8cff', [[175, 550], [175, 90], [372, 90], [372, 550]], 3.4, 20);
-addWalker('#e0457b', [[595, 550], [595, 90], [820, 90], [820, 550]], 3.0, 60);
-addWalker('#2fbf71', [[372, 550], [595, 550], [595, 300], [372, 300]], 3.2, 10);
-addWalker('#9b5de5', [[820, 550], [820, 120], [595, 120], [595, 550]], 2.8, 40);
-function placeOnPath(path, lens, total, dist, out) {
-  let d = ((dist % (2 * total)) + 2 * total) % (2 * total); const back = d > total; if (back) d = 2 * total - d;
-  let i = 0; while (i < lens.length - 1 && d > lens[i]) { d -= lens[i]; i++; }
-  const t = Math.min(1, d / lens[i]), a = path[i], b = path[i + 1];
-  out.pos.lerpVectors(a, b, t); out.dir.subVectors(b, a).normalize(); if (back) out.dir.negate();
-}
-
-/* ---------- guide cart + route + beacon ---------- */
-const guide = new THREE.Group(); const gCart = makeCart('#ff6b35'); gCart.scale.setScalar(1.2); guide.add(gCart);
-const tag = labelSprite('Follow me!', { icon: '🛒', bg: '#ff6b35', fg: '#fff', scale: .55 }); tag.position.y = 4; guide.add(tag);
-const entryC = layout.doors.entry.rect;
-const START = new THREE.Vector3(px2x(entryC.x + entryC.w / 2), 0, px2z(entryC.y + 20));
-guide.position.copy(START); guide.rotation.y = Math.PI; scene.add(guide);
-
-const routeDots = new THREE.Group(); scene.add(routeDots);
-const beacon = new THREE.Group(); beacon.visible = false; scene.add(beacon);
-const pin = new THREE.Mesh(new THREE.ConeGeometry(.7, 1.6, 16), std('#ff3b30', { emissive: '#ff3b30', emissiveIntensity: .6 })); pin.rotation.x = Math.PI; beacon.add(pin);
-const beam = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, 1, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true, opacity: .6 })); beacon.add(beam);
-const ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1.2, 40), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true, side: THREE.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.visible = false; scene.add(ring);
-
-const COLS = [175, 372, 595, 820];
-function routeFor(info) {
-  const w = info.walk, s = layout.doors.entry.rect, pts = [[s.x + s.w / 2, s.y + 20], [s.x + s.w / 2, 550]];
-  if (w.y === 85 || secById[productOf(info).section].facing === 'down') {
-    const col = COLS.reduce((a, b) => Math.abs(b - w.x) < Math.abs(a - w.x) ? b : a);
-    pts.push([col, 550], [col, 85], [w.x, 85]);
-  } else pts.push([w.x, 550], [w.x, w.y]);
-  return pathPx(pts);
-}
-const productOf = info => products.find(p => productInfo.get(p.code) === info);
-
-let route = null, selected = null, travelled = 0;
-function pathLength(path) { let t = 0; for (let i = 1; i < path.length; i++) t += path[i].distanceTo(path[i - 1]); return t; }
-function pointAt(path, d, out) {
-  for (let i = 1; i < path.length; i++) { const l = path[i].distanceTo(path[i - 1]); if (d <= l || i === path.length - 1) { const t = Math.min(1, d / l); out.pos.lerpVectors(path[i - 1], path[i], t); out.dir.subVectors(path[i], path[i - 1]).normalize(); return; } d -= l; }
-}
-const tmp = { pos: new THREE.Vector3(), dir: new THREE.Vector3() };
-
-const dotGeo = new THREE.CircleGeometry(.28, 12);
-function clearRoute() {
-  selected = null; route = null; beacon.visible = false;
-  routeDots.clear(); ring.visible = false; guide.position.copy(START); guide.rotation.y = Math.PI;
-  productMeshes.forEach(m => { m.material.emissive.set('#000'); m.scale.copy(m.userData.base); });
-  document.getElementById('info').classList.remove('show');
-  document.querySelectorAll('.res.on').forEach(e => e.classList.remove('on'));
-}
-function selectProduct(code, fly = true) {
-  clearRoute();
-  const p = byCode[code], info = productInfo.get(code); if (!p || !info) return;
-  selected = code;
-  const path = routeFor(info); route = { path, len: pathLength(path) }; travelled = 0;
-  for (let d = 0; d < route.len; d += 1.4) {
-    const dot = new THREE.Mesh(dotGeo, new THREE.MeshBasicMaterial({ color: '#ff6b35', transparent: true, opacity: .25 }));
-    dot.rotation.x = -Math.PI / 2; pointAt(path, d, tmp); dot.position.set(tmp.pos.x, .16, tmp.pos.z); dot.userData.d = d; routeDots.add(dot);
-  }
-  info.mesh.material.emissive.set('#ff3b30'); info.mesh.material.emissiveIntensity = .7;
-  const pinY = info.topY + 1.8;
-  beacon.position.set(info.pos.x, 0, info.pos.z); beacon.userData.pinY = pinY;
-  beam.scale.y = pinY - info.pos.y; beam.position.y = (pinY + info.pos.y) / 2;
-  ring.position.set(px2x(info.walk.x), .2, px2z(info.walk.y)); ring.visible = true;
-  beacon.visible = true;
-  const sec = secById[p.section];
-  document.getElementById('i-name').textContent = p.name;
-  document.getElementById('i-code').textContent = p.code;
-  document.getElementById('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${info.row} from the top · position ${info.col} of ${sec.cols}<br>${priceHTML(p)} ${offerBy[p.code] ? `<span class="red">${dealLabel(offerBy[p.code])}</span>` : ''} · barcode ${p.barcode}`;
-  document.getElementById('info').classList.add('show');
-  if (isMobile()) closePanels();
-  document.querySelectorAll('.res').forEach(e => e.classList.toggle('on', e.dataset.code === code));
-  if (fly) flyTo(new THREE.Vector3(info.pos.x * .7 + 0, 42, info.pos.z * .7 + 52), new THREE.Vector3(info.pos.x, 0, info.pos.z));
-}
-
-/* ---------- camera fly ---------- */
-let fly = null;
-function flyTo(pos, target, dur = 1.3) { fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos, t1: target, t: 0, dur }; }
-
-/* ---------- UI ---------- */
-const $q = document.getElementById('q'), $res = document.getElementById('results'), $chips = document.getElementById('chips');
-layout.sections.forEach(s => {
-  const b = document.createElement('button'); b.className = 'chip'; b.textContent = `${s.icon} ${s.number} ${s.label}`;
-  b.onclick = () => { const g = sectionGroups[s.id]; flyTo(new THREE.Vector3(g.position.x * .8, 38, g.position.z * .8 + 40), new THREE.Vector3(g.position.x, 0, g.position.z)); $q.value = ''; render(s.id); };
-  $chips.appendChild(b);
-});
-{ const b = document.createElement('button'); b.className = 'chip'; b.textContent = '🏷 All specials'; b.onclick = () => { $q.value = ''; render('__offers'); }; $chips.prepend(b); }
-function renderSpecials() {
-  const feat = offers.filter(o => o.featured).map(o => byCode[o.code]);
-  $('specials').innerHTML = '';
-  for (const p of feat) {
-    const d = document.createElement('div'); d.className = 'sp';
-    d.innerHTML = `<span class="tag">${dealLabel(offerBy[p.code])}</span><div class="nm">${p.name}</div><div class="pr">${priceHTML(p)}</div><button class="add" aria-label="Add ${p.name}">+</button>`;
-    d.onclick = e => { if (e.target.closest('.add')) addToCart(p.code); else selectProduct(p.code); };
-    $('specials').appendChild(d);
-  }
-  $('spall').onclick = () => { $q.value = ''; render('__offers'); };
-}
-function render(sectionFilter) {
-  const q = $q.value.trim().toLowerCase(); let list;
-  if (sectionFilter === '__offers') list = offers.map(o => byCode[o.code]);
-  else if (sectionFilter) list = products.filter(p => p.section === sectionFilter);
-  else if (q) list = products.filter(p => p.name.toLowerCase().includes(q) || p.code.toLowerCase() === q || p.code.toLowerCase().startsWith(q)).sort((a, b) => (b.name.toLowerCase().startsWith(q)) - (a.name.toLowerCase().startsWith(q)) || a.name.localeCompare(b.name));
-  else { $res.innerHTML = '<div id="hint">Type a product, or tap a section above. Click any item on a shelf in the 3D view to get a route from the entry.</div>'; return; }
-  $res.innerHTML = '';
-  if (!list.length) { $res.innerHTML = '<div id="hint">No product found. Try another name.</div>'; return; }
-  list.slice(0, 80).forEach(p => {
-    const sec = secById[p.section], b = document.createElement('button'); b.className = 'res'; b.dataset.code = p.code;
-    b.innerHTML = `<span class="code">${p.code}</span><span><div class="nm">${p.name}</div><div class="sc">${sec.icon} ${sec.label}</div>${badgeHTML(p)}</span><span class="price">${priceHTML(p)}</span><span class="plus" role="button" title="Add to cart">+</span>`;
-    b.onclick = e => { if (e.target.classList.contains('plus')) { addToCart(p.code); return; } selectProduct(p.code); }; $res.appendChild(b);
-  });
-}
-$q.addEventListener('input', () => render());
-renderSpecials(); render();
-document.getElementById('i-add').onclick = () => selected && addToCart(selected);
-document.getElementById('i-clear').onclick = () => { clearRoute(); flyTo(HOME.pos.clone(), HOME.target.clone()); };
-const bRot = document.getElementById('b-rotate');
-bRot.onclick = () => { controls.autoRotate = !controls.autoRotate; bRot.classList.toggle('on', controls.autoRotate); };
-document.getElementById('b-top').onclick = () => flyTo(new THREE.Vector3(0, 125, 0.01), new THREE.Vector3(0, 0, 0));
-document.getElementById('b-reset').onclick = () => { controls.autoRotate = false; bRot.classList.remove('on'); flyTo(HOME.pos.clone(), HOME.target.clone()); };
-
-/* ---------- picking ---------- */
-const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(), tip = document.getElementById('tip');
-let hover = null, down = null;
-function pick(e) {
-  mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(mouse, camera);
-  const hit = ray.intersectObjects(productMeshes, false)[0]; return hit ? hit.object : null;
-}
-renderer.domElement.addEventListener('pointermove', e => {
-  const m = pick(e);
-  if (m !== hover) { hover = m; renderer.domElement.style.cursor = m ? 'pointer' : 'grab'; }
-  if (m) { const p = byCode[m.userData.code], s = secById[p.section]; tip.innerHTML = `<b>${p.name}</b><br>${p.code} · ${s.icon} ${s.label}`; tip.style.display = 'block'; tip.style.left = e.clientX + 'px'; tip.style.top = e.clientY + 'px'; }
-  else tip.style.display = 'none';
-});
-renderer.domElement.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; });
-renderer.domElement.addEventListener('pointerup', e => {
-  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) return;
-  const m = pick(e); if (m) { $q.value = ''; selectProduct(m.userData.code, false); const el = $res.querySelector('.res.on'); if (el) el.scrollIntoView({ block: 'nearest' }); }
-});
-addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
-
-/* ---------- animate ---------- */
-let last = performance.now(), time = 0, exitHold = 0;
-const sp = { pos: new THREE.Vector3(), dir: new THREE.Vector3() };
-renderer.setAnimationLoop(now => {
-  const dt = Math.min(.05, (now - last) / 1000); last = now; time += dt;
-  if (fly) { fly.t += dt / fly.dur; const k = ease(Math.min(1, fly.t)); camera.position.lerpVectors(fly.p0, fly.p1, k); controls.target.lerpVectors(fly.t0, fly.t1, k); if (fly.t >= 1) fly = null; }
-  controls.update();
-  floatingSigns.forEach(s => { s.position.y = s.userData.baseY + Math.sin(time * 1.4 + s.userData.phase) * .25; });
-  doorPanels.forEach(d => { const open = d.key === 'exit' && time < exitHold ? 1 : (Math.sin(time * .9 + d.phase) + 1) / 2; const k = ease(Math.min(1, open * 1.6)) * d.w * .36; d.L.position.x = d.cx - d.w / 4 - k; d.R.position.x = d.cx + d.w / 4 + k; });
-  walkers.forEach(w => {
-    w.d += w.speed * dt; placeOnPath(w.path, w.lens, w.total, w.d, sp);
-    w.mesh.position.copy(sp.pos); w.mesh.position.y = Math.abs(Math.sin(w.d * 2.2)) * .08; w.mesh.rotation.y = Math.atan2(sp.dir.x, sp.dir.z);
-  });
-  if (route) {
-    if (travelled < route.len) { travelled = Math.min(route.len, travelled + dt * 14 * (.35 + .65 * Math.min(1, (route.len - travelled) / 6))); pointAt(route.path, travelled, tmp); guide.position.set(tmp.pos.x, Math.abs(Math.sin(time * 9)) * .05, tmp.pos.z); guide.rotation.y = Math.atan2(tmp.dir.x, tmp.dir.z); }
-    tag.position.y = 4 + Math.sin(time * 3) * .15;
-    routeDots.children.forEach(d => { const k = (time * 6 - d.userData.d) % 12; d.material.opacity = d.userData.d < travelled ? .08 : .25 + .6 * Math.max(0, 1 - Math.abs(k - 1) / 3); });
-    pin.position.y = beacon.userData.pinY + Math.sin(time * 4) * .3; const rs = 1 + ((time * 1.2) % 1) * 1.6; ring.scale.setScalar(rs); ring.material.opacity = 1 - (rs - 1) / 1.6;
-    const info = productInfo.get(selected); if (info) { const s = 1 + Math.sin(time * 6) * .12; info.mesh.scale.copy(info.mesh.userData.base).multiplyScalar(s); }
-  }
-  renderer.render(scene, camera);
-});
-
-
-/* ---------- cart + scanner + checkout ---------- */
-const byBarcode = Object.fromEntries(products.map(p => [p.barcode, p]));
-let cart = {}; try { cart = JSON.parse(localStorage.getItem('bsm-cart') || '{}'); } catch {}
-for (const c of Object.keys(cart)) if (!byCode[c]) delete cart[c];
-let points = 320, usePoints = false;          // demo starting balance
-try { const v = localStorage.getItem('bsm-points'); if (v !== null) points = +v || 0; usePoints = localStorage.getItem('bsm-usepts') === '1'; } catch {}
-function savePoints() { try { localStorage.setItem('bsm-points', points); localStorage.setItem('bsm-usepts', usePoints ? '1' : '0'); } catch {} }
-let flashT;
-function flash(msg, bad, remind) {
-  const f = $('flash'); f.classList.toggle('deal', !!remind);
-  if (remind) f.innerHTML = `✅ ${msg}<br><span class="red">${remind}</span>`; else { f.textContent = msg; f.style.background = bad ? '#e5484d' : '#27b24f'; }
-  if (remind) f.style.background = ''; f.classList.add('show'); clearTimeout(flashT); flashT = setTimeout(() => f.classList.remove('show'), remind ? 3200 : 1600);
-}
-function totals() {
-  const lines = Object.entries(cart).map(([c, q]) => ({ c, q, ...lineCalc(c, q) }));
-  const orig = lines.reduce((s, l) => s + l.orig, 0), total = lines.reduce((s, l) => s + l.total, 0);
-  const blocks = Math.min(Math.floor(points / 100), Math.floor(total / 10)), redeem = usePoints ? blocks * 10 : 0, pay = total - redeem;
-  return { lines, orig, saving: orig - total, total, blocks, redeem, pay, gst: Math.round(pay * 5 / 105), earn: Math.floor(pay / 10) };
-}
-function saveCart() { try { localStorage.setItem('bsm-cart', JSON.stringify(cart)); } catch {} renderCart(); }
-function addToCart(code, qty = 1, quiet) {
-  if (!byCode[code]) return; cart[code] = (cart[code] || 0) + qty; if (cart[code] <= 0) delete cart[code]; saveCart();
-  if (!quiet) flash(`Added ${byCode[code].name}`, false, lineCalc(code, cart[code] || 0).remind);
-}
-function renderCart() {
-  const T = totals(), n = T.lines.reduce((s, l) => s + l.q, 0);
-  $('ccount').textContent = n ? `(${n} item${n > 1 ? 's' : ''})` : '';
-  $('lines').innerHTML = T.lines.length ? '' : '<div id="empty">Cart is empty – scan an item or add one from search.</div>';
-  for (const l of T.lines) {
-    const p = byCode[l.c], d = document.createElement('div'); d.className = 'line';
-    d.innerHTML = `<span class="n">${p.name}</span><span class="qty"><button data-d="-1">−</button>${l.q}<button data-d="1">+</button></span><span class="c">${l.c} · ${priceHTML(p)}</span><span class="c" style="text-align:right">${l.saving ? `<s class="was">${inr(l.orig)}</s> ` : ''}<b style="color:var(--ink)">${inr(l.total)}</b></span>${l.remind ? `<span class="deal-row red">${l.remind}</span>` : l.earned ? `<span class="deal-row green">✓ ${l.earned} · saved ${inr(l.saving)}</span>` : ''}`;
-    d.querySelector('.n').onclick = () => selectProduct(l.c);
-    d.querySelectorAll('button').forEach(b => b.onclick = () => addToCart(l.c, +b.dataset.d, true));
-    $('lines').appendChild(d);
-  }
-  $('csub').textContent = inr(T.orig);
-  $('csaverow').hidden = !T.saving; $('csave').textContent = '−' + inr(T.saving);
-  $('usepts').hidden = !(T.blocks > 0 || usePoints); $('usepts-cb').checked = usePoints && T.blocks > 0;
-  $('usepts-t').textContent = T.blocks ? `Use ${T.blocks * 100} points (−${inr(T.blocks * 10)})` : 'Not enough points for this trolley';
-  $('ctot').textContent = inr(T.pay); $('cgst').textContent = `incl. GST ${inr(T.gst)}`;
-  $('checkout').disabled = !T.lines.length; $('nbadge').textContent = n; $('nbadge').hidden = !n;
-  $('ptsval').textContent = points;
-}
-$('usepts-cb').onchange = e => { usePoints = e.target.checked; savePoints(); renderCart(); };
-$('cclear').onclick = () => { cart = {}; saveCart(); };
-function scanValue(v) {
-  v = v.trim(); if (!v) return false;
-  const p = byBarcode[v] || byCode[v.toUpperCase()] || products.find(x => x.name.toLowerCase() === v.toLowerCase());
-  if (!p) { flash('Item not found: ' + v, true); return false; }
-  addToCart(p.code); return true;
-}
-$('scan').addEventListener('keydown', e => { if (e.key === 'Enter') { if (scanValue(e.target.value)) e.target.value = ''; } });
-
-// camera barcode scanning: native BarcodeDetector where available, ZXing everywhere else (iPhone Safari, Firefox)
-const FORMATS = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'];
-let camOn = false, camStream = null, zxReader = null, lastScan = '', lastAt = 0, scanned = 0;
-function beep() { try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 1100; g.gain.value = .08; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + .08); } catch {} }
-function onCode(raw) {
-  const now = performance.now(); if (raw === lastScan && now - lastAt < 2200) return; lastScan = raw; lastAt = now;
-  const p = byBarcode[raw] || byCode[raw.toUpperCase()];
-  if (!p) { $('camstat').innerHTML = `Unknown barcode <b>${raw}</b>`; return; }
-  addToCart(p.code, 1, true); scanned++; beep(); navigator.vibrate?.(60);
-  $('camstat').innerHTML = `✅ <b>${p.name}</b> – ${inr(p.price)}<br>${scanned} item${scanned > 1 ? 's' : ''} scanned · keep scanning or tap Done`;
-}
-async function decodeImageFile(file) {
-  const url = URL.createObjectURL(file);
-  try {
-    if ('BarcodeDetector' in window) { const img = await createImageBitmap(file); const r = await new BarcodeDetector({ formats: FORMATS }).detect(img); if (r[0]) return onCode(r[0].rawValue); }
-    else if (window.ZXing) { const r = await new ZXing.BrowserMultiFormatReader().decodeFromImageUrl(url); return onCode(r.getText()); }
-    $('camstat').textContent = 'No barcode found in that photo – try again, closer and steadier.';
-  } catch { $('camstat').textContent = 'No barcode found in that photo – try again, closer and steadier.'; }
-  finally { URL.revokeObjectURL(url); }
-}
-$('camfile').onchange = e => { const f = e.target.files[0]; if (f) decodeImageFile(f); e.target.value = ''; };
-async function openCam() {
-  scanned = 0; lastScan = ''; $('cam').classList.add('show');
-  $('camstat').textContent = 'Point the camera at a product barcode';
-  if (!navigator.mediaDevices?.getUserMedia || !window.isSecureContext) { $('camv').style.display = 'none'; $('camstat').innerHTML = 'Live camera needs a secure (https) connection. Use <b>Take / choose photo</b> to scan instead.'; return; }
-  $('camv').style.display = '';
-  try {
-    if ('BarcodeDetector' in window) {
-      const det = new BarcodeDetector({ formats: FORMATS });
-      camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
-      $('camv').srcObject = camStream; await $('camv').play(); camOn = true;
-      (async function loop() { while (camOn) { try { for (const b of await det.detect($('camv'))) onCode(b.rawValue); } catch {} await new Promise(r => setTimeout(r, 150)); } })();
-    } else if (window.ZXing) {
-      const hints = new Map([[ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.CODE_128]]]);
-      zxReader = new ZXing.BrowserMultiFormatReader(hints, 200); camOn = true;
-      await zxReader.decodeFromConstraints({ video: { facingMode: { ideal: 'environment' } }, audio: false }, $('camv'), (r) => { if (r) onCode(r.getText()); });
-    } else { $('camv').style.display = 'none'; $('camstat').textContent = 'Live scanning is not available in this browser – use Take / choose photo.'; }
-  } catch (e) { $('camv').style.display = 'none'; $('camstat').innerHTML = 'Camera blocked or unavailable. Allow camera access, or use <b>Take / choose photo</b>.'; }
-}
-function closeCam() { camOn = false; try { zxReader?.reset(); } catch {} zxReader = null; camStream?.getTracks().forEach(t => t.stop()); camStream = null; $('camv').srcObject = null; $('cam').classList.remove('show'); }
-$('camBtn').onclick = openCam; $('camClose').onclick = closeCam;
-$('scanAdd').onclick = () => { if (scanValue($('scan').value)) $('scan').value = ''; };
-
-// checkout (simulated payment)
-function openPay() {
-  const T = totals(); let method = 'UPI';
-  const lines = T.lines.map(l => `<div class="rline"><span>${l.q} × ${byCode[l.c].name}</span><span>${l.saving ? `<s class="was">${inr(l.orig)}</s> ` : ''}${inr(l.total)}</span></div>`).join('');
-  const row = (a, b, cls = '') => `<div class="rline ${cls}"><span>${a}</span><span>${b}</span></div>`;
-  $('paybox').innerHTML = `<h3>🧾 Checkout</h3>${lines}<hr style="border:0;border-top:1px solid var(--line)">${row('Subtotal', inr(T.orig))}${T.saving ? row('Specials savings', '−' + inr(T.saving), 'green') : ''}${T.redeem ? row(`Points redeemed (${T.blocks * 100})`, '−' + inr(T.redeem), 'green') : ''}
-    <div class="rline" style="font-weight:800;font-size:17px"><span>Total</span><span>${inr(T.pay)}</span></div>${row('Includes GST', inr(T.gst))}
-    <p class="green" style="font-size:12px;margin:8px 0 0">⭐ You'll earn ${T.earn} points${T.saving + T.redeem ? ` · you're saving ${inr(T.saving + T.redeem)}` : ''}</p>
-    <div class="methods"><button data-m="UPI" class="on">📱 UPI</button><button data-m="Card">💳 Card</button><button data-m="Wallet">👛 Wallet</button></div>
-    <div style="display:flex;gap:8px"><button class="btn ghost" id="payCancel">Back</button><button class="btn" id="payGo" style="flex:1">Pay ${inr(T.pay)}</button></div>
-    <p style="font-size:11px;color:var(--muted);margin:10px 0 0">Demo only – no real payment is taken.</p>`;
-  $('pay').classList.add('show');
-  $('paybox').querySelectorAll('.methods button').forEach(b => b.onclick = () => { method = b.dataset.m; $('paybox').querySelectorAll('.methods button').forEach(x => x.classList.toggle('on', x === b)); });
-  $('payCancel').onclick = () => $('pay').classList.remove('show');
-  $('payGo').onclick = () => {
-    $('payGo').disabled = true; $('payGo').textContent = 'Processing…';
-    setTimeout(() => {
-      const id = 'BSM-' + Date.now().toString(36).toUpperCase(), when = new Date().toLocaleString();
-      points = points - T.blocks * 100 * (usePoints ? 1 : 0) + T.earn; usePoints = false; savePoints();
-      $('paybox').innerHTML = `<div class="ok"><div class="tick">✅</div><h3>Payment successful</h3><p style="color:var(--muted);font-size:13px">Order ${id}<br>${when} · paid ${inr(T.pay)} via ${method}</p>${T.saving + T.redeem ? `<p class="green">You saved ${inr(T.saving + T.redeem)} today!</p>` : ''}<p>⭐ +${T.earn} points · balance ${points}</p><p>🚪 Exit gate is open – thank you for shopping!</p><button class="btn" id="payDone">Done</button></div>`;
-      exitHold = time + 8; cart = {}; saveCart(); clearRoute();
-      flyTo(new THREE.Vector3(30, 40, 70), new THREE.Vector3(px2x(layout.doors.exit.rect.x + 140), 0, 25));
-      $('payDone').onclick = () => $('pay').classList.remove('show');
-    }, 1200);
-  };
-}
-$('checkout').onclick = openPay;
-renderCart();
-
-
-/* ---------- mobile bottom navigation ---------- */
-const isMobile = () => matchMedia('(max-width: 760px)').matches;
-function closePanels() { ['side', 'cart'].forEach(id => $(id).classList.remove('open')); $('chat').classList.remove('show'); ['n-side', 'n-cart', 'n-ask'].forEach(id => $(id).classList.remove('on')); }
-function togglePanel(id, btn) { const el = $(id), was = el.classList.contains('open') || el.classList.contains('show'); closePanels(); if (!was) { el.classList.add(id === 'chat' ? 'show' : 'open'); $(btn).classList.add('on'); } }
-$('n-side').onclick = () => togglePanel('side', 'n-side');
-$('n-cart').onclick = () => togglePanel('cart', 'n-cart');
-$('n-ask').onclick = () => togglePanel('chat', 'n-ask');
-$('n-scan').onclick = () => { closePanels(); openCam(); };
-
-/* ---------- chat assistant ---------- */
-let history = []; try { history = JSON.parse(sessionStorage.getItem('bsm-chat') || '[]'); } catch {}
-function bubble(text, who) { const d = document.createElement('div'); d.className = 'm ' + who; d.textContent = text; $('msgs').appendChild(d); $('msgs').scrollTop = 1e9; return d; }
-bubble('Hi! Ask me where anything is, what to cook, or tell me what to add to your cart 🛒', 'a');
-$('chatbtn').onclick = () => { $('chat').classList.add('show'); $('chatbtn').style.display = 'none'; $('chatq').focus(); };
-$('chatx').onclick = () => { $('chat').classList.remove('show'); $('chatbtn').style.display = ''; };
-$('chatform').onsubmit = async e => {
-  e.preventDefault(); const text = $('chatq').value.trim(); if (!text) return; $('chatq').value = ''; bubble(text, 'u');
-  const wait = bubble('…', 'a');
-  try {
-    const r = await fetch('/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ messages: history, text, cart }) });
-    if (!r.ok && r.status !== 500) throw new Error('no api');
-    const j = await r.json(); wait.textContent = j.reply; history = j.messages || history;
-    try { sessionStorage.setItem('bsm-chat', JSON.stringify(history)); } catch {}
-    $('mode').textContent = j.mode === 'claude' ? 'powered by Claude' : 'offline mode (no API key)';
-    for (const a of j.actions || []) { if (a.type === 'add') addToCart(a.code, a.qty, true); if (a.type === 'route') selectProduct(a.code); }
-  } catch { wait.textContent = 'The assistant needs the Node server – run `npm start` in store-map (see README) instead of a plain static server.'; }
-  $('msgs').scrollTop = 1e9;
-};
-
-document.getElementById('loading').classList.add('hide');
-if (isMobile() && !new URLSearchParams(location.search).get('item')) togglePanel('side', 'n-side');
-const qs = new URLSearchParams(location.search).get('item'); if (qs && byCode[qs.toUpperCase()]) selectProduct(qs.toUpperCase());
-window.__store = { addToCart, openPay, selectProduct, clearRoute, camera, controls, scene, productInfo };
-</script>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
