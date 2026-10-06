@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#12905a">
 <title>BiteSpeed Mart</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛒%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2312905a'/%3E%3Cpath d='M12 18h6l5 22h24l5-16H21' fill='none' stroke='white' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='48' r='3.5' fill='white'/%3E%3Ccircle cx='44' cy='48' r='3.5' fill='white'/%3E%3C/svg%3E">
 <style>
   :root {
     --brand: #12905a; --brand-dark: #0c6f45; --accent: #12905a; --deal: #d92d20;
@@ -44,8 +44,8 @@
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
   .tile { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 10px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
   .art { height: 96px; border-radius: 13px; display: grid; place-items: center; font-size: 46px; position: relative; }
-  .badge { position: absolute; left: 6px; top: 6px; background: var(--deal); color: #fff; font-size: 10px; font-weight: 800; border-radius: 6px; padding: 2px 6px; max-width: 70%; }
-  .fav { position: absolute; right: 5px; top: 5px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(255,255,255,.85); color: #b8c0cc; font-size: 15px; cursor: pointer; display: grid; place-items: center; padding: 0; }
+  .badge { z-index: 2; position: absolute; left: 6px; top: 6px; background: var(--deal); color: #fff; font-size: 10px; font-weight: 800; border-radius: 6px; padding: 2px 6px; max-width: 70%; }
+  .fav { z-index: 2; position: absolute; right: 5px; top: 5px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(255,255,255,.85); color: #b8c0cc; font-size: 15px; cursor: pointer; display: grid; place-items: center; padding: 0; }
   .fav.on { color: #e5484d; }
   .tn { font-weight: 700; font-size: 13px; line-height: 1.25; min-height: 33px; overflow-wrap: anywhere; }
   .loc { align-self: flex-start; border: 0; background: none; color: var(--muted); font-size: 11px; padding: 0; cursor: pointer; text-align: left; }
@@ -76,10 +76,11 @@
   .rcard .rbody { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
   .rcard b { font-size: 15px; } .rcard .rmeta { font-size: 12px; color: var(--muted); } .rcard .rblurb { font-size: 12px; color: var(--muted); line-height: 1.4; }
   .tag { display: inline-block; font-size: 10px; font-weight: 700; background: #ecfaf3; color: var(--brand-dark); border-radius: 6px; padding: 2px 7px; margin-right: 4px; }
-  #recipe { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; z-index: 22; align-items: flex-end; justify-content: center; }
-  #recipe.show { display: flex; }
-  #recipe .sheet { background: #fff; width: min(640px, 100%); max-height: 94vh; overflow-y: auto; border-radius: 22px 22px 0 0; position: relative; }
-  @media (min-width: 900px) { #recipe { align-items: center; } #recipe .sheet { border-radius: 22px; max-height: 90vh; } }
+  #recipe, #credits { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; z-index: 22; align-items: flex-end; justify-content: center; }
+  #recipe.show, #credits.show { display: flex; }
+  #recipe .sheet, #credits .sheet { background: #fff; width: min(640px, 100%); max-height: 94vh; overflow-y: auto; border-radius: 22px 22px 0 0; position: relative; }
+  @media (min-width: 900px) { #recipe, #credits { align-items: center; } #recipe .sheet, #credits .sheet { border-radius: 22px; max-height: 90vh; } }
+  #creditsbox { padding: 18px 20px 24px; } #creditsbox h3 { margin: 0 0 6px; } #creditsbox p { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 12px; } #creditsbox ul { list-style: none; padding: 0; margin: 0; font-size: 12px; } #creditsbox li { padding: 6px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 10px; } #creditsbox a { color: var(--brand-dark); }
   #recipe .rhead { padding: 26px 20px 16px; text-align: center; position: relative; }
   #recipe .rhead .big { font-size: 60px; line-height: 1; }
   #recipe .rhead h3 { margin: 8px 0 4px; font-size: 22px; } #recipe .rhead p { margin: 0; color: var(--muted); font-size: 13px; }
@@ -99,6 +100,34 @@
   .rfoot { position: sticky; bottom: 0; background: #fff; padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); display: flex; gap: 10px; align-items: center; }
   .rfoot .btn { flex: 1; }
   .pantry-note { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  /* photos */
+  .ic { width: 16px; height: 16px; vertical-align: -3px; flex: none; }
+  .logo { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: rgba(255,255,255,.2); } .logo svg { width: 19px; height: 19px; }
+  #ptsChip { display: flex; align-items: center; gap: 5px; } #ptsChip svg { width: 15px; height: 15px; color: #ffd166; }
+  .art { height: auto; aspect-ratio: 1 / 1; overflow: hidden; background: #fff; border: 1px solid var(--line); display: block; }
+  .art img, .art .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border-radius: 0; background: #fff; }
+  .art .ph { background: linear-gradient(145deg, #f4f7f5, #e7eeea); }
+  .ph { width: 100%; height: 100%; display: grid; place-items: center; color: #a9b8b0; background: linear-gradient(145deg, #f4f7f5, #e7eeea); border-radius: 12px; }
+  .ph svg { width: 38px; height: 38px; stroke-width: 1.5; }
+  .fav svg { width: 15px; height: 15px; } .fav.on svg { fill: currentColor; }
+  .loc .ic { width: 12px; height: 12px; vertical-align: -2px; }
+  .th { width: 40px; height: 40px; border-radius: 10px; overflow: hidden; flex: none; display: inline-block; vertical-align: middle; margin-right: 9px; border: 1px solid var(--line); background: #fff; }
+  .th img, .th .ph { width: 100%; height: 100%; object-fit: contain; border-radius: 0; } .th .ph svg { width: 20px; height: 20px; }
+  .line .n { display: flex; align-items: center; }
+  .ing-main { display: flex; align-items: center; min-width: 0; }
+  .cat { background: #fff; border: 1px solid var(--line); min-height: 0; padding: 10px 10px 12px; }
+  .collage { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; aspect-ratio: 16 / 10; margin-bottom: 8px; border-radius: 12px; overflow: hidden; background: #f4f7f5; }
+  .collage img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+  .collage.ph1 { display: grid; place-items: center; color: #a9b8b0; } .collage.ph1 svg, .collage.rc > svg { width: 34px; height: 34px; justify-self: center; align-self: center; grid-column: 1 / -1; }
+  .rcard .rtop { overflow: hidden; } .rcard .rtop img { width: 100%; height: 100%; object-fit: cover; } .rcard .rtop svg { width: 42px; height: 42px; color: #9aa7a0; }
+  #recipe .rhead { padding: 0 0 14px; } #recipe .rhead .hero { width: 100%; height: 200px; object-fit: cover; display: block; border-radius: 22px 22px 0 0; }
+  #recipe .rhead .big svg { width: 54px; height: 54px; color: #9aa7a0; } #recipe .rhead .big { padding-top: 26px; }
+  #recipe .rhead h3, #recipe .rhead p, #recipe .facts { padding: 0 20px; }
+  .ok .tick svg { width: 54px; height: 54px; color: #15803d; stroke-width: 2.4; } .ok p svg { width: 14px; height: 14px; color: #e0a800; }
+  #flash svg { width: 14px; height: 14px; color: #15803d; stroke-width: 3; }
+  #chatbtn svg { width: 20px; height: 20px; }
+  .credits { font-size: 12px; color: var(--muted); text-align: center; margin-top: 18px; } .credits button { color: var(--brand-dark); background: none; border: 0; cursor: pointer; font: inherit; text-decoration: underline; }
 
   /* trolley */
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
@@ -197,8 +226,8 @@
   #loading.hide { opacity: 0; pointer-events: none; }
 
   @media (max-width: 899px) {
-    #chatbtn { padding: 0; width: 52px; height: 52px; justify-content: center; font-size: 0; }
-    #chatbtn::before { content: '💬'; font-size: 24px; }
+    #chatbtn { padding: 0; width: 52px; height: 52px; justify-content: center; }
+    #chatbtn span { display: none; }
     #info { right: 78px; width: auto; }
     .brand span { display: none; }
   }
@@ -209,15 +238,16 @@
 
 <div id="app">
   <header id="top">
-    <div class="brand" id="brand">🛒 <span>BiteSpeed Mart</span></div>
+    <div class="brand" id="brand"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2.5l2.2 11h10.6l2-8H6.5"/></svg></span><span>BiteSpeed Mart</span></div>
     <input id="gsearch" type="search" placeholder="Search products or codes…" autocomplete="off" aria-label="Search products">
-    <button id="ptsChip" title="Reward points">⭐ <span id="ptsval">0</span></button>
+    <button id="ptsChip" title="Reward points"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></svg><span id="ptsval">0</span></button>
   </header>
 
   <main id="views">
     <section class="view active" id="v-home"><div class="page">
-      <div class="section"><h2 class="sec"><span>🏷 This week's specials</span><a id="spall">See all</a></h2><div class="row" id="h-specials"></div></div>
-      <div class="section"><h2 class="sec"><span>♥ Buy again</span></h2><div class="row" id="h-again"></div></div>
+      <div class="section"><h2 class="sec"><span>This week's specials</span><a id="spall">See all</a></h2><div class="row" id="h-specials"></div></div>
+      <div class="section"><h2 class="sec"><span>Buy again</span></h2><div class="row" id="h-again"></div></div>
+      <div class="credits">Product and recipe photos come from Open Food Facts and Wikipedia contributors. <button id="credBtn">Image credits</button></div>
     </div></section>
 
     <section class="view" id="v-shop"><div class="page">
@@ -241,7 +271,7 @@
 
     <section class="view" id="v-cart"><div class="page"><div id="cartgrid">
       <div class="card">
-        <h2 class="sec" style="margin-top:0"><span>🧾 My trolley <small id="ccount" style="color:var(--muted);font-weight:600;font-size:13px"></small></span><button class="linkbtn" id="cclear">Clear</button></h2>
+        <h2 class="sec" style="margin-top:0"><span>My trolley <small id="ccount" style="color:var(--muted);font-weight:600;font-size:13px"></small></span><button class="linkbtn" id="cclear">Clear</button></h2>
         <div id="scanrow"><input id="scan" placeholder="Type barcode or item code…" autocomplete="off" inputmode="text"><button class="btn" id="scanAdd">Add</button></div>
         <div id="lines"></div>
       </div>
@@ -251,9 +281,9 @@
         <label id="usepts" hidden><input type="checkbox" id="usepts-cb"><span id="usepts-t"></span></label>
         <div class="tot big"><span>Total</span><span id="ctot">₹0</span></div>
         <div class="tot" style="font-size:12px"><span>Prices include GST</span><span id="cgst"></span></div>
-        <div class="tot" style="font-size:12px"><span>⭐ Earn on this shop</span><span id="cearn"></span></div>
+        <div class="tot" style="font-size:12px"><span>Points earned on this shop</span><span id="cearn"></span></div>
         <div class="payrow"><button class="btn iconbtn" id="camBtn" title="Scan items with the camera" aria-label="Scan items with the camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button><button class="btn" id="checkout" disabled style="flex:1">Checkout</button></div>
-        <button class="btn ghost" id="route" disabled style="width:100%;margin-top:8px">🧭 Plan my route</button>
+        <button class="btn ghost" id="route" disabled style="width:100%;margin-top:8px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7"/></svg> Plan my route</button>
       </div>
     </div></div></section>
   </main>
@@ -267,9 +297,9 @@
   </nav>
 </div>
 
-<button id="chatbtn">💬 Ask the store assistant</button>
+<button id="chatbtn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>Ask the store assistant</span></button>
 <div id="chat">
-  <header><span>🤖 Store assistant<small id="mode"></small></span><button class="btn ghost" id="chatx" style="padding:3px 10px">✕</button></header>
+  <header><span>Store assistant<small id="mode"></small></span><button class="btn ghost" id="chatx" style="padding:3px 10px">✕</button></header>
   <div id="msgs"></div>
   <form id="chatform"><input id="chatq" placeholder="e.g. where is the sugar?" autocomplete="off"><button class="btn">Send</button></form>
 </div>
@@ -277,6 +307,7 @@
 <div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
 <div id="pay"><div class="box" id="paybox"></div></div>
 <div id="recipe"><div class="sheet" id="recipebox"></div></div>
+<div id="credits"><div class="sheet" id="creditsbox"></div></div>
 <div id="flash"></div>
 <div id="tip"></div>
 

@@ -1,9 +1,11 @@
 // BiteSpeed Mart app shell: Home, Shop, Map, Trolley.
-import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, lineCalc, emojiFor, tint,
+import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, lineCalc, imgSrc, recipeImg,
   addToCart, clearCart, setUsePoints, isFav, toggleFav, cartCount, buyAgain, totals, completeOrder } from './store.js';
 import { createScene } from './scene.js';
 import { initScanner } from './scanner.js';
 import { initChat } from './chat.js';
+import { ICON, PLACEHOLDER } from './icons.js';
+const photo = (p, cls = '') => { const s = imgSrc(p.code); return s ? `<img class="${cls}" src="${s}" alt="${p.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph',innerHTML:this.dataset.ph}))" data-ph='${ICON.bag.replace(/'/g, '&#39;')}'>` : PLACEHOLDER; };
 
 const $ = id => document.getElementById(id);
 const hash = s => { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
@@ -15,7 +17,7 @@ const scene = createScene($('mapwrap'), D, { onPick: code => showInfo(code, fals
 let flashT;
 function flash(msg, remind) {
   const f = $('flash'); f.classList.toggle('deal', !!remind);
-  f.innerHTML = remind ? `✅ ${msg}<br><span class="red">${remind}</span>` : msg;
+  f.innerHTML = remind ? `${ICON.check} ${msg}<br><span class="red">${remind}</span>` : msg;
   f.classList.add('show'); clearTimeout(flashT); flashT = setTimeout(() => f.classList.remove('show'), remind ? 3200 : 1600);
 }
 function add(code, qty = 1, quiet) {
@@ -41,8 +43,8 @@ $('ptsChip').onclick = () => go('cart');
 const ctlHTML = c => { const q = state.cart[c] || 0; return q ? `<button data-act="dec" aria-label="Remove one">−</button><span>${q}</span><button data-act="inc" aria-label="Add one">+</button>` : `<button class="addbtn" data-act="inc">+ Add</button>`; };
 function tile(p) {
   const o = D.offerBy[p.code], sec = D.secById[p.section];
-  return `<article class="tile" data-code="${p.code}"><div class="art" style="background:${tint(p)}">${emojiFor(p)}${o ? `<span class="badge">${dealLabel(o)}</span>` : ''}<button class="fav${isFav(p.code) ? ' on' : ''}" data-act="fav" aria-label="Favourite">♥</button></div>
-    <div class="tn">${p.name}</div><button class="loc" data-act="loc">📍 ${sec.label}</button><div class="tp">${priceHTML(p)}</div><div class="ctl">${ctlHTML(p.code)}</div></article>`;
+  return `<article class="tile" data-code="${p.code}"><div class="art">${photo(p)}${o ? `<span class="badge">${dealLabel(o)}</span>` : ''}<button class="fav${isFav(p.code) ? ' on' : ''}" data-act="fav" aria-label="Favourite">${ICON.heart}</button></div>
+    <div class="tn">${p.name}</div><button class="loc" data-act="loc">${ICON.pin} ${sec.label}</button><div class="tp">${priceHTML(p)}</div><div class="ctl">${ctlHTML(p.code)}</div></article>`;
 }
 const tiles = list => list.map(tile).join('');
 $('views').addEventListener('click', e => {
@@ -61,7 +63,7 @@ function renderHome() {
   const feat = D.offers.filter(o => o.featured).map(o => D.byCode[o.code]);
   $('h-specials').innerHTML = tiles(feat);
   const again = buyAgain();
-  $('h-again').innerHTML = again.length ? tiles(again.slice(0, 14)) : '<div class="empty">Tap the ♥ on any product, or finish a shop, and your regular items will show up here for quick re-adding.</div>';
+  $('h-again').innerHTML = again.length ? tiles(again.slice(0, 14)) : '<div class="empty">Tap the heart on any product, or finish a shop, and your regular items will show up here for quick re-adding.</div>';
 }
 $('spall').onclick = () => { shop.section = '__offers'; shop.q = ''; $('gsearch').value = ''; go('shop'); renderShop(); };
 
@@ -83,14 +85,15 @@ function search(q) {
 function renderShop() {
   let list = null, title = 'Shop by aisle';
   if (shop.q) { list = search(shop.q); title = `Results for “${shop.q}”`; }
-  else if (shop.section === '__recipes') { list = []; title = '🍳 Recipes'; }
-  else if (shop.section === '__offers') { list = D.offers.map(o => D.byCode[o.code]); title = '🏷 Specials'; }
-  else if (shop.section) { list = D.products.filter(p => p.section === shop.section); const s = D.secById[shop.section]; title = `${s.icon} ${s.label}`; }
+  else if (shop.section === '__recipes') { list = []; title = 'Recipes'; }
+  else if (shop.section === '__offers') { list = D.offers.map(o => D.byCode[o.code]); title = 'Specials'; }
+  else if (shop.section) { list = D.products.filter(p => p.section === shop.section); const s = D.secById[shop.section]; title = s.label; }
   $('shoptitle').textContent = title; $('shopback').hidden = !list; $('sort').hidden = !list || shop.section === '__recipes';
   if (shop.section === '__recipes' && !shop.q) return renderRecipes();
   if (!list) {
-    const cat = (id, emoji, label, n, hue) => `<button class="cat" data-sec="${id}" style="background:hsl(${hue} 70% 92%)"><span class="ce">${emoji}</span><b>${label}</b><small>${n}</small></button>`;
-    $('shopbody').innerHTML = `<div class="cats">${cat('__offers', '🏷', 'Specials', `${D.offers.length} deals`, 8)}${cat('__recipes', '🍳', 'Recipes', `${D.recipes.length} recipes · add all ingredients`, 30)}${D.layout.sections.map(s => cat(s.id, s.icon, s.label, s.blurb || `${D.products.filter(p => p.section === s.id).length} items`, catHue(s.id))).join('')}</div>`;
+    const collage = ids => { const imgs = ids.map(c => D.byCode[c]).filter(p => p && imgSrc(p.code)).slice(0, 4); return imgs.length ? `<span class="collage">${imgs.map(p => `<img src="${imgSrc(p.code)}" alt="" loading="lazy">`).join('')}</span>` : `<span class="collage ph1">${ICON.bag}</span>`; };
+    const cat = (id, ids, label, n) => `<button class="cat" data-sec="${id}">${collage(ids)}<b>${label}</b><small>${n}</small></button>`;
+    $('shopbody').innerHTML = `<div class="cats">${cat('__offers', D.offers.map(o => o.code), 'Specials', `${D.offers.length} deals`)}${cat('__recipes', [], 'Recipes', `${D.recipes.length} recipes · add all ingredients`).replace(/<span class="collage[^]*?<\/span>/, `<span class="collage rc">${D.recipes.map(r => recipeImg(r.id)).filter(Boolean).slice(0, 4).map(s => `<img src="${s}" alt="" loading="lazy">`).join('') || ICON.utensils}</span>`)}${D.layout.sections.map(s => cat(s.id, D.products.filter(p => p.section === s.id).map(p => p.code), s.label, s.blurb || `${D.products.filter(p => p.section === s.id).length} items`)).join('')}</div>`;
     $('shopbody').querySelectorAll('.cat').forEach(b => b.onclick = () => { shop.section = b.dataset.sec; renderShop(); $('views').scrollTop = 0; });
   } else $('shopbody').innerHTML = list.length ? `<div class="grid">${tiles(sortList(list))}</div>` : '<div class="empty">No product found. Try another name, like “sugar” or “paneer”.</div>';
 }
@@ -102,13 +105,13 @@ $('gsearch').addEventListener('keydown', e => { if (e.key === 'Enter') { const p
 
 /* ---------- recipes ---------- */
 const PERISHABLE = new Set(['seafood', 'frozen', 'fruits-greens', 'dairy', 'bakery']);   // scaled with servings; dry goods stay at 1 pack
-const RFILTERS = [['all', 'All'], ['quick', '⚡ Quick'], ['veg', '🥦 Veg'], ['non-veg', '🍗 Non-veg'], ['dessert', '🍰 Dessert'], ['Breakfast', 'Breakfast'], ['Dinner', 'Dinner']];
+const RFILTERS = [['all', 'All'], ['quick', 'Quick'], ['veg', 'Veg'], ['non-veg', 'Non-veg'], ['dessert', 'Dessert'], ['Breakfast', 'Breakfast'], ['Dinner', 'Dinner']];
 let rFilter = 'all';
 const rMatch = r => rFilter === 'all' || r.tags.includes(rFilter) || r.course === rFilter;
 function renderRecipes() {
   const list = D.recipes.filter(rMatch);
   $('shopbody').innerHTML = `<div class="chips">${RFILTERS.map(([k, l]) => `<button class="chip${rFilter === k ? ' on' : ''}" data-f="${k}">${l}</button>`).join('')}</div>
-    <div class="rgrid">${list.map(r => `<button class="rcard" data-recipe="${r.id}"><div class="rtop" style="background:${r.color}22">${r.emoji}</div><div class="rbody"><b>${r.title}</b><span class="rmeta">⏱ ${r.minutes} min · 👥 Serves ${r.serves} · ${r.level}</span><span class="rblurb">${r.blurb}</span><span>${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</span></div></button>`).join('')}</div>`;
+    <div class="rgrid">${list.map(r => `<button class="rcard" data-recipe="${r.id}"><div class="rtop" style="background:${r.color}22">${recipeImg(r.id) ? `<img src="${recipeImg(r.id)}" alt="${r.title}" loading="lazy">` : ICON.utensils}</div><div class="rbody"><b>${r.title}</b><span class="rmeta">${r.minutes} min · Serves ${r.serves} · ${r.level}</span><span class="rblurb">${r.blurb}</span><span>${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</span></div></button>`).join('')}</div>`;
   $('shopbody').querySelectorAll('.chip').forEach(b => b.onclick = () => { rFilter = b.dataset.f; renderRecipes(); });
   $('shopbody').querySelectorAll('.rcard').forEach(b => b.onclick = () => openRecipe(b.dataset.recipe));
 }
@@ -125,10 +128,10 @@ const ingQty = (r, code) => PERISHABLE.has(D.byCode[code].section) ? Math.max(1,
 function drawRecipe(keepScroll) {
   const { r } = cur, ratio = cur.servings / r.serves, st = $('recipebox').scrollTop;
   const rows = r.ingredients.map(i => { const p = D.byCode[i.code], q = ingQty(r, i.code), o = D.offerBy[i.code], c = lineCalc(i.code, q), on = cur.on.has(i.code);
-    return `<div class="ing${on ? '' : ' off'}"><input type="checkbox" data-c="${i.code}" ${on ? 'checked' : ''} aria-label="Include ${p.name}"><div><div class="in">${emojiFor(p)} ${p.name}${q > 1 ? ` × ${q}` : ''}</div><div class="ia">${scaleAmount(i.amount, ratio)}</div></div><div class="ip">${c.saving ? `<s class="was">${inr(c.orig)}</s> ` : ''}<b>${inr(c.total)}</b></div>${o ? `<div class="dl red">${dealLabel(o)}</div>` : ''}</div>`; }).join('');
+    return `<div class="ing${on ? '' : ' off'}"><input type="checkbox" data-c="${i.code}" ${on ? 'checked' : ''} aria-label="Include ${p.name}"><div class="ing-main"><span class="th">${photo(p)}</span><div><div class="in">${p.name}${q > 1 ? ` × ${q}` : ''}</div><div class="ia">${scaleAmount(i.amount, ratio)}</div></div></div><div class="ip">${c.saving ? `<s class="was">${inr(c.orig)}</s> ` : ''}<b>${inr(c.total)}</b></div>${o ? `<div class="dl red">${dealLabel(o)}</div>` : ''}</div>`; }).join('');
   const sel = r.ingredients.filter(i => cur.on.has(i.code)), total = sel.reduce((s, i) => s + lineCalc(i.code, ingQty(r, i.code)).total, 0);
-  $('recipebox').innerHTML = `<div class="rhead" style="background:${r.color}22"><button class="rclose" aria-label="Close">✕</button><div class="big">${r.emoji}</div><h3>${r.title}</h3><p>${r.blurb}</p>
-      <div class="facts"><span class="fact">⏱ ${r.minutes} min</span><span class="fact">${r.level}</span><span class="fact">${r.course}</span>${r.tags.map(t => `<span class="fact">${t}</span>`).join('')}</div></div>
+  $('recipebox').innerHTML = `<div class="rhead" style="background:${r.color}22"><button class="rclose" aria-label="Close">✕</button>${recipeImg(r.id) ? `<img class="hero" src="${recipeImg(r.id)}" alt="${r.title}">` : `<div class="big">${ICON.utensils}</div>`}<h3>${r.title}</h3><p>${r.blurb}</p>
+      <div class="facts"><span class="fact">${r.minutes} min</span><span class="fact">${r.level}</span><span class="fact">${r.course}</span>${r.tags.map(t => `<span class="fact">${t}</span>`).join('')}</div></div>
     <div class="rbody"><div class="servrow"><span>Servings</span><span class="stepper"><button data-s="-1" aria-label="Fewer servings">−</button><span>${cur.servings}</span><button data-s="1" aria-label="More servings">+</button></span></div>
       <h4>Ingredients</h4>${rows}<div class="pantry-note">Fresh items scale with servings. Spices and dry goods are added as one pack, which covers several meals.</div>
       <h4>Method</h4><ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
@@ -146,17 +149,25 @@ $('recipe').addEventListener('click', e => {
 });
 $('recipe').addEventListener('change', e => { const c = e.target.dataset?.c; if (!c) return; e.target.checked ? cur.on.add(c) : cur.on.delete(c); drawRecipe(true); });
 
+/* ---------- image credits ---------- */
+$('credBtn').onclick = () => {
+  const rows = Object.entries(D.images).filter(([, v]) => !v.none).map(([k, v]) => { const name = k.startsWith('recipe:') ? D.recipes.find(r => r.id === k.slice(7))?.title : D.byCode[k]?.name; return `<li><span>${name || k}</span><span><a href="${v.page}" target="_blank" rel="noopener">${v.src === 'off' ? 'Open Food Facts' : 'Wikipedia'}</a> · ${v.license}</span></li>`; }).join('');
+  $('creditsbox').innerHTML = `<h3>Image credits</h3><p>Packaged-product photos are from Open Food Facts contributors (CC BY-SA 3.0). Fresh produce, fish and recipe photos are from Wikipedia / Wikimedia Commons under the licence shown for each image. Brand names and packaging belong to their owners; photos are used here for a demo only.</p><ul>${rows}</ul>`;
+  $('credits').classList.add('show');
+};
+$('credits').addEventListener('click', e => { if (e.target === $('credits')) $('credits').classList.remove('show'); });
+
 /* ---------- map ---------- */
 function onHover(code, x, y) {
   const tip = $('tip'); if (!code) { tip.style.display = 'none'; return; }
-  const p = D.byCode[code], s = D.secById[p.section]; tip.innerHTML = `<b>${p.name}</b><br>${p.code} · ${s.icon} ${s.label}`; tip.style.display = 'block'; tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  const p = D.byCode[code], s = D.secById[p.section]; tip.innerHTML = `<b>${p.name}</b><br>${p.code} · ${s.label}`; tip.style.display = 'block'; tip.style.left = x + 'px'; tip.style.top = y + 'px';
 }
 let infoCode = null;
 function showInfo(code, fly) {
   const r = scene.select(code, fly); if (!r) return; $('i-add').hidden = false;
   const p = D.byCode[code], sec = D.secById[p.section], o = D.offerBy[code]; infoCode = code;
   $('i-name').textContent = p.name; $('i-code').textContent = p.code;
-  $('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${r.row} from the top · position ${r.col} of ${sec.cols}<br>${priceHTML(p)} ${o ? `<span class="red">${dealLabel(o)}</span>` : ''}`;
+  $('i-meta').innerHTML = `<b>${sec.label}</b> (zone ${sec.number})<br>Shelf row ${r.row} from the top · position ${r.col} of ${sec.cols}<br>${priceHTML(p)} ${o ? `<span class="red">${dealLabel(o)}</span>` : ''}`;
   $('info').classList.add('show');
 }
 function locate(code) { go('map'); showInfo(code, true); }
@@ -165,7 +176,7 @@ $('i-clear').onclick = () => { scene.clear(); infoCode = null; $('info').classLi
 function planRoute() {
   const codes = Object.keys(state.cart); if (!codes.length) return;
   go('map'); const r = scene.selectRoute(codes); if (!r) return;
-  infoCode = null; $('i-name').textContent = '🧭 Route through your trolley'; $('i-code').textContent = `${r.order.length} item${r.order.length > 1 ? 's' : ''}`;
+  infoCode = null; $('i-name').textContent = 'Route through your trolley'; $('i-code').textContent = `${r.order.length} item${r.order.length > 1 ? 's' : ''}`;
   $('i-meta').innerHTML = 'The orange cart visits each marked shelf in the quickest order, starting from the entry.'; $('i-add').hidden = true; $('info').classList.add('show');
 }
 $('route').onclick = planRoute;
@@ -181,7 +192,7 @@ function renderCart() {
   $('lines').innerHTML = T.lines.length ? '' : '<div class="empty">Your trolley is empty. Scan an item, or add one from Home or Shop.</div>';
   for (const l of T.lines) {
     const p = D.byCode[l.c], d = document.createElement('div'); d.className = 'line';
-    d.innerHTML = `<span class="n">${emojiFor(p)} ${p.name}</span><span class="qty"><button data-d="-1" aria-label="Remove one">−</button>${l.q}<button data-d="1" aria-label="Add one">+</button></span><span class="c">${l.c} · ${priceHTML(p)}</span><span class="c" style="text-align:right">${l.saving ? `<s class="was">${inr(l.orig)}</s> ` : ''}<b style="color:var(--ink)">${inr(l.total)}</b></span>${l.remind ? `<span class="deal-row red">${l.remind}</span>` : l.earned ? `<span class="deal-row green">✓ ${l.earned} · saved ${inr(l.saving)}</span>` : ''}`;
+    d.innerHTML = `<span class="n"><span class="th">${photo(p)}</span>${p.name}</span><span class="qty"><button data-d="-1" aria-label="Remove one">−</button>${l.q}<button data-d="1" aria-label="Add one">+</button></span><span class="c">${l.c} · ${priceHTML(p)}</span><span class="c" style="text-align:right">${l.saving ? `<s class="was">${inr(l.orig)}</s> ` : ''}<b style="color:var(--ink)">${inr(l.total)}</b></span>${l.remind ? `<span class="deal-row red">${l.remind}</span>` : l.earned ? `<span class="deal-row green">✓ ${l.earned} · saved ${inr(l.saving)}</span>` : ''}`;
     d.querySelector('.n').onclick = () => locate(l.c);
     d.querySelectorAll('.qty button').forEach(b => b.onclick = () => add(l.c, +b.dataset.d, true));
     $('lines').appendChild(d);
@@ -210,10 +221,10 @@ function openPay() {
   const T = totals(); let method = 'UPI';
   const row = (a, b, cls = '') => `<div class="rline ${cls}"><span>${a}</span><span>${b}</span></div>`;
   const lines = T.lines.map(l => row(`${l.q} × ${D.byCode[l.c].name}`, `${l.saving ? `<s class="was">${inr(l.orig)}</s> ` : ''}${inr(l.total)}`)).join('');
-  $('paybox').innerHTML = `<h3>🧾 Checkout</h3>${lines}<hr style="border:0;border-top:1px solid var(--line)">${row('Subtotal', inr(T.orig))}${T.saving ? row('Specials savings', '−' + inr(T.saving), 'green') : ''}${T.redeem ? row(`Points redeemed (${T.blocks * 100})`, '−' + inr(T.redeem), 'green') : ''}
+  $('paybox').innerHTML = `<h3>Checkout</h3>${lines}<hr style="border:0;border-top:1px solid var(--line)">${row('Subtotal', inr(T.orig))}${T.saving ? row('Specials savings', '−' + inr(T.saving), 'green') : ''}${T.redeem ? row(`Points redeemed (${T.blocks * 100})`, '−' + inr(T.redeem), 'green') : ''}
     <div class="rline" style="font-weight:800;font-size:17px"><span>Total</span><span>${inr(T.pay)}</span></div>${row('Includes GST', inr(T.gst))}
-    <p class="green" style="font-size:12px;margin:8px 0 0">⭐ You'll earn ${T.earn} points${T.saving + T.redeem ? ` · you're saving ${inr(T.saving + T.redeem)}` : ''}</p>
-    <div class="methods"><button data-m="UPI" class="on">📱 UPI</button><button data-m="Card">💳 Card</button><button data-m="Wallet">👛 Wallet</button></div>
+    <p class="green" style="font-size:12px;margin:8px 0 0">${ICON.star} You'll earn ${T.earn} points${T.saving + T.redeem ? ` · you're saving ${inr(T.saving + T.redeem)}` : ''}</p>
+    <div class="methods"><button data-m="UPI" class="on">UPI</button><button data-m="Card">Card</button><button data-m="Wallet">Wallet</button></div>
     <div style="display:flex;gap:8px"><button class="btn ghost" id="payCancel">Back</button><button class="btn" id="payGo" style="flex:1">Pay ${inr(T.pay)}</button></div>
     <p style="font-size:11px;color:var(--muted);margin:10px 0 0">Demo only – no real payment is taken.</p>`;
   $('pay').classList.add('show');
@@ -224,7 +235,7 @@ function openPay() {
     setTimeout(() => {
       const id = 'BSM-' + Date.now().toString(36).toUpperCase(), when = new Date().toLocaleString();
       completeOrder(T); scene.clear(); $('info').classList.remove('show'); go('map'); scene.flyToExit(); scene.openExit(8);
-      $('paybox').innerHTML = `<div class="ok"><div class="tick">✅</div><h3>Payment successful</h3><p style="color:var(--muted);font-size:13px">Order ${id}<br>${when} · paid ${inr(T.pay)} via ${method}</p>${T.saving + T.redeem ? `<p class="green">You saved ${inr(T.saving + T.redeem)} today!</p>` : ''}<p>⭐ +${T.earn} points · balance ${state.points}</p><p>🚪 Exit gate is open – thank you for shopping!</p><button class="btn" id="payDone">Done</button></div>`;
+      $('paybox').innerHTML = `<div class="ok"><div class="tick">${ICON.check}</div><h3>Payment successful</h3><p style="color:var(--muted);font-size:13px">Order ${id}<br>${when} · paid ${inr(T.pay)} via ${method}</p>${T.saving + T.redeem ? `<p class="green">You saved ${inr(T.saving + T.redeem)} today!</p>` : ''}<p>${ICON.star} +${T.earn} points · balance ${state.points}</p><p>The exit gate is open – thank you for shopping!</p><button class="btn" id="payDone">Done</button></div>`;
       $('payDone').onclick = () => { $('pay').classList.remove('show'); go('home'); };
     }, 1200);
   };

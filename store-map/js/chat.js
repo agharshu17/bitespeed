@@ -5,7 +5,7 @@ const $ = id => document.getElementById(id);
 export function initChat({ onAction }) {
   let history = []; try { history = JSON.parse(sessionStorage.getItem('bsm-chat') || '[]'); } catch {}
   const bubble = (text, who) => { const d = document.createElement('div'); d.className = 'm ' + who; d.textContent = text; $('msgs').appendChild(d); $('msgs').scrollTop = 1e9; return d; };
-  bubble('Hi! Ask me where anything is, what\'s on special, or tell me what to add to your trolley 🛒', 'a');
+  bubble('Hi! Ask me where anything is, what\'s on special, or tell me what to add to your trolley', 'a');
   const open = v => { $('chat').classList.toggle('show', v); $('chatbtn').style.display = v ? 'none' : ''; if (v) $('chatq').focus(); };
   $('chatbtn').onclick = () => open(true); $('chatx').onclick = () => open(false);
   $('chatform').onsubmit = async e => {

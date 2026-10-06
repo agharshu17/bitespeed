@@ -13,7 +13,7 @@ export function initScanner({ resolve, onScan }) {
     const p = resolve(raw);
     if (!p) { status(`Unknown barcode <b>${raw}</b>`); return; }
     onScan(p); scanned++; beep(); navigator.vibrate?.(60);
-    status(`✅ <b>${p.name}</b> – ${inr(p.price)}<br>${scanned} item${scanned > 1 ? 's' : ''} scanned · keep scanning or tap Done`);
+    status(`<b>✓ ${p.name}</b> – ${inr(p.price)}<br>${scanned} item${scanned > 1 ? 's' : ''} scanned · keep scanning or tap Done`);
   }
   async function decodeImageFile(file) {
     const url = URL.createObjectURL(file), fail = () => status('No barcode found in that photo – try again, closer and steadier.');
