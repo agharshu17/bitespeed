@@ -52,7 +52,7 @@ Trolley → **🧭 Plan my route** opens the Map, drops a marker on every item's
 each one in a short walking order (nearest-first along the real walkways, pausing at each stop). **Clear route** resets it.
 
 ## Recipes
-`data/recipes.json`: 14 recipes whose ingredients are catalogue codes. Shop → **Recipes** (filters: quick, veg, non-veg, dessert, breakfast, dinner).
+`data/recipes.json`: 55 recipes whose ingredients are catalogue codes; items the store doesn't sell (garlic, ginger, oil, lemon, okra, eggplant, cabbage, tahini, pita, feta, pizza base, curry leaves, lettuce) are listed under "Also needed (not sold in our store)" via an `extras` list. Shop → **Recipes** (filters: quick, veg, non-veg, dessert, breakfast, dinner).
 The recipe page has a servings changer (fresh items scale up, spices and dry goods stay at one pack), a tick box per ingredient,
 the method, and **Add N items** to put the ticked ingredients in the trolley (deals and reminders apply as usual).
 

@@ -106,7 +106,7 @@ $('gsearch').addEventListener('keydown', e => { if (e.key === 'Enter') { const p
 
 /* ---------- recipes ---------- */
 const PERISHABLE = new Set(['seafood', 'frozen', 'fruits-greens', 'dairy', 'bakery']);   // scaled with servings; dry goods stay at 1 pack
-const RFILTERS = [['all', 'All'], ['quick', 'Quick & easy'], ['veg', 'Veg'], ['non-veg', 'Non-veg'], ['dessert', 'Dessert'], ['Breakfast', 'Breakfast'], ['Dinner', 'Dinner'], ['Drinks', 'Drinks'], ['Snack', 'Snack']];
+const RFILTERS = [['all', 'All'], ['quick', 'Quick & easy'], ['veg', 'Veg'], ['non-veg', 'Non-veg'], ['dessert', 'Dessert'], ['Breakfast', 'Breakfast'], ['Lunch', 'Lunch'], ['Dinner', 'Dinner'], ['Drinks', 'Drinks'], ['Snack', 'Snack']];
 let rFilter = 'all';
 const rMatch = r => rFilter === 'all' || r.tags.includes(rFilter) || r.course === rFilter;
 const dots = n => `<span class="dots" aria-label="Difficulty ${n} of 5">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
@@ -158,7 +158,7 @@ function drawRecipe() {
   $('recipepage').innerHTML = `<button class="rback" id="rback">← Back</button><h1 class="rtitle">${r.title}</h1><div class="rsub">${r.course} · ${r.tags.join(' · ')}</div>
     <div class="rhero">${rPhoto(r)}</div>
     <div class="rfacts card"><div class="fx"><small>Prep</small><b>${mins(prepOf(r))}</b></div><div class="fx"><small>Cook</small><b>${mins(cookOf(r))}</b></div><div class="fx"><small>Serves</small><b>${r.serves}</b></div><div class="fx"><small>Difficulty</small>${dots(diffN(r))}</div><div class="racts">${bookmark(r)}</div></div>
-    <div class="rcols"><div><h3>${r.ingredients.length} Ingredients</h3><div class="card"><div class="servrow"><span>Number of servings</span><span class="stepper"><button data-s="-1" aria-label="Fewer servings">−</button><span>${cur.servings}</span><button data-s="1" aria-label="More servings">+</button></span></div>${rows}<div class="pantry-note">Fresh items scale with servings. Spices and dry goods are added as one pack, which covers several meals.</div></div>
+    <div class="rcols"><div><h3>${r.ingredients.length} Ingredients</h3><div class="card"><div class="servrow"><span>Number of servings</span><span class="stepper"><button data-s="-1" aria-label="Fewer servings">−</button><span>${cur.servings}</span><button data-s="1" aria-label="More servings">+</button></span></div>${rows}${(r.extras || []).length ? `<div class="extras"><b>Also needed</b> <span>(not sold in our store)</span><ul>${r.extras.map(x => `<li><span>${x.name}</span><span>${scaleAmount(x.amount, ratio)}</span></li>`).join('')}</ul></div>` : ''}<div class="pantry-note">Fresh items scale with servings. Spices and dry goods are added as one pack, which covers several meals.</div></div>
         <div class="radd-wrap"><button class="btn" id="radd" ${sel.length ? '' : 'disabled'}>Add ${sel.length} item${sel.length === 1 ? '' : 's'} to trolley · ${inr(total)}</button></div></div>
       <div><h3>Description</h3><p class="rdesc">${r.blurb}</p><h3>Method</h3>${r.steps.map((s, i) => `<div class="card step"><small>Step ${i + 1} of ${r.steps.length}</small><p>${s}</p></div>`).join('')}</div></div>`;
   $('views').scrollTop = st;
