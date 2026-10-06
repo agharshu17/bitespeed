@@ -43,6 +43,12 @@ set the service's *Root Directory* to `store-map`, start command `npm start` (it
 - **iPhone / Safari:** Share → Add to Home Screen (the bar shows this hint).
 After a change, bump `VERSION` in `sw.js` so installed copies refresh.
 
+### Railway, step by step
+1. railway.com → **New Project → Deploy from GitHub repo** → pick `agharshu17/bitespeed`, branch `claude/practical-bohr-frok49` (or merge it into your main branch first).
+2. Open the new service → **Settings → Source → Root Directory** → `store-map` (the repo root is an unrelated Java project).
+3. **Settings → Networking → Generate Domain**. Railway builds with `store-map/railway.json` (`npm install --omit=dev`, then `npm start`) and serves over https.
+4. Open the domain on your phone and install (see above). Nothing else to configure: no environment variables are needed.
+
 ## App layout
 Bottom tabs (top menu on a computer): **Home** (this week's specials, buy again), **Shop** (aisle tiles, product grids with emoji icons,
 sorting, search), a centre **Scan** button, **Map** (3D store with route to any item) and **Trolley** (items, savings, points, checkout).
