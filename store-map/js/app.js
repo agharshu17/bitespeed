@@ -153,7 +153,7 @@ function onHover(code, x, y) {
 }
 let infoCode = null;
 function showInfo(code, fly) {
-  const r = scene.select(code, fly); if (!r) return;
+  const r = scene.select(code, fly); if (!r) return; $('i-add').hidden = false;
   const p = D.byCode[code], sec = D.secById[p.section], o = D.offerBy[code]; infoCode = code;
   $('i-name').textContent = p.name; $('i-code').textContent = p.code;
   $('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${r.row} from the top · position ${r.col} of ${sec.cols}<br>${priceHTML(p)} ${o ? `<span class="red">${dealLabel(o)}</span>` : ''}`;
@@ -162,6 +162,13 @@ function showInfo(code, fly) {
 function locate(code) { go('map'); showInfo(code, true); }
 $('i-add').onclick = () => infoCode && add(infoCode);
 $('i-clear').onclick = () => { scene.clear(); infoCode = null; $('info').classList.remove('show'); scene.flyHome(); };
+function planRoute() {
+  const codes = Object.keys(state.cart); if (!codes.length) return;
+  go('map'); const r = scene.selectRoute(codes); if (!r) return;
+  infoCode = null; $('i-name').textContent = '🧭 Route through your trolley'; $('i-code').textContent = `${r.order.length} item${r.order.length > 1 ? 's' : ''}`;
+  $('i-meta').innerHTML = 'The orange cart visits each marked shelf in the quickest order, starting from the entry.'; $('i-add').hidden = true; $('info').classList.add('show');
+}
+$('route').onclick = planRoute;
 $('b-rotate').onclick = e => { scene.setAutoRotate(!scene.autoRotate); e.currentTarget.classList.toggle('on', scene.autoRotate); };
 $('b-top').onclick = () => scene.flyTop();
 $('b-reset').onclick = () => { scene.setAutoRotate(false); $('b-rotate').classList.remove('on'); scene.flyHome(); };
@@ -184,7 +191,7 @@ function renderCart() {
   $('usepts').hidden = !(T.blocks > 0 || state.usePoints); $('usepts-cb').checked = state.usePoints && T.blocks > 0;
   $('usepts-t').textContent = T.blocks ? `Use ${T.blocks * 100} points (−${inr(T.blocks * 10)})` : 'Not enough points for this trolley';
   $('ctot').textContent = inr(T.pay); $('cgst').textContent = `incl. GST ${inr(T.gst)}`; $('cearn').textContent = `${T.earn} points`;
-  $('checkout').disabled = !T.lines.length; $('nbadge').textContent = n; $('nbadge').hidden = !n;
+  $('checkout').disabled = !T.lines.length; $('route').disabled = !T.lines.length; $('nbadge').textContent = n; $('nbadge').hidden = !n;
   $('ptsval').textContent = state.points;
 }
 $('usepts-cb').onchange = e => setUsePoints(e.target.checked);

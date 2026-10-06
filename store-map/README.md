@@ -43,6 +43,10 @@ sorting, search), a centre **Scan** button, **Map** (3D store with route to any 
 The ♥ on a product adds it to "Buy again"; items you pay for are added there automatically. Code layout:
 `index.html` (shell + styles), `js/app.js` (screens), `js/store.js` (data, prices, trolley, points), `js/scene.js` (3D), `js/scanner.js`, `js/chat.js`.
 
+## Trolley route
+Trolley → **🧭 Plan my route** opens the Map, drops a marker on every item's shelf and walks the orange cart from the entry past
+each one in a short walking order (nearest-first along the real walkways, pausing at each stop). **Clear route** resets it.
+
 ## Recipes
 `data/recipes.json`: 14 recipes whose ingredients are catalogue codes. Shop → **Recipes** (filters: quick, veg, non-veg, dessert, breakfast, dinner).
 The recipe page has a servings changer (fresh items scale up, spices and dry goods stay at one pack), a tick box per ingredient,

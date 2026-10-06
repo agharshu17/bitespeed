@@ -212,54 +212,86 @@ const START = new THREE.Vector3(px2x(entryC.x + entryC.w / 2), 0, px2z(entryC.y 
 guide.position.copy(START); guide.rotation.y = Math.PI; scene.add(guide);
 
 const routeDots = new THREE.Group(); scene.add(routeDots);
-const beacon = new THREE.Group(); beacon.visible = false; scene.add(beacon);
-const pin = new THREE.Mesh(new THREE.ConeGeometry(.7, 1.6, 16), std('#ff3b30', { emissive: '#ff3b30', emissiveIntensity: .6 })); pin.rotation.x = Math.PI; beacon.add(pin);
-const beam = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, 1, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true, opacity: .6 })); beacon.add(beam);
-const ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1.2, 40), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true, side: THREE.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.visible = false; scene.add(ring);
-
-const COLS = [175, 372, 595, 820];
-function routeFor(info) {
-  const w = info.walk, s = layout.doors.entry.rect, pts = [[s.x + s.w / 2, s.y + 20], [s.x + s.w / 2, 550]];
-  if (w.y === 85 || secById[productOf(info).section].facing === 'down') {
-    const col = COLS.reduce((a, b) => Math.abs(b - w.x) < Math.abs(a - w.x) ? b : a);
-    pts.push([col, 550], [col, 85], [w.x, 85]);
-  } else pts.push([w.x, 550], [w.x, w.y]);
-  return pathPx(pts);
+const markers = [];   // one per highlighted shelf: { g, pin, beam, ring, pinY }
+const pinMat = std('#ff3b30', { emissive: '#ff3b30', emissiveIntensity: .6 }), beamMat = new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true, opacity: .6 });
+function makeMarker(info) {
+  const g = new THREE.Group(), pinY = info.topY + 1.8;
+  const pin = new THREE.Mesh(new THREE.ConeGeometry(.7, 1.6, 16), pinMat); pin.rotation.x = Math.PI; g.add(pin);
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, 1, 8), beamMat); beam.scale.y = pinY - info.pos.y; beam.position.y = (pinY + info.pos.y) / 2; g.add(beam);
+  g.position.set(info.pos.x, 0, info.pos.z); scene.add(g);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1.2, 40), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true, side: THREE.DoubleSide }));
+  ring.rotation.x = -Math.PI / 2; ring.position.set(px2x(info.walk.x), .2, px2z(info.walk.y)); scene.add(ring);
+  return { g, pin, beam, ring, pinY };
 }
-const productOf = info => products.find(p => productInfo.get(p.code) === info);
 
-let route = null, selected = null, travelled = 0;
+/* walkway network (floor-plan px): four vertical walkways joined by a top (y=85) and bottom (y=550) corridor */
+const COLS = [175, 372, 595, 820], TOP = 85, BOT = 550;
+const nearestCol = x => COLS.reduce((a, b) => Math.abs(b - x) < Math.abs(a - x) ? b : a);
+function anchorOf([x, y]) {
+  if (y <= TOP + 1) { const c = nearestCol(x); return { col: c, y: TOP, tail: [[c, TOP], [x, TOP]] }; }
+  if (y >= BOT - 1) { const c = nearestCol(x); return { col: c, y: BOT, tail: [[c, BOT], [x, BOT], [x, y]] }; }
+  return { col: x, y, tail: [[x, y]] };
+}
+function netPath(A, B) {
+  const a = anchorOf(A), b = anchorOf(B), pts = [...a.tail].reverse();
+  if (a.col === b.col) pts.push([b.col, b.y]);
+  else { const cost = Y => Math.abs(a.y - Y) + Math.abs(Y - b.y), Y = cost(TOP) <= cost(BOT) ? TOP : BOT; pts.push([a.col, Y], [b.col, Y], [b.col, b.y]); }
+  return pts.concat(b.tail);
+}
+const pxLen = pts => pts.reduce((t, p, i) => i ? t + Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]) : 0, 0);
+const entryR = layout.doors.entry.rect, ENTRY_PX = [entryR.x + entryR.w / 2, entryR.y + 20];
+/** nearest-neighbour order of stops, starting at the entry */
+function orderStops(stops) {
+  const left = [...stops], out = []; let cur = ENTRY_PX;
+  while (left.length) {
+    let bi = 0, bd = Infinity;
+    left.forEach((s, i) => { const d = pxLen(netPath(cur, [s.info.walk.x, s.info.walk.y])); if (d < bd) { bd = d; bi = i; } });
+    const s = left.splice(bi, 1)[0]; out.push(s); cur = [s.info.walk.x, s.info.walk.y];
+  }
+  return out;
+}
+
+let route = null, selected = [], travelled = 0, pauseUntil = 0, nextStop = 0;
 function pathLength(path) { let t = 0; for (let i = 1; i < path.length; i++) t += path[i].distanceTo(path[i - 1]); return t; }
 function pointAt(path, d, out) {
-  for (let i = 1; i < path.length; i++) { const l = path[i].distanceTo(path[i - 1]); if (d <= l || i === path.length - 1) { const t = Math.min(1, d / l); out.pos.lerpVectors(path[i - 1], path[i], t); out.dir.subVectors(path[i], path[i - 1]).normalize(); return; } d -= l; }
+  for (let i = 1; i < path.length; i++) { const l = path[i].distanceTo(path[i - 1]); if (d <= l || i === path.length - 1) { const t = l ? Math.min(1, d / l) : 0; out.pos.lerpVectors(path[i - 1], path[i], t); out.dir.subVectors(path[i], path[i - 1]).normalize(); return; } d -= l; }
 }
 const tmp = { pos: new THREE.Vector3(), dir: new THREE.Vector3() };
 
 const dotGeo = new THREE.CircleGeometry(.28, 12);
 function clearRoute() {
-  selected = null; route = null; beacon.visible = false;
-  routeDots.clear(); ring.visible = false; guide.position.copy(START); guide.rotation.y = Math.PI;
+  selected = []; route = null; pauseUntil = 0; nextStop = 0;
+  markers.splice(0).forEach(m => { scene.remove(m.g); scene.remove(m.ring); });
+  routeDots.clear(); guide.position.copy(START); guide.rotation.y = Math.PI;
   productMeshes.forEach(m => { m.material.emissive.set('#000'); m.scale.copy(m.userData.base); });
 }
 
-function select(code, fly = true) {
+/** highlight shelves and walk the guide cart past them; one code = "take me there", several = trolley route */
+function plan(codes, fly = true) {
   clearRoute();
-  const p = byCode[code], info = productInfo.get(code); if (!p || !info) return null;
-  selected = code;
-  const path = routeFor(info); route = { path, len: pathLength(path) }; travelled = 0;
+  const stops = codes.map(c => ({ c, info: productInfo.get(c) })).filter(x => x.info); if (!stops.length) return null;
+  const ordered = stops.length > 1 ? orderStops(stops) : stops;
+  const px = [ENTRY_PX], stopIdx = []; let cur = ENTRY_PX;
+  for (const s of ordered) {
+    const to = [s.info.walk.x, s.info.walk.y];
+    for (const p of netPath(cur, to)) { const l = px[px.length - 1]; if (Math.hypot(p[0] - l[0], p[1] - l[1]) > .01) px.push(p); }
+    stopIdx.push(px.length - 1); cur = to;
+  }
+  const path = pathPx(px); route = { path, len: pathLength(path), stops: [] }; travelled = 0;
+  let acc = 0; const cum = path.map((p, i) => i ? (acc += p.distanceTo(path[i - 1])) : 0); route.stops = stopIdx.map(i => cum[i]);
   for (let d = 0; d < route.len; d += 1.4) {
     const dot = new THREE.Mesh(dotGeo, new THREE.MeshBasicMaterial({ color: '#ff6b35', transparent: true, opacity: .25 }));
     dot.rotation.x = -Math.PI / 2; pointAt(path, d, tmp); dot.position.set(tmp.pos.x, .16, tmp.pos.z); dot.userData.d = d; routeDots.add(dot);
   }
-  info.mesh.material.emissive.set('#ff3b30'); info.mesh.material.emissiveIntensity = .7;
-  const pinY = info.topY + 1.8;
-  beacon.position.set(info.pos.x, 0, info.pos.z); beacon.userData.pinY = pinY;
-  beam.scale.y = pinY - info.pos.y; beam.position.y = (pinY + info.pos.y) / 2;
-  ring.position.set(px2x(info.walk.x), .2, px2z(info.walk.y)); ring.visible = true;
-  beacon.visible = true;
-  if (fly) flyTo(new THREE.Vector3(info.pos.x * .7 + 0, 42, info.pos.z * .7 + 52), new THREE.Vector3(info.pos.x, 0, info.pos.z));
-  return { code, row: info.row, col: info.col };
+  for (const s of ordered) { s.info.mesh.material.emissive.set('#ff3b30'); s.info.mesh.material.emissiveIntensity = .7; markers.push(makeMarker(s.info)); }
+  selected = ordered.map(s => s.c);
+  if (fly) {
+    if (ordered.length === 1) { const i = ordered[0].info; flyTo(new THREE.Vector3(i.pos.x * .7, 42, i.pos.z * .7 + 52), new THREE.Vector3(i.pos.x, 0, i.pos.z)); }
+    else flyTo(new THREE.Vector3(0, PORTRAIT ? 150 : 100, PORTRAIT ? 90 : 62), new THREE.Vector3(0, 0, 4));
+  }
+  return { order: selected, info: ordered[0].info };
 }
+function select(code, fly = true) { const r = plan([code], fly); return r && { code, row: r.info.row, col: r.info.col }; }
 
 /* ---------- camera fly ---------- */
 let fly = null;
@@ -300,11 +332,17 @@ renderer.setAnimationLoop(now => {
     w.mesh.position.copy(sp.pos); w.mesh.position.y = Math.abs(Math.sin(w.d * 2.2)) * .08; w.mesh.rotation.y = Math.atan2(sp.dir.x, sp.dir.z);
   });
   if (route) {
-    if (travelled < route.len) { travelled = Math.min(route.len, travelled + dt * 14 * (.35 + .65 * Math.min(1, (route.len - travelled) / 6))); pointAt(route.path, travelled, tmp); guide.position.set(tmp.pos.x, Math.abs(Math.sin(time * 9)) * .05, tmp.pos.z); guide.rotation.y = Math.atan2(tmp.dir.x, tmp.dir.z); }
+    if (travelled < route.len && time >= pauseUntil) {
+      travelled = Math.min(route.len, travelled + dt * 14 * (.35 + .65 * Math.min(1, (route.len - travelled) / 6)));
+      if (nextStop < route.stops.length && travelled >= route.stops[nextStop] - .01 && route.stops.length > 1) { travelled = route.stops[nextStop]; nextStop++; pauseUntil = time + .9; }
+      else if (nextStop < route.stops.length && travelled >= route.stops[nextStop]) nextStop++;
+      pointAt(route.path, travelled, tmp); guide.position.set(tmp.pos.x, Math.abs(Math.sin(time * 9)) * .05, tmp.pos.z); guide.rotation.y = Math.atan2(tmp.dir.x, tmp.dir.z);
+    }
     tag.position.y = 4 + Math.sin(time * 3) * .15;
     routeDots.children.forEach(d => { const k = (time * 6 - d.userData.d) % 12; d.material.opacity = d.userData.d < travelled ? .08 : .25 + .6 * Math.max(0, 1 - Math.abs(k - 1) / 3); });
-    pin.position.y = beacon.userData.pinY + Math.sin(time * 4) * .3; const rs = 1 + ((time * 1.2) % 1) * 1.6; ring.scale.setScalar(rs); ring.material.opacity = 1 - (rs - 1) / 1.6;
-    const info = productInfo.get(selected); if (info) { const s = 1 + Math.sin(time * 6) * .12; info.mesh.scale.copy(info.mesh.userData.base).multiplyScalar(s); }
+    const rs = 1 + ((time * 1.2) % 1) * 1.6;
+    markers.forEach(m => { m.pin.position.y = m.pinY + Math.sin(time * 4) * .3; m.ring.scale.setScalar(rs); m.ring.material.opacity = 1 - (rs - 1) / 1.6; });
+    const pulse = 1 + Math.sin(time * 6) * .12; selected.forEach(c => { const info = productInfo.get(c); if (info) info.mesh.scale.copy(info.mesh.userData.base).multiplyScalar(pulse); });
   }
   renderer.render(scene, camera);
 });
@@ -313,7 +351,7 @@ const HOME_VIEW = () => flyTo(HOME.pos.clone(), HOME.target.clone());
 return {
   productInfo,
   setActive(v) { active = v; if (v) { last = performance.now(); camera.aspect = W() / H(); camera.updateProjectionMatrix(); renderer.setSize(W(), H()); } },
-  select, clear: clearRoute, flyHome: HOME_VIEW,
+  select, selectRoute: codes => plan(codes, true), clear: clearRoute, flyHome: HOME_VIEW,
   flyTop: () => flyTo(new THREE.Vector3(0, 125, 0.01), new THREE.Vector3(0, 0, 0)),
   flyToSection(id) { const s = secById[id]; const cx = px2x(s.rect.x + s.rect.w / 2), cz = px2z(s.rect.y + s.rect.h / 2); flyTo(new THREE.Vector3(cx * .8, 38, cz * .8 + 40), new THREE.Vector3(cx, 0, cz)); },
   flyToExit() { flyTo(new THREE.Vector3(30, 40, 70), new THREE.Vector3(px2x(layout.doors.exit.rect.x + 140), 0, 25)); },
