@@ -66,6 +66,43 @@
   .cat { border: 0; border-radius: 18px; padding: 16px 12px; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-height: 112px; }
   .cat .ce { font-size: 38px; line-height: 1; } .cat b { font-size: 15px; } .cat small { color: var(--muted); font-size: 12px; }
 
+  /* recipe cards + page */
+  .dots { display: inline-flex; gap: 3px; vertical-align: middle; } .dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #b9c4be; display: block; } .dots i.on { background: var(--brand); border-color: var(--brand); }
+  .wrow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 899px) { .wrow { display: flex; overflow-x: auto; scroll-snap-type: x proximity; } .wrow .wcard { flex: none; width: 300px; scroll-snap-align: start; } }
+  .wcard { display: flex; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; cursor: pointer; text-align: left; padding: 0; min-height: 150px; }
+  .wcard .wimg { width: 42%; flex: none; position: relative; background: #eef2ef; } .wcard .wimg img, .wcard .wimg .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .wcard .wbody { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; } .wcard .wbody > b { font-size: 15px; line-height: 1.25; }
+  .wfacts { display: flex; gap: 14px; flex-wrap: wrap; } .fx { display: flex; flex-direction: column; gap: 2px; } .fx small { font-size: 11px; color: var(--muted); } .fx b { font-size: 15px; } .fx .dots { margin-top: 4px; }
+  .est { align-self: flex-start; font-size: 12px; background: #f1f4f2; border-radius: 6px; padding: 3px 8px; margin-top: auto; }
+  .circs { display: flex; gap: 18px; overflow-x: auto; padding: 4px 2px 8px; }
+  .circ { flex: none; width: 112px; border: 0; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; text-align: center; line-height: 1.2; }
+  .circ .cimg { width: 112px; height: 112px; border-radius: 50%; overflow: hidden; background: #e8eeea; border: 3px solid #fff; box-shadow: 0 0 0 1px var(--line); } .circ img, .circ .ph { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .prow { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; }
+  .pcard { flex: none; width: 210px; position: relative; cursor: pointer; scroll-snap-align: start; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .pcard .pimg { height: 150px; position: relative; background: #eef2ef; } .pcard .pimg img, .pcard .pimg .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .pcard .pb { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; } .pcard .pb b { font-size: 14px; line-height: 1.25; } .pcard .pm { font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+  .bm { position: absolute; right: 8px; top: 8px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); cursor: pointer; display: grid; place-items: center; color: var(--ink); z-index: 2; padding: 0; }
+  .bm svg { width: 18px; height: 18px; } .bm.on { color: var(--brand); } .bm.on svg { fill: currentColor; }
+  #recipepage { max-width: 1000px; }
+  .rback { border: 0; background: none; color: var(--brand-dark); font-weight: 700; cursor: pointer; padding: 4px 0 8px; font-size: 14px; }
+  .rtitle { text-align: center; font-size: 26px; margin: 6px 0 4px; line-height: 1.2; } .rsub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  .rhero { border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 7; background: #eef2ef; position: relative; } .rhero img, .rhero .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; } .rhero .ph svg { width: 56px; height: 56px; }
+  @media (max-width: 899px) { .rhero { aspect-ratio: 4 / 3; } }
+  .rfacts { display: flex; align-items: center; gap: 26px; padding: 12px 18px; margin: -14px 12px 20px; position: relative; box-shadow: 0 6px 18px rgba(31,42,55,.08); flex-wrap: wrap; }
+  .rfacts .racts { margin-left: auto; display: flex; gap: 8px; } .rfacts .bm { position: static; box-shadow: none; background: #f1f4f2; }
+  .rcols { display: grid; grid-template-columns: 1fr; gap: 18px; } @media (min-width: 900px) { .rcols { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .rcols h3 { margin: 0 0 10px; font-size: 20px; }
+  .servrow { display: flex; align-items: center; justify-content: space-between; padding: 6px 0 12px; border-bottom: 1px solid var(--line); font-weight: 700; font-size: 14px; }
+  .stepper { display: flex; align-items: center; gap: 12px; } .stepper button { width: 36px; height: 36px; border-radius: 10px; border: 0; background: #eef2ef; font-size: 18px; cursor: pointer; }
+  .ing { display: grid; grid-template-columns: auto 1fr auto; gap: 2px 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .ing input { width: 20px; height: 20px; accent-color: var(--brand); } .ing .in { font-weight: 700; } .ing .ia { color: var(--muted); font-size: 12px; } .ing .ip { text-align: right; font-size: 13px; } .ing.off { opacity: .45; } .ing .dl { grid-column: 2 / -1; font-size: 11px; }
+  .ing-main { display: flex; align-items: center; min-width: 0; }
+  .radd-wrap { position: sticky; bottom: 8px; padding-top: 12px; } .radd-wrap .btn { width: 100%; padding: 14px; font-size: 15px; box-shadow: 0 8px 20px rgba(18,144,90,.35); }
+  .pantry-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .step { margin-bottom: 12px; } .step small { font-weight: 700; font-size: 13px; display: block; margin-bottom: 6px; } .step p { margin: 0; font-size: 14px; line-height: 1.55; }
+  .rdesc { font-size: 14px; line-height: 1.55; color: #3c4756; margin: 0 0 18px; }
+
   /* recipes */
   .chips { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 2px; }
   .chips .chip { background: #fff; padding: 7px 13px; font-size: 13px; }
@@ -246,6 +283,10 @@
   <main id="views">
     <section class="view active" id="v-home"><div class="page">
       <div class="section"><h2 class="sec"><span>This week's specials</span><a id="spall">See all</a></h2><div class="row" id="h-specials"></div></div>
+      <div class="section"><h2 class="sec"><span>Dinner ideas to try this week</span></h2><div class="wrow" id="h-dinner"></div></div>
+      <div class="section"><h2 class="sec"><span>Recipe ideas</span></h2><div class="circs" id="h-circs"></div></div>
+      <div class="section"><h2 class="sec"><span>Popular recipes</span></h2><div class="prow" id="h-popular"></div></div>
+      <div class="section" id="h-saved-sec" hidden><h2 class="sec"><span>Your saved recipes</span></h2><div class="prow" id="h-saved"></div></div>
       <div class="section"><h2 class="sec"><span>Buy again</span></h2><div class="row" id="h-again"></div></div>
       <div class="credits">Product and recipe photos come from Open Food Facts and Wikipedia contributors. <button id="credBtn">Image credits</button></div>
     </div></section>
@@ -268,6 +309,8 @@
         <div class="acts"><button class="btn" id="i-add">+ Add to trolley</button><button class="btn ghost" id="i-clear">Clear route</button></div>
       </div>
     </section>
+
+    <section class="view" id="v-recipe"><div class="page" id="recipepage"></div></section>
 
     <section class="view" id="v-cart"><div class="page"><div id="cartgrid">
       <div class="card">
@@ -306,7 +349,6 @@
 
 <div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
 <div id="pay"><div class="box" id="paybox"></div></div>
-<div id="recipe"><div class="sheet" id="recipebox"></div></div>
 <div id="credits"><div class="sheet" id="creditsbox"></div></div>
 <div id="flash"></div>
 <div id="tip"></div>

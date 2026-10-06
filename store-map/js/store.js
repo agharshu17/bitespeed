@@ -5,6 +5,8 @@ export async function loadData() {
   const get = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
   const [layout, products, offers, recipes] = await Promise.all([get('data/store-layout.json'), get('data/products.json'), get('data/offers.json'), get('data/recipes.json')]);
   const images = await get('data/images.json').catch(() => ({}));
+  const rimgs = await get('data/recipe-images.json').catch(() => ({}));
+  for (const [id, v] of Object.entries(rimgs)) images['recipe:' + id] = v;
   Object.assign(D, { layout, products, offers, recipes, images });
   D.byCode = Object.fromEntries(products.map(p => [p.code, p]));
   D.byBarcode = Object.fromEntries(products.map(p => [p.barcode, p]));
@@ -42,17 +44,17 @@ export const tint = p => `hsl(${hash(p.name) % 360} 75% 92%)`;
 /* ---------- persistent state ---------- */
 const load = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } };
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
-export const state = { cart: {}, points: 320, usePoints: false, favs: [], bought: {} };   // 320 = demo starting balance
+export const state = { cart: {}, points: 320, usePoints: false, favs: [], bought: {}, saved: [] };   // 320 = demo starting balance
 const subs = new Set();
 export const subscribe = fn => { subs.add(fn); return () => subs.delete(fn); };
 const emit = () => subs.forEach(f => f());
 export function initState() {
   state.cart = load('bsm-cart', {}); state.points = +load('bsm-points', 320) || 0; state.usePoints = !!load('bsm-usepts', false);
-  state.favs = load('bsm-favs', []); state.bought = load('bsm-bought', {});
+  state.favs = load('bsm-favs', []); state.bought = load('bsm-bought', {}); state.saved = load('bsm-saved', []);
   for (const c of Object.keys(state.cart)) if (!D.byCode[c]) delete state.cart[c];
   state.favs = state.favs.filter(c => D.byCode[c]);
 }
-const persist = () => { save('bsm-cart', state.cart); save('bsm-points', state.points); save('bsm-usepts', state.usePoints); save('bsm-favs', state.favs); save('bsm-bought', state.bought); emit(); };
+const persist = () => { save('bsm-cart', state.cart); save('bsm-points', state.points); save('bsm-usepts', state.usePoints); save('bsm-favs', state.favs); save('bsm-bought', state.bought); save('bsm-saved', state.saved); emit(); };
 
 export function addToCart(code, qty = 1) {
   if (!D.byCode[code]) return;
@@ -61,6 +63,8 @@ export function addToCart(code, qty = 1) {
 }
 export const clearCart = () => { state.cart = {}; persist(); };
 export const setUsePoints = v => { state.usePoints = v; persist(); };
+export const isSaved = id => state.saved.includes(id);
+export function toggleSaved(id) { state.saved = isSaved(id) ? state.saved.filter(x => x !== id) : [id, ...state.saved]; persist(); }
 export const isFav = c => state.favs.includes(c);
 export function toggleFav(c) { state.favs = isFav(c) ? state.favs.filter(x => x !== c) : [c, ...state.favs]; persist(); }
 export const cartCount = () => Object.values(state.cart).reduce((a, b) => a + b, 0);

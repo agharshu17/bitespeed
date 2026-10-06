@@ -1,0 +1,100 @@
+{
+ "paneer-butter-masala": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Shahi_paneer",
+  "title": "Shahi paneer",
+  "license": "CC BY-SA 4.0",
+  "credit": "Om shankar singh"
+ },
+ "veg-biryani": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Biryani",
+  "title": "Biryani",
+  "license": "CC BY-SA 4.0",
+  "credit": "Mahi Tatavarty"
+ },
+ "dal-tadka": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Tempering_(spices)",
+  "title": "Tempering (spices)",
+  "license": "CC BY-SA 3.0",
+  "credit": "w:en:User:Badagnani"
+ },
+ "chole-masala": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Chana_masala",
+  "title": "Chana masala",
+  "license": "CC BY-SA 2.0",
+  "credit": "Simon Law (sfllaw) from Montréal, QC, Canada"
+ },
+ "poha": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Flattened_rice",
+  "title": "Flattened rice",
+  "license": "CC BY-SA 3.0",
+  "credit": "Sanjay Acharya, aka Sanjay ach at en.wikipedia"
+ },
+ "masala-chai": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Masala_chai",
+  "title": "Masala chai",
+  "license": "CC BY-SA 4.0",
+  "credit": "Dadhichbittu007"
+ },
+ "pasta-arrabbiata": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Arrabbiata_sauce",
+  "title": "Arrabbiata sauce",
+  "license": "CC BY-SA 4.0",
+  "credit": "Petar Milošević"
+ },
+ "veg-sandwich": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Vegetable_sandwich",
+  "title": "Vegetable sandwich",
+  "license": "CC BY-SA 4.0",
+  "credit": "Kanikatwl"
+ },
+ "fish-curry": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Machher_jhol",
+  "title": "Machher jhol",
+  "license": "CC BY-SA 4.0",
+  "credit": "Atudu"
+ },
+ "pancakes": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Pancake",
+  "title": "Pancake",
+  "license": "CC0",
+  "credit": "Mae Mu"
+ },
+ "brownies": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Chocolate_brownie",
+  "title": "Chocolate brownie",
+  "license": "CC BY-SA 3.0",
+  "credit": "Ɱ"
+ },
+ "smoothie-bowl": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Smoothie",
+  "title": "Smoothie",
+  "license": "CC0",
+  "credit": "rawpixel.com"
+ },
+ "cold-coffee": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Iced_coffee",
+  "title": "Iced coffee",
+  "license": "CC BY-SA 3.0",
+  "credit": "Richard Huber"
+ },
+ "fruit-chaat": {
+  "src": "wikipedia",
+  "page": "https://en.wikipedia.org/wiki/Chaat",
+  "title": "Chaat",
+  "license": "CC BY-SA 4.0",
+  "credit": "Rupamdas75"
+ }
+}

@@ -1,6 +1,6 @@
 // BiteSpeed Mart app shell: Home, Shop, Map, Trolley.
 import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, lineCalc, imgSrc, recipeImg,
-  addToCart, clearCart, setUsePoints, isFav, toggleFav, cartCount, buyAgain, totals, completeOrder } from './store.js';
+  addToCart, clearCart, setUsePoints, isFav, toggleFav, isSaved, toggleSaved, cartCount, buyAgain, totals, completeOrder } from './store.js';
 import { createScene } from './scene.js';
 import { initScanner } from './scanner.js';
 import { initChat } from './chat.js';
@@ -26,11 +26,12 @@ function add(code, qty = 1, quiet) {
 }
 
 /* ---------- navigation ---------- */
-let view = 'home', homeSig = '';
+let view = 'home', prevView = 'home', homeSig = '';
 function go(v) {
+  if (v !== view) prevView = view;
   view = v;
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === 'v-' + v));
-  document.querySelectorAll('#tabs [data-go]').forEach(b => b.classList.toggle('on', b.dataset.go === v));
+  document.querySelectorAll('#tabs [data-go]').forEach(b => b.classList.toggle('on', b.dataset.go === (v === 'recipe' ? 'shop' : v)));
   scene.setActive(v === 'map');
   $('views').scrollTop = 0;
   if (v === 'home') renderHome();
@@ -59,9 +60,10 @@ function refreshTiles() {
 
 /* ---------- home ---------- */
 function renderHome() {
-  homeSig = state.favs.join() + '|' + Object.keys(state.bought).join();
+  homeSig = state.favs.join() + '|' + Object.keys(state.bought).join() + '|' + state.saved.join();
   const feat = D.offers.filter(o => o.featured).map(o => D.byCode[o.code]);
   $('h-specials').innerHTML = tiles(feat);
+  renderRecipeHome();
   const again = buyAgain();
   $('h-again').innerHTML = again.length ? tiles(again.slice(0, 14)) : '<div class="empty">Tap the heart on any product, or finish a shop, and your regular items will show up here for quick re-adding.</div>';
 }
@@ -105,15 +107,39 @@ $('gsearch').addEventListener('keydown', e => { if (e.key === 'Enter') { const p
 
 /* ---------- recipes ---------- */
 const PERISHABLE = new Set(['seafood', 'frozen', 'fruits-greens', 'dairy', 'bakery']);   // scaled with servings; dry goods stay at 1 pack
-const RFILTERS = [['all', 'All'], ['quick', 'Quick'], ['veg', 'Veg'], ['non-veg', 'Non-veg'], ['dessert', 'Dessert'], ['Breakfast', 'Breakfast'], ['Dinner', 'Dinner']];
+const RFILTERS = [['all', 'All'], ['quick', 'Quick & easy'], ['veg', 'Veg'], ['non-veg', 'Non-veg'], ['dessert', 'Dessert'], ['Breakfast', 'Breakfast'], ['Dinner', 'Dinner'], ['Drinks', 'Drinks'], ['Snack', 'Snack']];
 let rFilter = 'all';
 const rMatch = r => rFilter === 'all' || r.tags.includes(rFilter) || r.course === rFilter;
+const dots = n => `<span class="dots" aria-label="Difficulty ${n} of 5">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
+const diffN = r => ({ Easy: 2, Medium: 3, Hard: 4 }[r.level] || 2);
+const prepOf = r => Math.max(5, Math.round(r.minutes * 0.3 / 5) * 5), cookOf = r => Math.max(5, r.minutes - prepOf(r));
+const mins = m => m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? ` ${m % 60}m` : ''}` : `${m}m`;
+const estServe = r => Math.round(r.ingredients.reduce((s, i) => s + lineCalc(i.code, 1).total, 0) / r.serves);
+const rPhoto = (r, alt = true) => recipeImg(r.id) ? `<img src="${recipeImg(r.id)}" alt="${alt ? r.title : ''}" loading="lazy">` : `<div class="ph">${ICON.utensils}</div>`;
+const bookmark = r => `<button class="bm${isSaved(r.id) ? ' on' : ''}" data-save="${r.id}" aria-label="${isSaved(r.id) ? 'Remove from saved' : 'Save recipe'}">${ICON.bookmark}</button>`;
+const wideCard = r => `<article class="wcard" data-recipe="${r.id}" tabindex="0"><div class="wimg">${rPhoto(r)}</div><div class="wbody"><b>${r.title}</b><div class="wfacts"><div class="fx"><small>Prep</small><b>${mins(prepOf(r))}</b></div><div class="fx"><small>Cook</small><b>${mins(cookOf(r))}</b></div><div class="fx"><small>Difficulty</small>${dots(diffN(r))}</div></div><span class="est">Est. ${inr(estServe(r))} per serve</span></div></article>`;
+const tallCard = r => `<article class="pcard" data-recipe="${r.id}" tabindex="0"><div class="pimg">${rPhoto(r)}${bookmark(r)}</div><div class="pb"><b>${r.title}</b><div class="pm"><span>${mins(r.minutes)}</span>${dots(diffN(r))}</div><span class="est">Est. ${inr(estServe(r))} per serve</span></div></article>`;
+const POPULAR = ['paneer-butter-masala', 'veg-biryani', 'dal-tadka', 'pancakes', 'masala-chai', 'chole-masala', 'brownies', 'pasta-arrabbiata', 'poha', 'veg-sandwich', 'fish-curry', 'smoothie-bowl'];
+const RIDEAS = [['quick', 'Quick & easy'], ['Breakfast', 'Breakfast'], ['Dinner', 'Dinner'], ['veg', 'Vegetarian'], ['non-veg', 'Non-veg'], ['dessert', 'Desserts'], ['Drinks', 'Drinks'], ['Snack', 'Snacks']];
+function renderRecipeHome() {
+  const dinners = D.recipes.filter(r => r.course === 'Dinner'), week = Math.floor(Date.now() / 6048e5), pick = [0, 1, 2].map(i => dinners[(week + i) % dinners.length]);
+  $('h-dinner').innerHTML = pick.map(wideCard).join('');
+  $('h-circs').innerHTML = RIDEAS.map(([k, l]) => { const r = D.recipes.find(x => (x.tags.includes(k) || x.course === k) && recipeImg(x.id)) || D.recipes.find(x => x.tags.includes(k) || x.course === k); return r ? `<button class="circ" data-rf="${k}"><span class="cimg">${rPhoto(r, false)}</span>${l}</button>` : ''; }).join('');
+  $('h-popular').innerHTML = POPULAR.map(id => D.recipes.find(r => r.id === id)).filter(Boolean).map(tallCard).join('');
+  const saved = state.saved.map(id => D.recipes.find(r => r.id === id)).filter(Boolean);
+  $('h-saved-sec').hidden = !saved.length; $('h-saved').innerHTML = saved.map(tallCard).join('');
+}
+$('views').addEventListener('click', e => {
+  const sv = e.target.closest('[data-save]'); if (sv) { e.stopPropagation(); toggleSaved(sv.dataset.save); return; }
+  const rf = e.target.closest('[data-rf]'); if (rf) { rFilter = rf.dataset.rf; shop.section = '__recipes'; shop.q = ''; $('gsearch').value = ''; go('shop'); renderShop(); return; }
+  const rc = e.target.closest('[data-recipe]'); if (rc) openRecipe(rc.dataset.recipe);
+});
+$('views').addEventListener('keydown', e => { if (e.key === 'Enter') { const rc = e.target.closest('[data-recipe]'); if (rc) openRecipe(rc.dataset.recipe); } });
 function renderRecipes() {
   const list = D.recipes.filter(rMatch);
   $('shopbody').innerHTML = `<div class="chips">${RFILTERS.map(([k, l]) => `<button class="chip${rFilter === k ? ' on' : ''}" data-f="${k}">${l}</button>`).join('')}</div>
-    <div class="rgrid">${list.map(r => `<button class="rcard" data-recipe="${r.id}"><div class="rtop" style="background:${r.color}22">${recipeImg(r.id) ? `<img src="${recipeImg(r.id)}" alt="${r.title}" loading="lazy">` : ICON.utensils}</div><div class="rbody"><b>${r.title}</b><span class="rmeta">${r.minutes} min · Serves ${r.serves} · ${r.level}</span><span class="rblurb">${r.blurb}</span><span>${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</span></div></button>`).join('')}</div>`;
+    <div class="rgrid">${list.map(r => `<article class="pcard" style="width:auto" data-recipe="${r.id}" tabindex="0"><div class="pimg">${rPhoto(r)}${bookmark(r)}</div><div class="pb"><b>${r.title}</b><div class="pm"><span>${mins(r.minutes)}</span>${dots(diffN(r))}<span>Serves ${r.serves}</span></div><span class="est">Est. ${inr(estServe(r))} per serve</span></div></article>`).join('')}</div>`;
   $('shopbody').querySelectorAll('.chip').forEach(b => b.onclick = () => { rFilter = b.dataset.f; renderRecipes(); });
-  $('shopbody').querySelectorAll('.rcard').forEach(b => b.onclick = () => openRecipe(b.dataset.recipe));
 }
 const FR = { 0: '', .25: '¼', .5: '½', .75: '¾' };
 function scaleAmount(str, ratio) {
@@ -123,31 +149,31 @@ function scaleAmount(str, ratio) {
   return `${whole || !frac ? whole : ''}${frac}${m[2]}`;
 }
 let cur = null;   // { r, servings, on:Set }
-function openRecipe(id) { const r = D.recipes.find(x => x.id === id); cur = { r, servings: r.serves, on: new Set(r.ingredients.map(i => i.code)) }; drawRecipe(); $('recipe').classList.add('show'); $('recipebox').scrollTop = 0; }
+function openRecipe(id) { const r = D.recipes.find(x => x.id === id); cur = { r, servings: r.serves, on: new Set(r.ingredients.map(i => i.code)) }; drawRecipe(); go('recipe'); }
 const ingQty = (r, code) => PERISHABLE.has(D.byCode[code].section) ? Math.max(1, Math.ceil(cur.servings / r.serves)) : 1;
-function drawRecipe(keepScroll) {
-  const { r } = cur, ratio = cur.servings / r.serves, st = $('recipebox').scrollTop;
+function drawRecipe() {
+  const { r } = cur, ratio = cur.servings / r.serves, st = $('views').scrollTop;
   const rows = r.ingredients.map(i => { const p = D.byCode[i.code], q = ingQty(r, i.code), o = D.offerBy[i.code], c = lineCalc(i.code, q), on = cur.on.has(i.code);
     return `<div class="ing${on ? '' : ' off'}"><input type="checkbox" data-c="${i.code}" ${on ? 'checked' : ''} aria-label="Include ${p.name}"><div class="ing-main"><span class="th">${photo(p)}</span><div><div class="in">${p.name}${q > 1 ? ` × ${q}` : ''}</div><div class="ia">${scaleAmount(i.amount, ratio)}</div></div></div><div class="ip">${c.saving ? `<s class="was">${inr(c.orig)}</s> ` : ''}<b>${inr(c.total)}</b></div>${o ? `<div class="dl red">${dealLabel(o)}</div>` : ''}</div>`; }).join('');
   const sel = r.ingredients.filter(i => cur.on.has(i.code)), total = sel.reduce((s, i) => s + lineCalc(i.code, ingQty(r, i.code)).total, 0);
-  $('recipebox').innerHTML = `<div class="rhead" style="background:${r.color}22"><button class="rclose" aria-label="Close">✕</button>${recipeImg(r.id) ? `<img class="hero" src="${recipeImg(r.id)}" alt="${r.title}">` : `<div class="big">${ICON.utensils}</div>`}<h3>${r.title}</h3><p>${r.blurb}</p>
-      <div class="facts"><span class="fact">${r.minutes} min</span><span class="fact">${r.level}</span><span class="fact">${r.course}</span>${r.tags.map(t => `<span class="fact">${t}</span>`).join('')}</div></div>
-    <div class="rbody"><div class="servrow"><span>Servings</span><span class="stepper"><button data-s="-1" aria-label="Fewer servings">−</button><span>${cur.servings}</span><button data-s="1" aria-label="More servings">+</button></span></div>
-      <h4>Ingredients</h4>${rows}<div class="pantry-note">Fresh items scale with servings. Spices and dry goods are added as one pack, which covers several meals.</div>
-      <h4>Method</h4><ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
-    <div class="rfoot"><button class="btn" id="radd" ${sel.length ? '' : 'disabled'}>Add ${sel.length} item${sel.length === 1 ? '' : 's'} · ${inr(total)}</button></div>`;
-  if (keepScroll) $('recipebox').scrollTop = st;
+  $('recipepage').innerHTML = `<button class="rback" id="rback">← Back</button><h1 class="rtitle">${r.title}</h1><div class="rsub">${r.course} · ${r.tags.join(' · ')}</div>
+    <div class="rhero">${rPhoto(r)}</div>
+    <div class="rfacts card"><div class="fx"><small>Prep</small><b>${mins(prepOf(r))}</b></div><div class="fx"><small>Cook</small><b>${mins(cookOf(r))}</b></div><div class="fx"><small>Serves</small><b>${r.serves}</b></div><div class="fx"><small>Difficulty</small>${dots(diffN(r))}</div><div class="racts">${bookmark(r)}</div></div>
+    <div class="rcols"><div><h3>${r.ingredients.length} Ingredients</h3><div class="card"><div class="servrow"><span>Number of servings</span><span class="stepper"><button data-s="-1" aria-label="Fewer servings">−</button><span>${cur.servings}</span><button data-s="1" aria-label="More servings">+</button></span></div>${rows}<div class="pantry-note">Fresh items scale with servings. Spices and dry goods are added as one pack, which covers several meals.</div></div>
+        <div class="radd-wrap"><button class="btn" id="radd" ${sel.length ? '' : 'disabled'}>Add ${sel.length} item${sel.length === 1 ? '' : 's'} to trolley · ${inr(total)}</button></div></div>
+      <div><h3>Description</h3><p class="rdesc">${r.blurb}</p><h3>Method</h3>${r.steps.map((s, i) => `<div class="card step"><small>Step ${i + 1} of ${r.steps.length}</small><p>${s}</p></div>`).join('')}</div></div>`;
+  $('views').scrollTop = st;
 }
-$('recipe').addEventListener('click', e => {
-  if (e.target === $('recipe') || e.target.closest('.rclose')) { $('recipe').classList.remove('show'); return; }
-  const s = e.target.closest('[data-s]'); if (s) { cur.servings = Math.min(12, Math.max(1, cur.servings + +s.dataset.s)); drawRecipe(true); return; }
-  if (e.target.id === 'radd') {
+$('recipepage').addEventListener('click', e => {
+  if (e.target.closest('#rback')) { go(prevView === 'recipe' ? 'shop' : prevView); return; }
+  const s = e.target.closest('[data-s]'); if (s) { cur.servings = Math.min(12, Math.max(1, cur.servings + +s.dataset.s)); drawRecipe(); return; }
+  if (e.target.closest('#radd')) {
     const { r } = cur, sel = r.ingredients.filter(i => cur.on.has(i.code));
     sel.forEach(i => add(i.code, ingQty(r, i.code), true));
-    $('recipe').classList.remove('show'); flash(`Added ${sel.length} ingredient${sel.length === 1 ? '' : 's'} for ${r.title} – check your trolley for deals`);
+    flash(`Added ${sel.length} ingredient${sel.length === 1 ? '' : 's'} for ${r.title} – check your trolley for deals`);
   }
 });
-$('recipe').addEventListener('change', e => { const c = e.target.dataset?.c; if (!c) return; e.target.checked ? cur.on.add(c) : cur.on.delete(c); drawRecipe(true); });
+$('recipepage').addEventListener('change', e => { const c = e.target.dataset?.c; if (!c) return; e.target.checked ? cur.on.add(c) : cur.on.delete(c); drawRecipe(); });
 
 /* ---------- image credits ---------- */
 $('credBtn').onclick = () => {
@@ -246,7 +272,7 @@ $('checkout').onclick = openPay;
 initChat({ onAction: a => { if (a.type === 'add') add(a.code, a.qty, true); else if (a.type === 'route') locate(a.code); } });
 
 /* ---------- boot ---------- */
-subscribe(() => { renderCart(); refreshTiles(); const sig = state.favs.join() + '|' + Object.keys(state.bought).join(); if (view === 'home' && sig !== homeSig) renderHome(); });
+subscribe(() => { renderCart(); refreshTiles(); document.querySelectorAll('.bm').forEach(b => b.classList.toggle('on', isSaved(b.dataset.save))); const sig = state.favs.join() + '|' + Object.keys(state.bought).join() + '|' + state.saved.join(); if (view === 'home' && sig !== homeSig) renderHome(); });
 renderCart(); renderHome(); renderShop();
 $('loading').classList.add('hide');
 const item = new URLSearchParams(location.search).get('item');

@@ -102,7 +102,7 @@
   "page": "https://en.wikipedia.org/wiki/Fish_fillet",
   "title": "Fish fillet",
   "license": "CC0",
-  "credit": "Brücke-Osteuropa"
+  "credit": "Br\u00fccke-Osteuropa"
  },
  "B01": {
   "none": true
@@ -154,7 +154,7 @@
   "page": "https://en.wikipedia.org/wiki/Papaya",
   "title": "Papaya",
   "license": "Public domain",
-  "credit": "Franz Eugen Köhler, Köhler's Medizinal-Pflanzen"
+  "credit": "Franz Eugen K\u00f6hler, K\u00f6hler's Medizinal-Pflanzen"
  },
  "B09": {
   "src": "wikipedia",
@@ -168,7 +168,7 @@
   "page": "https://en.wikipedia.org/wiki/Pomegranate",
   "title": "Pomegranate",
   "license": "CC BY-SA 3.0",
-  "credit": "Augustus Binu : flickr"
+  "credit": "Augustus Binu\u00a0: flickr"
  },
  "B11": {
   "src": "wikipedia",
@@ -252,7 +252,7 @@
   "page": "https://en.wikipedia.org/wiki/Coriander",
   "title": "Coriander",
   "license": "Public domain",
-  "credit": "Franz Eugen Köhler, Köhler's Medizinal-Pflanzen"
+  "credit": "Franz Eugen K\u00f6hler, K\u00f6hler's Medizinal-Pflanzen"
  },
  "B23": {
   "src": "wikipedia",
@@ -274,5 +274,101 @@
   "title": "Bell pepper",
   "license": "CC BY-SA 3.0",
   "credit": "Kham Tran - www.khamtran.com"
+ },
+ "5-01": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8901063341500",
+  "title": "White bread",
+  "brand": "Britannia",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-02": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8901063338593",
+  "title": "100% Whole Wheat Brown Bread",
+  "brand": "Britannia",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-03": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8906001387114",
+  "title": "Multi Grain High Fibre Bread",
+  "brand": "English Oven",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-04": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8904043551548",
+  "title": "Modern 100% Whole Wheat Bread",
+  "brand": "Modern",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-05": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8906031251720",
+  "title": "Milk Masti Bread",
+  "brand": "Chakote",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-06": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8908014814069",
+  "title": "garlic bread",
+  "brand": "Mr Bakewell",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-07": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8904043552644",
+  "title": "Modern Sandwich Supreme Bread",
+  "brand": "Modern",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-08": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/00538350",
+  "title": "Artisan French Bread",
+  "brand": "Trader Joe's",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-09": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8908009059383",
+  "title": "Focaccia Sourdough Bread",
+  "brand": "The Health Factory",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-11": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8908006514847",
+  "title": "Muffets and tuffets Burger bun",
+  "brand": "",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-16": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8901063032446",
+  "title": "Britannia Treat croissant coco cream bauli",
+  "brand": "Britannia",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
+ },
+ "5-17": {
+  "src": "off",
+  "page": "https://world.openfoodfacts.org/product/8908009419101",
+  "title": "Bauli Moonfils Croissant chocolate",
+  "brand": "Bauli",
+  "license": "CC BY-SA 3.0",
+  "credit": "Open Food Facts contributors"
  }
 }
