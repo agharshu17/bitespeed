@@ -83,12 +83,14 @@ function search(q) {
 function renderShop() {
   let list = null, title = 'Shop by aisle';
   if (shop.q) { list = search(shop.q); title = `Results for “${shop.q}”`; }
+  else if (shop.section === '__recipes') { list = []; title = '🍳 Recipes'; }
   else if (shop.section === '__offers') { list = D.offers.map(o => D.byCode[o.code]); title = '🏷 Specials'; }
   else if (shop.section) { list = D.products.filter(p => p.section === shop.section); const s = D.secById[shop.section]; title = `${s.icon} ${s.label}`; }
-  $('shoptitle').textContent = title; $('shopback').hidden = !list; $('sort').hidden = !list;
+  $('shoptitle').textContent = title; $('shopback').hidden = !list; $('sort').hidden = !list || shop.section === '__recipes';
+  if (shop.section === '__recipes' && !shop.q) return renderRecipes();
   if (!list) {
     const cat = (id, emoji, label, n, hue) => `<button class="cat" data-sec="${id}" style="background:hsl(${hue} 70% 92%)"><span class="ce">${emoji}</span><b>${label}</b><small>${n}</small></button>`;
-    $('shopbody').innerHTML = `<div class="cats">${cat('__offers', '🏷', 'Specials', `${D.offers.length} deals`, 8)}${D.layout.sections.map(s => cat(s.id, s.icon, s.label, s.blurb || `${D.products.filter(p => p.section === s.id).length} items`, catHue(s.id))).join('')}</div>`;
+    $('shopbody').innerHTML = `<div class="cats">${cat('__offers', '🏷', 'Specials', `${D.offers.length} deals`, 8)}${cat('__recipes', '🍳', 'Recipes', `${D.recipes.length} recipes · add all ingredients`, 30)}${D.layout.sections.map(s => cat(s.id, s.icon, s.label, s.blurb || `${D.products.filter(p => p.section === s.id).length} items`, catHue(s.id))).join('')}</div>`;
     $('shopbody').querySelectorAll('.cat').forEach(b => b.onclick = () => { shop.section = b.dataset.sec; renderShop(); $('views').scrollTop = 0; });
   } else $('shopbody').innerHTML = list.length ? `<div class="grid">${tiles(sortList(list))}</div>` : '<div class="empty">No product found. Try another name, like “sugar” or “paneer”.</div>';
 }
@@ -96,6 +98,53 @@ $('shopback').onclick = () => { shop.section = null; shop.q = ''; $('gsearch').v
 $('sort').onchange = e => { shop.sort = e.target.value; renderShop(); };
 $('gsearch').addEventListener('input', e => { shop.q = e.target.value.trim(); if (shop.q) shop.section = null; if (view !== 'shop') go('shop'); renderShop(); });
 $('gsearch').addEventListener('keydown', e => { if (e.key === 'Enter') { const p = D.byBarcode[e.target.value.trim()]; if (p) { add(p.code); e.target.value = ''; shop.q = ''; renderShop(); } } });
+
+
+/* ---------- recipes ---------- */
+const PERISHABLE = new Set(['seafood', 'frozen', 'fruits-greens', 'dairy', 'bakery']);   // scaled with servings; dry goods stay at 1 pack
+const RFILTERS = [['all', 'All'], ['quick', '⚡ Quick'], ['veg', '🥦 Veg'], ['non-veg', '🍗 Non-veg'], ['dessert', '🍰 Dessert'], ['Breakfast', 'Breakfast'], ['Dinner', 'Dinner']];
+let rFilter = 'all';
+const rMatch = r => rFilter === 'all' || r.tags.includes(rFilter) || r.course === rFilter;
+function renderRecipes() {
+  const list = D.recipes.filter(rMatch);
+  $('shopbody').innerHTML = `<div class="chips">${RFILTERS.map(([k, l]) => `<button class="chip${rFilter === k ? ' on' : ''}" data-f="${k}">${l}</button>`).join('')}</div>
+    <div class="rgrid">${list.map(r => `<button class="rcard" data-recipe="${r.id}"><div class="rtop" style="background:${r.color}22">${r.emoji}</div><div class="rbody"><b>${r.title}</b><span class="rmeta">⏱ ${r.minutes} min · 👥 Serves ${r.serves} · ${r.level}</span><span class="rblurb">${r.blurb}</span><span>${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</span></div></button>`).join('')}</div>`;
+  $('shopbody').querySelectorAll('.chip').forEach(b => b.onclick = () => { rFilter = b.dataset.f; renderRecipes(); });
+  $('shopbody').querySelectorAll('.rcard').forEach(b => b.onclick = () => openRecipe(b.dataset.recipe));
+}
+const FR = { 0: '', .25: '¼', .5: '½', .75: '¾' };
+function scaleAmount(str, ratio) {
+  const m = str.match(/^(\d+(?:\.\d+)?(?:\/\d+)?)(.*)$/); if (!m) return str;
+  let v = m[1].includes('/') ? m[1].split('/').reduce((a, b) => a / b) : parseFloat(m[1]); v *= ratio;
+  v = v >= 10 ? Math.round(v) : Math.round(v * 4) / 4; const whole = Math.floor(v), frac = FR[v - whole];
+  return `${whole || !frac ? whole : ''}${frac}${m[2]}`;
+}
+let cur = null;   // { r, servings, on:Set }
+function openRecipe(id) { const r = D.recipes.find(x => x.id === id); cur = { r, servings: r.serves, on: new Set(r.ingredients.map(i => i.code)) }; drawRecipe(); $('recipe').classList.add('show'); $('recipebox').scrollTop = 0; }
+const ingQty = (r, code) => PERISHABLE.has(D.byCode[code].section) ? Math.max(1, Math.ceil(cur.servings / r.serves)) : 1;
+function drawRecipe(keepScroll) {
+  const { r } = cur, ratio = cur.servings / r.serves, st = $('recipebox').scrollTop;
+  const rows = r.ingredients.map(i => { const p = D.byCode[i.code], q = ingQty(r, i.code), o = D.offerBy[i.code], c = lineCalc(i.code, q), on = cur.on.has(i.code);
+    return `<div class="ing${on ? '' : ' off'}"><input type="checkbox" data-c="${i.code}" ${on ? 'checked' : ''} aria-label="Include ${p.name}"><div><div class="in">${emojiFor(p)} ${p.name}${q > 1 ? ` × ${q}` : ''}</div><div class="ia">${scaleAmount(i.amount, ratio)}</div></div><div class="ip">${c.saving ? `<s class="was">${inr(c.orig)}</s> ` : ''}<b>${inr(c.total)}</b></div>${o ? `<div class="dl red">${dealLabel(o)}</div>` : ''}</div>`; }).join('');
+  const sel = r.ingredients.filter(i => cur.on.has(i.code)), total = sel.reduce((s, i) => s + lineCalc(i.code, ingQty(r, i.code)).total, 0);
+  $('recipebox').innerHTML = `<div class="rhead" style="background:${r.color}22"><button class="rclose" aria-label="Close">✕</button><div class="big">${r.emoji}</div><h3>${r.title}</h3><p>${r.blurb}</p>
+      <div class="facts"><span class="fact">⏱ ${r.minutes} min</span><span class="fact">${r.level}</span><span class="fact">${r.course}</span>${r.tags.map(t => `<span class="fact">${t}</span>`).join('')}</div></div>
+    <div class="rbody"><div class="servrow"><span>Servings</span><span class="stepper"><button data-s="-1" aria-label="Fewer servings">−</button><span>${cur.servings}</span><button data-s="1" aria-label="More servings">+</button></span></div>
+      <h4>Ingredients</h4>${rows}<div class="pantry-note">Fresh items scale with servings. Spices and dry goods are added as one pack, which covers several meals.</div>
+      <h4>Method</h4><ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
+    <div class="rfoot"><button class="btn" id="radd" ${sel.length ? '' : 'disabled'}>Add ${sel.length} item${sel.length === 1 ? '' : 's'} · ${inr(total)}</button></div>`;
+  if (keepScroll) $('recipebox').scrollTop = st;
+}
+$('recipe').addEventListener('click', e => {
+  if (e.target === $('recipe') || e.target.closest('.rclose')) { $('recipe').classList.remove('show'); return; }
+  const s = e.target.closest('[data-s]'); if (s) { cur.servings = Math.min(12, Math.max(1, cur.servings + +s.dataset.s)); drawRecipe(true); return; }
+  if (e.target.id === 'radd') {
+    const { r } = cur, sel = r.ingredients.filter(i => cur.on.has(i.code));
+    sel.forEach(i => add(i.code, ingQty(r, i.code), true));
+    $('recipe').classList.remove('show'); flash(`Added ${sel.length} ingredient${sel.length === 1 ? '' : 's'} for ${r.title} – check your trolley for deals`);
+  }
+});
+$('recipe').addEventListener('change', e => { const c = e.target.dataset?.c; if (!c) return; e.target.checked ? cur.on.add(c) : cur.on.delete(c); drawRecipe(true); });
 
 /* ---------- map ---------- */
 function onHover(code, x, y) {

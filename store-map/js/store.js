@@ -1,10 +1,10 @@
 // Data, pricing, trolley, points, favourites. No DOM in here.
-export const D = { layout: null, products: [], offers: [], byCode: {}, byBarcode: {}, offerBy: {}, secById: {} };
+export const D = { layout: null, products: [], offers: [], recipes: [], byCode: {}, byBarcode: {}, offerBy: {}, secById: {} };
 
 export async function loadData() {
   const get = u => fetch(u).then(r => r.json());
-  const [layout, products, offers] = await Promise.all([get('data/store-layout.json'), get('data/products.json'), get('data/offers.json')]);
-  Object.assign(D, { layout, products, offers });
+  const [layout, products, offers, recipes] = await Promise.all([get('data/store-layout.json'), get('data/products.json'), get('data/offers.json'), get('data/recipes.json')]);
+  Object.assign(D, { layout, products, offers, recipes });
   D.byCode = Object.fromEntries(products.map(p => [p.code, p]));
   D.byBarcode = Object.fromEntries(products.map(p => [p.barcode, p]));
   D.offerBy = Object.fromEntries(offers.map(o => [o.code, o]));

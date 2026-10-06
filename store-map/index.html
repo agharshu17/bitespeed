@@ -66,6 +66,40 @@
   .cat { border: 0; border-radius: 18px; padding: 16px 12px; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-height: 112px; }
   .cat .ce { font-size: 38px; line-height: 1; } .cat b { font-size: 15px; } .cat small { color: var(--muted); font-size: 12px; }
 
+  /* recipes */
+  .chips { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 2px; }
+  .chips .chip { background: #fff; padding: 7px 13px; font-size: 13px; }
+  .chips .chip.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .rgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .rcard { border: 1px solid var(--line); background: var(--card); border-radius: 20px; overflow: hidden; text-align: left; cursor: pointer; padding: 0; display: flex; flex-direction: column; }
+  .rcard .rtop { height: 104px; display: grid; place-items: center; font-size: 54px; }
+  .rcard .rbody { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .rcard b { font-size: 15px; } .rcard .rmeta { font-size: 12px; color: var(--muted); } .rcard .rblurb { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; background: #ecfaf3; color: var(--brand-dark); border-radius: 6px; padding: 2px 7px; margin-right: 4px; }
+  #recipe { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; z-index: 22; align-items: flex-end; justify-content: center; }
+  #recipe.show { display: flex; }
+  #recipe .sheet { background: #fff; width: min(640px, 100%); max-height: 94vh; overflow-y: auto; border-radius: 22px 22px 0 0; position: relative; }
+  @media (min-width: 900px) { #recipe { align-items: center; } #recipe .sheet { border-radius: 22px; max-height: 90vh; } }
+  #recipe .rhead { padding: 26px 20px 16px; text-align: center; position: relative; }
+  #recipe .rhead .big { font-size: 60px; line-height: 1; }
+  #recipe .rhead h3 { margin: 8px 0 4px; font-size: 22px; } #recipe .rhead p { margin: 0; color: var(--muted); font-size: 13px; }
+  #recipe .rclose { position: absolute; right: 12px; top: 12px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.9); cursor: pointer; font-size: 16px; }
+  #recipe .rbody { padding: 4px 20px 20px; }
+  .facts { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .fact { background: rgba(255,255,255,.75); border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 700; }
+  .servrow { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); font-weight: 700; }
+  .stepper { display: flex; align-items: center; gap: 12px; } .stepper button { width: 32px; height: 32px; border-radius: 10px; border: 1px solid var(--line); background: #fff; font-size: 17px; cursor: pointer; }
+  .ing { display: grid; grid-template-columns: auto 1fr auto; gap: 2px 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .ing input { width: 20px; height: 20px; accent-color: var(--brand); }
+  .ing .in { font-weight: 700; } .ing .ia { color: var(--muted); font-size: 12px; } .ing .ip { text-align: right; font-size: 13px; }
+  .ing.off { opacity: .45; }
+  .ing .dl { grid-column: 2 / -1; font-size: 11px; }
+  #recipe ol { padding-left: 20px; margin: 8px 0 0; } #recipe ol li { margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+  #recipe h4 { margin: 18px 0 6px; font-size: 15px; }
+  .rfoot { position: sticky; bottom: 0; background: #fff; padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); display: flex; gap: 10px; align-items: center; }
+  .rfoot .btn { flex: 1; }
+  .pantry-note { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
   /* trolley */
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
   #scanrow { display: flex; gap: 8px; margin-bottom: 12px; }
@@ -241,6 +275,7 @@
 
 <div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
 <div id="pay"><div class="box" id="paybox"></div></div>
+<div id="recipe"><div class="sheet" id="recipebox"></div></div>
 <div id="flash"></div>
 <div id="tip"></div>
 

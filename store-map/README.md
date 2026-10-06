@@ -43,6 +43,11 @@ sorting, search), a centre **Scan** button, **Map** (3D store with route to any 
 The ♥ on a product adds it to "Buy again"; items you pay for are added there automatically. Code layout:
 `index.html` (shell + styles), `js/app.js` (screens), `js/store.js` (data, prices, trolley, points), `js/scene.js` (3D), `js/scanner.js`, `js/chat.js`.
 
+## Recipes
+`data/recipes.json`: 14 recipes whose ingredients are catalogue codes. Shop → **Recipes** (filters: quick, veg, non-veg, dessert, breakfast, dinner).
+The recipe page has a servings changer (fresh items scale up, spices and dry goods stay at one pack), a tick box per ingredient,
+the method, and **Add N items** to put the ticked ingredients in the trolley (deals and reminders apply as usual).
+
 ## Offers & points
 `data/offers.json` (sample deals, regenerate/edit freely): `percent` (`pct`), `multibuy` (`qty` for `price`) and `bogo`
 (`buy` + `free`). Specials show first (strip at the top of the Find panel + "All specials"), the cart shows was/now prices,
