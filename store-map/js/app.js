@@ -198,6 +198,7 @@ function planRoute() {
 }
 $('route').onclick = planRoute;
 $('b-rotate').onclick = e => { scene.setAutoRotate(!scene.autoRotate); e.currentTarget.classList.toggle('on', scene.autoRotate); };
+$('z-in').onclick = () => scene.zoom(0.7); $('z-out').onclick = () => scene.zoom(1 / 0.7);
 $('b-top').onclick = () => scene.flyTop();
 $('b-reset').onclick = () => { scene.setAutoRotate(false); $('b-rotate').classList.remove('on'); scene.flyHome(); };
 D.layout.sections.forEach(s => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = `${s.icon} ${s.label}`; b.onclick = () => scene.flyToSection(s.id); $('mapchips').appendChild(b); });

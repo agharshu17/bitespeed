@@ -356,6 +356,7 @@ return {
   flyToSection(id) { const s = secById[id]; const cx = px2x(s.rect.x + s.rect.w / 2), cz = px2z(s.rect.y + s.rect.h / 2); flyTo(new THREE.Vector3(cx * .8, 38, cz * .8 + 40), new THREE.Vector3(cx, 0, cz)); },
   flyToExit() { flyTo(new THREE.Vector3(30, 40, 70), new THREE.Vector3(px2x(layout.doors.exit.rect.x + 140), 0, 25)); },
   openExit(sec = 8) { exitHold = time + sec; },
+  zoom(f) { const off = camera.position.clone().sub(controls.target), len = THREE.MathUtils.clamp(off.length() * f, controls.minDistance, controls.maxDistance); flyTo(controls.target.clone().add(off.setLength(len)), controls.target.clone(), .3); },
   setAutoRotate(v) { controls.autoRotate = v; }, get autoRotate() { return controls.autoRotate; },
 };
 }
