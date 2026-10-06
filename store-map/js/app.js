@@ -1,11 +1,11 @@
 // BiteSpeed Mart app shell: Home, Shop, Map, Trolley.
-import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, lineCalc, imgSrc, recipeImg,
+import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, lineCalc, emojiFor, tint, recipeImg,
   addToCart, clearCart, setUsePoints, isFav, toggleFav, isSaved, toggleSaved, cartCount, buyAgain, totals, completeOrder } from './store.js';
 import { createScene } from './scene.js';
 import { initScanner } from './scanner.js';
 import { initChat } from './chat.js';
 import { ICON, PLACEHOLDER } from './icons.js';
-const photo = (p, cls = '') => { const s = imgSrc(p.code); return s ? `<img class="${cls}" src="${s}" alt="${p.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph',innerHTML:this.dataset.ph}))" data-ph='${ICON.bag.replace(/'/g, '&#39;')}'>` : PLACEHOLDER; };
+const photo = p => `<span class="emo" style="background:${tint(p)}">${emojiFor(p)}</span>`;
 
 const $ = id => document.getElementById(id);
 const hash = s => { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
@@ -93,9 +93,8 @@ function renderShop() {
   $('shoptitle').textContent = title; $('shopback').hidden = !list; $('sort').hidden = !list || shop.section === '__recipes';
   if (shop.section === '__recipes' && !shop.q) return renderRecipes();
   if (!list) {
-    const collage = ids => { const imgs = ids.map(c => D.byCode[c]).filter(p => p && imgSrc(p.code)).slice(0, 4); return imgs.length ? `<span class="collage">${imgs.map(p => `<img src="${imgSrc(p.code)}" alt="" loading="lazy">`).join('')}</span>` : `<span class="collage ph1">${ICON.bag}</span>`; };
-    const cat = (id, ids, label, n) => `<button class="cat" data-sec="${id}">${collage(ids)}<b>${label}</b><small>${n}</small></button>`;
-    $('shopbody').innerHTML = `<div class="cats">${cat('__offers', D.offers.map(o => o.code), 'Specials', `${D.offers.length} deals`)}${cat('__recipes', [], 'Recipes', `${D.recipes.length} recipes · add all ingredients`).replace(/<span class="collage[^]*?<\/span>/, `<span class="collage rc">${D.recipes.map(r => recipeImg(r.id)).filter(Boolean).slice(0, 4).map(s => `<img src="${s}" alt="" loading="lazy">`).join('') || ICON.utensils}</span>`)}${D.layout.sections.map(s => cat(s.id, D.products.filter(p => p.section === s.id).map(p => p.code), s.label, s.blurb || `${D.products.filter(p => p.section === s.id).length} items`)).join('')}</div>`;
+    const cat = (id, emoji, label, n, hue) => `<button class="cat" data-sec="${id}" style="background:hsl(${hue} 70% 92%)"><span class="ce">${emoji}</span><b>${label}</b><small>${n}</small></button>`;
+    $('shopbody').innerHTML = `<div class="cats">${cat('__offers', '🏷️', 'Specials', `${D.offers.length} deals`, 8)}${cat('__recipes', '🍳', 'Recipes', `${D.recipes.length} recipes · add all ingredients`, 30)}${D.layout.sections.map(s => cat(s.id, s.icon, s.label, s.blurb || `${D.products.filter(p => p.section === s.id).length} items`, catHue(s.id))).join('')}</div>`;
     $('shopbody').querySelectorAll('.cat').forEach(b => b.onclick = () => { shop.section = b.dataset.sec; renderShop(); $('views').scrollTop = 0; });
   } else $('shopbody').innerHTML = list.length ? `<div class="grid">${tiles(sortList(list))}</div>` : '<div class="empty">No product found. Try another name, like “sugar” or “paneer”.</div>';
 }
@@ -178,7 +177,7 @@ $('recipepage').addEventListener('change', e => { const c = e.target.dataset?.c;
 /* ---------- image credits ---------- */
 $('credBtn').onclick = () => {
   const rows = Object.entries(D.images).filter(([, v]) => !v.none).map(([k, v]) => { const name = k.startsWith('recipe:') ? D.recipes.find(r => r.id === k.slice(7))?.title : D.byCode[k]?.name; return `<li><span>${name || k}</span><span><a href="${v.page}" target="_blank" rel="noopener">${v.src === 'off' ? 'Open Food Facts' : 'Wikipedia'}</a> · ${v.license}</span></li>`; }).join('');
-  $('creditsbox').innerHTML = `<h3>Image credits</h3><p>Packaged-product photos are from Open Food Facts contributors (CC BY-SA 3.0). Fresh produce, fish and recipe photos are from Wikipedia / Wikimedia Commons under the licence shown for each image. Brand names and packaging belong to their owners; photos are used here for a demo only.</p><ul>${rows}</ul>`;
+  $('creditsbox').innerHTML = `<h3>Image credits</h3><p>Recipe photos are from Wikipedia / Wikimedia Commons under the licence shown for each image.</p><ul>${rows}</ul>`;
   $('credits').classList.add('show');
 };
 $('credits').addEventListener('click', e => { if (e.target === $('credits')) $('credits').classList.remove('show'); });

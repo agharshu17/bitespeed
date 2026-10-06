@@ -4,7 +4,7 @@ export const D = { layout: null, products: [], offers: [], recipes: [], images: 
 export async function loadData() {
   const get = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
   const [layout, products, offers, recipes] = await Promise.all([get('data/store-layout.json'), get('data/products.json'), get('data/offers.json'), get('data/recipes.json')]);
-  const images = await get('data/images.json').catch(() => ({}));
+  const images = {};
   const rimgs = await get('data/recipe-images.json').catch(() => ({}));
   for (const [id, v] of Object.entries(rimgs)) images['recipe:' + id] = v;
   Object.assign(D, { layout, products, offers, recipes, images });
@@ -35,11 +35,36 @@ export function lineCalc(code, qty) {
     remind: r ? `🎁 Buy ${o.buy} get ${o.free} free – add ${g - r} more` : '' };
 }
 
-/* ---------- product photos (data/images.json, files in assets/products and assets/recipes) ---------- */
-export const imgSrc = code => (D.images[code] && !D.images[code].none) ? `assets/products/${code}.jpg` : null;
-export const recipeImg = id => (D.images['recipe:' + id] && !D.images['recipe:' + id].none) ? `assets/recipes/${id}.jpg` : null;
+/* ---------- emoji icons (no product photos yet) ---------- */
+const EMOJI = [
+  [/ice cream/, '🍨'], [/prawn|squid|crab/, '🦐'], [/fish|pomfret|rohu|catla|salmon|tuna|mackerel|hilsa|surmai|bangda|rawas/, '🐟'],
+  [/paneer|cheese/, '🧀'], [/butter$|^butter|salted butter|unsalted butter/, '🧈'], [/peanut butter|almond butter/, '🥜'], [/milk|curd|yogurt|lassi|buttermilk|milkshake|cream$/, '🥛'],
+  [/apple/, '🍎'], [/banana/, '🍌'], [/orange/, '🍊'], [/mango/, '🥭'], [/grape/, '🍇'], [/watermelon/, '🍉'], [/melon|papaya/, '🍈'], [/pineapple/, '🍍'], [/pomegranate/, '🍎'], [/guava|pear/, '🍐'], [/kiwi/, '🥝'], [/strawberr/, '🍓'],
+  [/potato/, '🥔'], [/onion/, '🧅'], [/tomato/, '🍅'], [/carrot/, '🥕'], [/cucumber/, '🥒'], [/spinach/, '🥬'], [/coriander|mint$/, '🌿'], [/capsicum/, '🫑'], [/green chill/, '🌶️'],
+  [/popcorn/, '🍿'], [/chips|nachos|fries|wedges|hash/, '🍟'], [/biscuit|cookie|wafer|cracker|pretzel/, '🍪'],
+  [/noodle|pasta|macaroni|spaghetti|vermicelli|penne|fusilli|lasagna/, '🍝'], [/soup/, '🍲'], [/pizza/, '🍕'], [/burger|momo|samosa|kachori|paratha|spring roll/, '🥟'],
+  [/chocolate|brownie|choco/, '🍫'], [/cake|muffin|cupcake|pie|cheesecake|blondie/, '🍰'], [/donut/, '🍩'], [/croissant|danish|cinnamon roll/, '🥐'], [/bread|buns|pav|toast|rusk|khari|baguette|roll/, '🍞'],
+  [/candy|candies|gum|toffee|lollipop|gummy|jelly|marshmallow|cotton|chikki/, '🍬'], [/honey|jam|marmalade|syrup|spread/, '🍯'],
+  [/coffee/, '☕'], [/tea$|^tea|green tea|masala tea/, '🍵'], [/water|tonic|sparkling/, '💧'], [/juice|squash|sharbat|rooh|punch|cider|lemonade|coconut/, '🧃'], [/cola|soda|ale|energy|sports|electrolyte|drink/, '🥤'],
+  [/pickle|olives|jalapeno|canned/, '🫙'], [/sauce|ketchup|mayonnaise|vinegar|seasoning/, '🥫'],
+  [/rice|poha|sabudana/, '🍚'], [/flour|maida|besan|rava|wheat|bajra|jowar|corn flour/, '🌾'], [/sugar|jaggery/, '🍬'], [/salt/, '🧂'],
+  [/peanut|cashew|almond|walnut|pistachio|raisin|dates|figs|apricot|dry fruit|coconut/, '🥜'], [/cornflakes|muesli|oats|granola|flakes/, '🥣'],
+  [/dal|chana|rajma|peas|soy|gram|beans|moong/, '🫘'], [/masala|powder|pepper|cumin|cardamom|cinnamon|cloves|bay|seeds|ajwain|methi|oregano|herbs|chilli/, '🌶️'],
+  [/bhujia|sev|mixture|chakli|mathri|murukku|puffs|dalmoth|khatta/, '🥨'],
+];
+export function emojiFor(p) {
+  const n = p.name.toLowerCase();
+  if (p.section === 'frozen' && /ice cream/.test(n)) return '🍨';
+  for (const [re, e] of EMOJI) if (re.test(n)) return e;
+  return D.secById[p.section]?.icon || '🛒';
+}
 const hash = s => { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
 export const tint = p => `hsl(${hash(p.name) % 360} 75% 92%)`;
+
+
+/* ---------- recipe photos (data/recipe-images.json, files in assets/recipes) ---------- */
+export const imgSrc = () => null;
+export const recipeImg = id => (D.images['recipe:' + id] && !D.images['recipe:' + id].none) ? `assets/recipes/${id}.jpg` : null;
 
 /* ---------- persistent state ---------- */
 const load = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } };

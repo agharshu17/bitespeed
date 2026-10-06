@@ -142,9 +142,9 @@
   .ic { width: 16px; height: 16px; vertical-align: -3px; flex: none; }
   .logo { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: rgba(255,255,255,.2); } .logo svg { width: 19px; height: 19px; }
   #ptsChip { display: flex; align-items: center; gap: 5px; } #ptsChip svg { width: 15px; height: 15px; color: #ffd166; }
-  .art { height: auto; aspect-ratio: 1 / 1; overflow: hidden; background: #fff; border: 1px solid var(--line); display: block; }
-  .art img, .art .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border-radius: 0; background: #fff; }
-  .art .ph { background: linear-gradient(145deg, #f4f7f5, #e7eeea); }
+  .art { height: 96px; border-radius: 13px; overflow: hidden; display: block; }
+  .emo { position: absolute; inset: 0; display: grid; place-items: center; font-size: 46px; }
+  .th .emo { font-size: 22px; } .th { background: transparent; }
   .ph { width: 100%; height: 100%; display: grid; place-items: center; color: #a9b8b0; background: linear-gradient(145deg, #f4f7f5, #e7eeea); border-radius: 12px; }
   .ph svg { width: 38px; height: 38px; stroke-width: 1.5; }
   .fav svg { width: 15px; height: 15px; } .fav.on svg { fill: currentColor; }
@@ -288,7 +288,7 @@
       <div class="section"><h2 class="sec"><span>Popular recipes</span></h2><div class="prow" id="h-popular"></div></div>
       <div class="section" id="h-saved-sec" hidden><h2 class="sec"><span>Your saved recipes</span></h2><div class="prow" id="h-saved"></div></div>
       <div class="section"><h2 class="sec"><span>Buy again</span></h2><div class="row" id="h-again"></div></div>
-      <div class="credits">Product and recipe photos come from Open Food Facts and Wikipedia contributors. <button id="credBtn">Image credits</button></div>
+      <div class="credits">Recipe photos come from Wikipedia contributors. <button id="credBtn">Image credits</button></div>
     </div></section>
 
     <section class="view" id="v-shop"><div class="page">
