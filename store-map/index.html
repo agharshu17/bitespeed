@@ -11,6 +11,7 @@
     --accent: #ff6b35; --accent-2: #ffb703;
   }
   :root { color-scheme: light; }
+  [hidden] { display: none !important; }
   * { box-sizing: border-box; }
   input { color: var(--ink); background: #fff; -webkit-text-fill-color: var(--ink); }
   input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
@@ -84,6 +85,24 @@
   .m.u { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
   .m.a { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 4px; }
   #chatform { display: flex; gap: 6px; } #chatq { flex: 1; min-width: 0; padding: 9px 11px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; font-size: 13px; outline: none; }
+  .deal { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .2px; color: #d92d20; background: #fdecea; border: 1px solid #f7c6c2; border-radius: 6px; padding: 1px 6px; margin-top: 3px; }
+  .red { color: #d92d20; font-weight: 700; } .green { color: #15803d; font-weight: 700; }
+  .was { color: var(--muted); font-weight: 500; font-size: 11px; } .now { font-weight: 800; }
+  .res .price { text-align: right; line-height: 1.25; }
+  #pts { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); margin-top: -4px; }
+  #pts b { color: var(--ink); }
+  #spwrap h4 { margin: 2px 0 6px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+  #spwrap h4 button { border: 0; background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; padding: 0; }
+  #specials { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x proximity; }
+  .sp { flex: none; width: 138px; scroll-snap-align: start; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; display: flex; flex-direction: column; gap: 3px; cursor: pointer; position: relative; }
+  .sp .tag { align-self: flex-start; font-size: 10px; font-weight: 800; color: #fff; background: #d92d20; border-radius: 6px; padding: 2px 6px; }
+  .sp .nm { font-size: 13px; font-weight: 700; line-height: 1.2; min-height: 32px; }
+  .sp .pr { display: flex; align-items: baseline; gap: 5px; }
+  .sp .add { position: absolute; right: 8px; bottom: 8px; width: 26px; height: 26px; border-radius: 8px; border: 0; background: var(--accent); color: #fff; font-size: 16px; cursor: pointer; display: grid; place-items: center; padding: 0; }
+  .line .deal-row { grid-column: 1 / -1; font-size: 11px; }
+  .tot.save { color: #15803d; font-weight: 700; }
+  #usepts { display: flex; gap: 8px; align-items: center; font-size: 12px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 6px 9px; }
+  #flash.deal { width: max-content; max-width: 88vw; border-radius: 16px; background: #fff; color: var(--ink); border: 1px solid #f7c6c2; box-shadow: 0 8px 24px rgba(31,42,55,.18); text-align: center; line-height: 1.45; }
   #tip { position: fixed; pointer-events: none; padding: 6px 10px; border-radius: 10px; background: rgba(31,42,55,.92); color: #fff; font-size: 12px; line-height: 1.4; display: none; transform: translate(12px, 12px); z-index: 5; white-space: nowrap; }
   #tip b { font-size: 13px; }
   #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #dfe9f3; font-weight: 700; color: var(--muted); z-index: 10; transition: opacity .5s; }
@@ -124,6 +143,8 @@
 <div id="side" class="panel">
   <h1>🛒 BiteSpeed Mart <small id="count"></small></h1>
   <input id="q" type="search" placeholder="Search a product or code (e.g. sugar, 2A17)…" autocomplete="off">
+  <div id="pts"><span>⭐ <b id="ptsval">0</b> reward points</span><span>100 pts = ₹10 off</span></div>
+  <div id="spwrap"><h4><span>🏷 This week's specials</span><button id="spall">See all</button></h4><div id="specials"></div></div>
   <div id="chips"></div>
   <div id="results"></div>
 </div>
@@ -145,7 +166,10 @@
   <div id="scanrow"><input id="scan" placeholder="Type barcode or item code…" autocomplete="off" inputmode="text"><button class="btn" id="scanAdd">Add</button></div>
   <div id="lines"></div>
   <div class="tot"><span>Subtotal</span><span id="csub">₹0</span></div>
+  <div class="tot save" id="csaverow" hidden><span>Specials savings</span><span id="csave">−₹0</span></div>
+  <label id="usepts" hidden><input type="checkbox" id="usepts-cb"><span id="usepts-t"></span></label>
   <div class="tot big"><span>Total</span><span id="ctot">₹0</span></div>
+  <div class="tot" style="font-size:11px"><span>Prices include GST</span><span id="cgst"></span></div>
   <div class="payrow"><button class="btn iconbtn" id="camBtn" title="Scan items with the camera" aria-label="Scan items with the camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button><button class="btn" id="checkout" disabled style="flex:1">Checkout</button></div>
 </div>
 <div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
@@ -174,12 +198,36 @@ import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 
 /* ---------- data ---------- */
-const [layout, products] = await Promise.all([
+const [layout, products, offers] = await Promise.all([
   fetch('data/store-layout.json').then(r => r.json()),
   fetch('data/products.json').then(r => r.json()),
+  fetch('data/offers.json').then(r => r.json()),
 ]);
 const secById = Object.fromEntries(layout.sections.map(s => [s.id, s]));
 const byCode = Object.fromEntries(products.map(p => [p.code, p]));
+const offerBy = Object.fromEntries(offers.map(o => [o.code, o]));
+const inr = n => '₹' + n.toLocaleString('en-IN');
+const $ = id => document.getElementById(id);
+
+/* ---------- offers & pricing (prices include GST) ---------- */
+const dealLabel = o => o.type === 'percent' ? `${o.pct}% OFF` : o.type === 'multibuy' ? `${o.qty} for ${inr(o.price)}` : `Buy ${o.buy} get ${o.free} free`;
+const unitPrice = p => { const o = offerBy[p.code]; return o && o.type === 'percent' ? Math.round(p.price * (1 - o.pct / 100)) : p.price; };
+const priceHTML = p => { const o = offerBy[p.code]; return o && o.type === 'percent' ? `<s class="was">${inr(p.price)}</s> <b class="now">${inr(unitPrice(p))}</b>` : `<b class="now">${inr(p.price)}</b>`; };
+const badgeHTML = p => { const o = offerBy[p.code]; return o ? `<div class="deal">${dealLabel(o)}</div>` : ''; };
+/** price of `qty` of a product with its offer applied, plus a status line for the trolley */
+function lineCalc(code, qty) {
+  const p = byCode[code], o = offerBy[code], orig = p.price * qty;
+  if (!o) return { total: orig, orig, saving: 0, earned: '', remind: '' };
+  if (o.type === 'percent') { const total = unitPrice(p) * qty; return { total, orig, saving: orig - total, earned: `${o.pct}% off applied`, remind: '' }; }
+  if (o.type === 'multibuy') {
+    const sets = Math.floor(qty / o.qty), r = qty % o.qty, total = sets * o.price + r * p.price;
+    return { total, orig, saving: orig - total, earned: sets ? `${sets} × ${o.qty} for ${inr(o.price)} applied` : '',
+      remind: r ? `${o.qty} for ${inr(o.price)} – add ${o.qty - r} more to save ${inr(p.price * o.qty - o.price)}` : '' };
+  }
+  const g = o.buy + o.free, sets = Math.floor(qty / g), r = qty % g, total = (sets * o.buy + r) * p.price;
+  return { total, orig, saving: orig - total, earned: sets ? `${sets * o.free} free item${sets * o.free > 1 ? 's' : ''} applied` : '',
+    remind: r ? `🎁 Buy ${o.buy} get ${o.free} free – add ${g - r} more` : '' };
+}
 document.getElementById('count').textContent = `${products.length} products`;
 
 /* ---------- helpers ---------- */
@@ -437,7 +485,7 @@ function selectProduct(code, fly = true) {
   const sec = secById[p.section];
   document.getElementById('i-name').textContent = p.name;
   document.getElementById('i-code').textContent = p.code;
-  document.getElementById('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${info.row} from the top · position ${info.col} of ${sec.cols}<br>₹${p.price} · barcode ${p.barcode}`;
+  document.getElementById('i-meta').innerHTML = `📍 <b>${sec.icon} ${sec.label}</b> (zone ${sec.number})<br>Shelf row ${info.row} from the top · position ${info.col} of ${sec.cols}<br>${priceHTML(p)} ${offerBy[p.code] ? `<span class="red">${dealLabel(offerBy[p.code])}</span>` : ''} · barcode ${p.barcode}`;
   document.getElementById('info').classList.add('show');
   if (isMobile()) closePanels();
   document.querySelectorAll('.res').forEach(e => e.classList.toggle('on', e.dataset.code === code));
@@ -455,21 +503,34 @@ layout.sections.forEach(s => {
   b.onclick = () => { const g = sectionGroups[s.id]; flyTo(new THREE.Vector3(g.position.x * .8, 38, g.position.z * .8 + 40), new THREE.Vector3(g.position.x, 0, g.position.z)); $q.value = ''; render(s.id); };
   $chips.appendChild(b);
 });
+{ const b = document.createElement('button'); b.className = 'chip'; b.textContent = '🏷 All specials'; b.onclick = () => { $q.value = ''; render('__offers'); }; $chips.prepend(b); }
+function renderSpecials() {
+  const feat = offers.filter(o => o.featured).map(o => byCode[o.code]);
+  $('specials').innerHTML = '';
+  for (const p of feat) {
+    const d = document.createElement('div'); d.className = 'sp';
+    d.innerHTML = `<span class="tag">${dealLabel(offerBy[p.code])}</span><div class="nm">${p.name}</div><div class="pr">${priceHTML(p)}</div><button class="add" aria-label="Add ${p.name}">+</button>`;
+    d.onclick = e => { if (e.target.closest('.add')) addToCart(p.code); else selectProduct(p.code); };
+    $('specials').appendChild(d);
+  }
+  $('spall').onclick = () => { $q.value = ''; render('__offers'); };
+}
 function render(sectionFilter) {
   const q = $q.value.trim().toLowerCase(); let list;
-  if (sectionFilter) list = products.filter(p => p.section === sectionFilter);
+  if (sectionFilter === '__offers') list = offers.map(o => byCode[o.code]);
+  else if (sectionFilter) list = products.filter(p => p.section === sectionFilter);
   else if (q) list = products.filter(p => p.name.toLowerCase().includes(q) || p.code.toLowerCase() === q || p.code.toLowerCase().startsWith(q)).sort((a, b) => (b.name.toLowerCase().startsWith(q)) - (a.name.toLowerCase().startsWith(q)) || a.name.localeCompare(b.name));
   else { $res.innerHTML = '<div id="hint">Type a product, or tap a section above. Click any item on a shelf in the 3D view to get a route from the entry.</div>'; return; }
   $res.innerHTML = '';
   if (!list.length) { $res.innerHTML = '<div id="hint">No product found. Try another name.</div>'; return; }
   list.slice(0, 80).forEach(p => {
     const sec = secById[p.section], b = document.createElement('button'); b.className = 'res'; b.dataset.code = p.code;
-    b.innerHTML = `<span class="code">${p.code}</span><span><div class="nm">${p.name}</div><div class="sc">${sec.icon} ${sec.label}</div></span><span class="price">₹${p.price}</span><span class="plus" role="button" title="Add to cart">+</span>`;
+    b.innerHTML = `<span class="code">${p.code}</span><span><div class="nm">${p.name}</div><div class="sc">${sec.icon} ${sec.label}</div>${badgeHTML(p)}</span><span class="price">${priceHTML(p)}</span><span class="plus" role="button" title="Add to cart">+</span>`;
     b.onclick = e => { if (e.target.classList.contains('plus')) { addToCart(p.code); return; } selectProduct(p.code); }; $res.appendChild(b);
   });
 }
 $q.addEventListener('input', () => render());
-render();
+renderSpecials(); render();
 document.getElementById('i-add').onclick = () => selected && addToCart(selected);
 document.getElementById('i-clear').onclick = () => { clearRoute(); flyTo(HOME.pos.clone(), HOME.target.clone()); };
 const bRot = document.getElementById('b-rotate');
@@ -522,30 +583,49 @@ renderer.setAnimationLoop(now => {
 
 
 /* ---------- cart + scanner + checkout ---------- */
-const $ = id => document.getElementById(id);
 const byBarcode = Object.fromEntries(products.map(p => [p.barcode, p]));
-const inr = n => '₹' + n.toLocaleString('en-IN');
-const GST = 0.05;                                   // placeholder tax rate
 let cart = {}; try { cart = JSON.parse(localStorage.getItem('bsm-cart') || '{}'); } catch {}
 for (const c of Object.keys(cart)) if (!byCode[c]) delete cart[c];
-let flashT; function flash(msg, bad) { const f = $('flash'); f.textContent = msg; f.style.background = bad ? '#e5484d' : '#27b24f'; f.classList.add('show'); clearTimeout(flashT); flashT = setTimeout(() => f.classList.remove('show'), 1600); }
-const subtotal = () => Object.entries(cart).reduce((s, [c, q]) => s + byCode[c].price * q, 0);
+let points = 320, usePoints = false;          // demo starting balance
+try { const v = localStorage.getItem('bsm-points'); if (v !== null) points = +v || 0; usePoints = localStorage.getItem('bsm-usepts') === '1'; } catch {}
+function savePoints() { try { localStorage.setItem('bsm-points', points); localStorage.setItem('bsm-usepts', usePoints ? '1' : '0'); } catch {} }
+let flashT;
+function flash(msg, bad, remind) {
+  const f = $('flash'); f.classList.toggle('deal', !!remind);
+  if (remind) f.innerHTML = `✅ ${msg}<br><span class="red">${remind}</span>`; else { f.textContent = msg; f.style.background = bad ? '#e5484d' : '#27b24f'; }
+  if (remind) f.style.background = ''; f.classList.add('show'); clearTimeout(flashT); flashT = setTimeout(() => f.classList.remove('show'), remind ? 3200 : 1600);
+}
+function totals() {
+  const lines = Object.entries(cart).map(([c, q]) => ({ c, q, ...lineCalc(c, q) }));
+  const orig = lines.reduce((s, l) => s + l.orig, 0), total = lines.reduce((s, l) => s + l.total, 0);
+  const blocks = Math.min(Math.floor(points / 100), Math.floor(total / 10)), redeem = usePoints ? blocks * 10 : 0, pay = total - redeem;
+  return { lines, orig, saving: orig - total, total, blocks, redeem, pay, gst: Math.round(pay * 5 / 105), earn: Math.floor(pay / 10) };
+}
 function saveCart() { try { localStorage.setItem('bsm-cart', JSON.stringify(cart)); } catch {} renderCart(); }
-function addToCart(code, qty = 1, quiet) { if (!byCode[code]) return; cart[code] = (cart[code] || 0) + qty; if (cart[code] <= 0) delete cart[code]; saveCart(); if (!quiet) flash(`Added ${byCode[code].name}`); }
+function addToCart(code, qty = 1, quiet) {
+  if (!byCode[code]) return; cart[code] = (cart[code] || 0) + qty; if (cart[code] <= 0) delete cart[code]; saveCart();
+  if (!quiet) flash(`Added ${byCode[code].name}`, false, lineCalc(code, cart[code] || 0).remind);
+}
 function renderCart() {
-  const entries = Object.entries(cart), n = entries.reduce((s, [, q]) => s + q, 0);
+  const T = totals(), n = T.lines.reduce((s, l) => s + l.q, 0);
   $('ccount').textContent = n ? `(${n} item${n > 1 ? 's' : ''})` : '';
-  $('lines').innerHTML = entries.length ? '' : '<div id="empty">Cart is empty – scan an item or add one from search.</div>';
-  for (const [c, q] of entries) {
-    const p = byCode[c], d = document.createElement('div'); d.className = 'line';
-    d.innerHTML = `<span class="n">${p.name}</span><span class="qty"><button data-d="-1">−</button>${q}<button data-d="1">+</button></span><span class="c">${c} · ${inr(p.price)}</span><span class="c" style="text-align:right">${inr(p.price * q)}</span>`;
-    d.querySelector('.n').onclick = () => selectProduct(c);
-    d.querySelectorAll('button').forEach(b => b.onclick = () => addToCart(c, +b.dataset.d, true));
+  $('lines').innerHTML = T.lines.length ? '' : '<div id="empty">Cart is empty – scan an item or add one from search.</div>';
+  for (const l of T.lines) {
+    const p = byCode[l.c], d = document.createElement('div'); d.className = 'line';
+    d.innerHTML = `<span class="n">${p.name}</span><span class="qty"><button data-d="-1">−</button>${l.q}<button data-d="1">+</button></span><span class="c">${l.c} · ${priceHTML(p)}</span><span class="c" style="text-align:right">${l.saving ? `<s class="was">${inr(l.orig)}</s> ` : ''}<b style="color:var(--ink)">${inr(l.total)}</b></span>${l.remind ? `<span class="deal-row red">${l.remind}</span>` : l.earned ? `<span class="deal-row green">✓ ${l.earned} · saved ${inr(l.saving)}</span>` : ''}`;
+    d.querySelector('.n').onclick = () => selectProduct(l.c);
+    d.querySelectorAll('button').forEach(b => b.onclick = () => addToCart(l.c, +b.dataset.d, true));
     $('lines').appendChild(d);
   }
-  $('csub').textContent = inr(subtotal()); $('ctot').textContent = inr(Math.round(subtotal() * (1 + GST)));
-  $('checkout').disabled = !entries.length; $('nbadge').textContent = n; $('nbadge').hidden = !n;
+  $('csub').textContent = inr(T.orig);
+  $('csaverow').hidden = !T.saving; $('csave').textContent = '−' + inr(T.saving);
+  $('usepts').hidden = !(T.blocks > 0 || usePoints); $('usepts-cb').checked = usePoints && T.blocks > 0;
+  $('usepts-t').textContent = T.blocks ? `Use ${T.blocks * 100} points (−${inr(T.blocks * 10)})` : 'Not enough points for this trolley';
+  $('ctot').textContent = inr(T.pay); $('cgst').textContent = `incl. GST ${inr(T.gst)}`;
+  $('checkout').disabled = !T.lines.length; $('nbadge').textContent = n; $('nbadge').hidden = !n;
+  $('ptsval').textContent = points;
 }
+$('usepts-cb').onchange = e => { usePoints = e.target.checked; savePoints(); renderCart(); };
 $('cclear').onclick = () => { cart = {}; saveCart(); };
 function scanValue(v) {
   v = v.trim(); if (!v) return false;
@@ -600,11 +680,14 @@ $('scanAdd').onclick = () => { if (scanValue($('scan').value)) $('scan').value =
 
 // checkout (simulated payment)
 function openPay() {
-  const sub = subtotal(), tax = Math.round(sub * GST), tot = sub + tax; let method = 'UPI';
-  const lines = Object.entries(cart).map(([c, q]) => `<div class="rline"><span>${q} × ${byCode[c].name}</span><span>${inr(q * byCode[c].price)}</span></div>`).join('');
-  $('paybox').innerHTML = `<h3>🧾 Checkout</h3>${lines}<hr style="border:0;border-top:1px solid var(--line)"><div class="rline"><span>Subtotal</span><span>${inr(sub)}</span></div><div class="rline"><span>GST (5%)</span><span>${inr(tax)}</span></div><div class="rline" style="font-weight:800;font-size:17px"><span>Total</span><span>${inr(tot)}</span></div>
+  const T = totals(); let method = 'UPI';
+  const lines = T.lines.map(l => `<div class="rline"><span>${l.q} × ${byCode[l.c].name}</span><span>${l.saving ? `<s class="was">${inr(l.orig)}</s> ` : ''}${inr(l.total)}</span></div>`).join('');
+  const row = (a, b, cls = '') => `<div class="rline ${cls}"><span>${a}</span><span>${b}</span></div>`;
+  $('paybox').innerHTML = `<h3>🧾 Checkout</h3>${lines}<hr style="border:0;border-top:1px solid var(--line)">${row('Subtotal', inr(T.orig))}${T.saving ? row('Specials savings', '−' + inr(T.saving), 'green') : ''}${T.redeem ? row(`Points redeemed (${T.blocks * 100})`, '−' + inr(T.redeem), 'green') : ''}
+    <div class="rline" style="font-weight:800;font-size:17px"><span>Total</span><span>${inr(T.pay)}</span></div>${row('Includes GST', inr(T.gst))}
+    <p class="green" style="font-size:12px;margin:8px 0 0">⭐ You'll earn ${T.earn} points${T.saving + T.redeem ? ` · you're saving ${inr(T.saving + T.redeem)}` : ''}</p>
     <div class="methods"><button data-m="UPI" class="on">📱 UPI</button><button data-m="Card">💳 Card</button><button data-m="Wallet">👛 Wallet</button></div>
-    <div style="display:flex;gap:8px"><button class="btn ghost" id="payCancel">Back</button><button class="btn" id="payGo" style="flex:1">Pay ${inr(tot)}</button></div>
+    <div style="display:flex;gap:8px"><button class="btn ghost" id="payCancel">Back</button><button class="btn" id="payGo" style="flex:1">Pay ${inr(T.pay)}</button></div>
     <p style="font-size:11px;color:var(--muted);margin:10px 0 0">Demo only – no real payment is taken.</p>`;
   $('pay').classList.add('show');
   $('paybox').querySelectorAll('.methods button').forEach(b => b.onclick = () => { method = b.dataset.m; $('paybox').querySelectorAll('.methods button').forEach(x => x.classList.toggle('on', x === b)); });
@@ -613,7 +696,8 @@ function openPay() {
     $('payGo').disabled = true; $('payGo').textContent = 'Processing…';
     setTimeout(() => {
       const id = 'BSM-' + Date.now().toString(36).toUpperCase(), when = new Date().toLocaleString();
-      $('paybox').innerHTML = `<div class="ok"><div class="tick">✅</div><h3>Payment successful</h3><p style="color:var(--muted);font-size:13px">Order ${id}<br>${when} · paid ${inr(tot)} via ${method}</p><p>🚪 Exit gate is open – thank you for shopping!</p><button class="btn" id="payDone">Done</button></div>`;
+      points = points - T.blocks * 100 * (usePoints ? 1 : 0) + T.earn; usePoints = false; savePoints();
+      $('paybox').innerHTML = `<div class="ok"><div class="tick">✅</div><h3>Payment successful</h3><p style="color:var(--muted);font-size:13px">Order ${id}<br>${when} · paid ${inr(T.pay)} via ${method}</p>${T.saving + T.redeem ? `<p class="green">You saved ${inr(T.saving + T.redeem)} today!</p>` : ''}<p>⭐ +${T.earn} points · balance ${points}</p><p>🚪 Exit gate is open – thank you for shopping!</p><button class="btn" id="payDone">Done</button></div>`;
       exitHold = time + 8; cart = {}; saveCart(); clearRoute();
       flyTo(new THREE.Vector3(30, 40, 70), new THREE.Vector3(px2x(layout.doors.exit.rect.x + 140), 0, 25));
       $('payDone').onclick = () => $('pay').classList.remove('show');
@@ -654,6 +738,7 @@ $('chatform').onsubmit = async e => {
 };
 
 document.getElementById('loading').classList.add('hide');
+if (isMobile() && !new URLSearchParams(location.search).get('item')) togglePanel('side', 'n-side');
 const qs = new URLSearchParams(location.search).get('item'); if (qs && byCode[qs.toUpperCase()]) selectProduct(qs.toUpperCase());
 window.__store = { addToCart, openPay, selectProduct, clearRoute, camera, controls, scene, productInfo };
 </script>

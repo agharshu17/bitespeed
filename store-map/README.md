@@ -37,11 +37,18 @@ Each product also has a `price` (₹, **placeholder values – replace with real
 - `3A48` renamed **Fried Moong Dal** (a snack, different from raw Moong Dal 2B02).
 - Frozen codes are now `FRZ-A01 … FRZ-A25`.
 
+## Offers & points
+`data/offers.json` (sample deals, regenerate/edit freely): `percent` (`pct`), `multibuy` (`qty` for `price`) and `bogo`
+(`buy` + `free`). Specials show first (strip at the top of the Find panel + "All specials"), the cart shows was/now prices,
+savings and a **red reminder** such as "Buy 2 get 1 free – add 2 more" (also as a toast when you add the item).
+Prices include GST. Reward points: earn 1 per ₹10 paid, redeem 100 points for ₹10 off at checkout (demo balance of 320 points,
+kept in the browser). The assistant also knows the deals.
+
 ## Features
 - 3D: orbit/zoom, hover tooltips, search, section chips, animated cart route from the entry, auto-rotate, top view, sliding doors, ambient shoppers.
 - **Self-checkout:** cart panel; add by typing/pasting a barcode or code and pressing Enter, with the 📷 button
   (camera barcode scan, Chrome/Edge via `BarcodeDetector`), from search (+), or by clicking a shelf item.
-  Checkout shows subtotal + 5 % GST (placeholder) and a **simulated** payment, then the exit gate opens. Cart persists in the browser.
+  Checkout shows savings, points and a **simulated** payment, then the exit gate opens. Cart persists in the browser.
 - **Assistant:** `server/server.mjs` exposes `/api/chat`. With an API key it runs Claude (`claude-opus-5-5`, override with
   `ANTHROPIC_MODEL`) in a tool-use loop over `search_products`, `list_section`, `add_to_cart`, `show_route`, `get_cart`;
   the browser applies the returned add/route actions. Without a key it falls back to offline keyword search.

@@ -9,6 +9,9 @@ import Anthropic from '@anthropic-ai/sdk';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const layout = JSON.parse(fs.readFileSync(path.join(root, 'data/store-layout.json'), 'utf8'));
 const products = JSON.parse(fs.readFileSync(path.join(root, 'data/products.json'), 'utf8'));
+const offerBy = Object.fromEntries(JSON.parse(fs.readFileSync(path.join(root, 'data/offers.json'), 'utf8')).map(o => [o.code, o]));
+const dealText = o => !o ? null : o.type === 'percent' ? `${o.pct}% off` : o.type === 'multibuy' ? `${o.qty} for ₹${o.price}` : `Buy ${o.buy} get ${o.free} free`;
+const lineTotal = (p, q) => { const o = offerBy[p.code]; if (!o) return p.price * q; if (o.type === 'percent') return Math.round(p.price * (1 - o.pct / 100)) * q; if (o.type === 'multibuy') return Math.floor(q / o.qty) * o.price + (q % o.qty) * p.price; const g = o.buy + o.free; return (Math.floor(q / g) * o.buy + (q % g)) * p.price; };
 const sections = Object.fromEntries(layout.sections.map(s => [s.id, s]));
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5-5';
 const useClaude = !!(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
@@ -17,7 +20,7 @@ const client = useClaude ? new Anthropic() : null;
 /* ---------- store lookups ---------- */
 const describe = p => {
   const s = sections[p.section], row = Math.floor(p.slot / s.cols) + 1, col = (p.slot % s.cols) + 1;
-  return { code: p.code, name: p.name, price: p.price, location: `${s.label} (zone ${s.number}), shelf row ${row} from the top, position ${col} of ${s.cols}`, section: s.id };
+  return { code: p.code, name: p.name, price: p.price, deal: dealText(offerBy[p.code]), location: `${s.label} (zone ${s.number}), shelf row ${row} from the top, position ${col} of ${s.cols}`, section: s.id };
 };
 const norm = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean);
 function search(query, limit = 8) {
@@ -42,10 +45,12 @@ const tools = [
     input_schema: { type: 'object', properties: { code: { type: 'string' }, quantity: { type: 'integer', minimum: 1 } }, required: ['code'], additionalProperties: false } },
   { name: 'show_route', description: 'Show the shopper the walking route and highlight a product on the 3D map. Use when they ask where something is or how to get to it.',
     input_schema: { type: 'object', properties: { code: { type: 'string' } }, required: ['code'], additionalProperties: false } },
+  { name: 'get_specials', description: 'List current special offers (discounts, multi-buy and buy-X-get-Y-free deals), optionally limited to one section id.',
+    input_schema: { type: 'object', properties: { section: { type: 'string' } }, additionalProperties: false } },
   { name: 'get_cart', description: 'Get the current cart contents and total.',
     input_schema: { type: 'object', properties: {}, additionalProperties: false } },
 ];
-const SYSTEM = `You are the shopping assistant on a smart-cart screen in BiteSpeed Mart, a grocery store. Help shoppers find products, answer where things are, add items to their cart and suggest recipes or substitutes using ONLY products from the catalogue (always check with search_products; never invent items, prices or locations). Keep replies short and friendly (2-4 sentences, a short list is fine). When you name a product give its code and location. If something isn't stocked, say so and offer the closest alternative. Prices are in rupees (₹).`;
+const SYSTEM = `You are the shopping assistant on a smart-cart screen in BiteSpeed Mart, a grocery store. Help shoppers find products, answer where things are, add items to their cart and suggest recipes or substitutes using ONLY products from the catalogue (always check with search_products; never invent items, prices or locations). Keep replies short and friendly (2-4 sentences, a short list is fine). When you name a product give its code and location. If something isn't stocked, say so and offer the closest alternative. Prices are in rupees (₹) and include GST. Items may carry a "deal" (percentage off, multi-buy such as '2 for ₹150', or 'Buy 2 get 1 free'): mention a deal whenever you recommend or add an item that has one, and when the shopper has fewer items than the deal needs, remind them how many more to add. There is also a get_specials tool for browsing current offers.`;
 
 function runTool(name, input, ctx) {
   if (name === 'search_products') return search(input.query);
@@ -55,9 +60,10 @@ function runTool(name, input, ctx) {
     if (name === 'add_to_cart') { const q = input.quantity || 1; ctx.actions.push({ type: 'add', code: p.code, qty: q }); ctx.cart[p.code] = (ctx.cart[p.code] || 0) + q; return { added: p.name, quantity: q }; }
     ctx.actions.push({ type: 'route', code: p.code }); return { showing: describe(p) };
   }
+  if (name === 'get_specials') return Object.keys(offerBy).map(c => products.find(p => p.code === c)).filter(p => p && (!input.section || p.section === input.section)).slice(0, 25).map(describe);
   if (name === 'get_cart') {
-    const items = Object.entries(ctx.cart).map(([c, q]) => { const p = products.find(x => x.code === c); return p && { code: c, name: p.name, qty: q, price: p.price }; }).filter(Boolean);
-    return { items, total: items.reduce((s, i) => s + i.qty * i.price, 0) };
+    const items = Object.entries(ctx.cart).map(([c, q]) => { const p = products.find(x => x.code === c); return p && { code: c, name: p.name, qty: q, price: p.price, deal: dealText(offerBy[p.code]), line_total: lineTotal(p, q) }; }).filter(Boolean);
+    return { items, total: items.reduce((s, i) => s + i.line_total, 0), note: 'line_total already includes offers; prices include GST' };
   }
   return { error: 'unknown tool' };
 }
@@ -83,8 +89,8 @@ function chatFallback(text, ctx) {
   if (!hits.length) return "I couldn't find that in our catalogue. Try another name (e.g. \"sugar\" or \"paneer\").";
   const top = hits[0];
   ctx.actions.push({ type: 'route', code: top.code });
-  if (wantsAdd) { ctx.actions.push({ type: 'add', code: top.code, qty: 1 }); return `Added ${top.name} (₹${top.price}) to your cart. It's in ${top.location}.`; }
-  return `${top.name} (${top.code}, ₹${top.price}) is in ${top.location}. I've marked it on the map.` + (hits.length > 1 ? `\nAlso: ${hits.slice(1).map(h => h.name).join(', ')}.` : '');
+  if (wantsAdd) { ctx.actions.push({ type: 'add', code: top.code, qty: 1 }); return `Added ${top.name} (₹${top.price}${top.deal ? ', ' + top.deal : ''}) to your cart. It's in ${top.location}.`; }
+  return `${top.name} (${top.code}, ₹${top.price}${top.deal ? ' – ' + top.deal : ''}) is in ${top.location}. I've marked it on the map.` + (hits.length > 1 ? `\nAlso: ${hits.slice(1).map(h => h.name).join(', ')}.` : '');
 }
 
 /* ---------- http ---------- */
