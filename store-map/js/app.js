@@ -3,7 +3,6 @@ import { D, loadData, initState, state, subscribe, inr, dealLabel, priceHTML, li
   addToCart, clearCart, setUsePoints, isFav, toggleFav, isSaved, toggleSaved, cartCount, buyAgain, totals, completeOrder } from './store.js';
 import { createScene } from './scene.js';
 import { initScanner } from './scanner.js';
-import { initChat } from './chat.js';
 import { ICON, PLACEHOLDER } from './icons.js';
 const photo = p => `<span class="emo" style="background:${tint(p)}">${emojiFor(p)}</span>`;
 
@@ -259,9 +258,6 @@ function openPay() {
   };
 }
 $('checkout').onclick = openPay;
-
-/* ---------- assistant ---------- */
-initChat({ onAction: a => { if (a.type === 'add') add(a.code, a.qty, true); else if (a.type === 'route') locate(a.code); } });
 
 /* ---------- install as an app (PWA) ---------- */
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});

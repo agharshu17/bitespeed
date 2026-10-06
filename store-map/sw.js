@@ -1,6 +1,6 @@
-// Offline-capable shell: precache the app, refresh in the background. The assistant (/api) always goes to the network.
-const VERSION = 'bsm-v1';
-const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'js/app.js', 'js/store.js', 'js/scene.js', 'js/scanner.js', 'js/chat.js', 'js/icons.js',
+// Offline-capable shell: precache the app, refresh in the background. 
+const VERSION = 'bsm-v2';
+const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'js/app.js', 'js/store.js', 'js/scene.js', 'js/scanner.js', 'js/icons.js',
   'data/store-layout.json', 'data/products.json', 'data/offers.json', 'data/recipes.json',
   'vendor/three.module.js', 'vendor/three.core.js', 'vendor/OrbitControls.js', 'vendor/zxing.min.js', 'icons/icon-192.png', 'icons/icon-512.png'];
 

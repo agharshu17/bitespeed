@@ -5,9 +5,6 @@
   "scripts": {
     "start": "node server/server.mjs"
   },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.110.0"
-  },
   "devDependencies": {
     "sharp": "^0.35.5"
   }

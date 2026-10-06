@@ -5,15 +5,13 @@ plus the product/location data the app will use.
 
 ## Run it
     cd store-map && npm install && npm start      # http://localhost:8000
-    # optional: ANTHROPIC_API_KEY=sk-ant-... npm start   -> Claude-powered assistant
-    #           (without a key the chat uses a simple offline keyword search)
 
 **On a phone:** open the app on the same Wi-Fi at `http://<your-computer-ip>:8000`. Live camera scanning needs HTTPS
 (browsers only allow the camera on `https://` or `localhost`) – deploy it (e.g. Railway) or tunnel it (`npx localtunnel --port 8000`,
 ngrok). Over plain http the **Take / choose photo** button still scans a barcode from a photo.
 Chrome/Edge/Android use the built-in `BarcodeDetector`; iPhone Safari/Firefox use the bundled ZXing library (`vendor/zxing.min.js`, MIT).
 
-(`python3 -m http.server` also shows the 3D map and checkout, but the chat needs the Node server.)
+(`python3 -m http.server` works too.)
 
 Deep link to a product: `http://localhost:8000/?item=2A17`
 
@@ -38,9 +36,9 @@ Each product also has a `price` (₹, **placeholder values – replace with real
 - Frozen codes are now `FRZ-A01 … FRZ-A25`.
 
 ## Install it as an app (PWA)
-The site is an installable web app: `manifest.webmanifest`, `sw.js` (offline cache of the whole shell, data and 3D library; the assistant still needs the network) and icons in `icons/`
+The site is an installable web app: `manifest.webmanifest`, `sw.js` (offline cache of the whole shell, data and 3D library) and icons in `icons/`
 (regenerate with `node scripts/make-icons.mjs`). Browsers only allow installing from **https** (or localhost), so deploy it first, e.g. on Railway:
-set the service's *Root Directory* to `store-map`, start command `npm start` (it reads `PORT`), and add `ANTHROPIC_API_KEY` for the Claude assistant.
+set the service's *Root Directory* to `store-map`, start command `npm start` (it reads `PORT`).
 - **Android / Chrome / Edge:** a green "Install BiteSpeed Mart" bar appears on Home (or use the browser's install button).
 - **iPhone / Safari:** Share → Add to Home Screen (the bar shows this hint).
 After a change, bump `VERSION` in `sw.js` so installed copies refresh.
@@ -49,7 +47,7 @@ After a change, bump `VERSION` in `sw.js` so installed copies refresh.
 Bottom tabs (top menu on a computer): **Home** (this week's specials, buy again), **Shop** (aisle tiles, product grids with emoji icons,
 sorting, search), a centre **Scan** button, **Map** (3D store with route to any item) and **Trolley** (items, savings, points, checkout).
 The ♥ on a product adds it to "Buy again"; items you pay for are added there automatically. Code layout:
-`index.html` (shell + styles), `js/app.js` (screens), `js/store.js` (data, prices, trolley, points), `js/scene.js` (3D), `js/scanner.js`, `js/chat.js`.
+`index.html` (shell + styles), `js/app.js` (screens), `js/store.js` (data, prices, trolley, points), `js/scene.js` (3D), `js/scanner.js`.
 
 ## Icons
 Products, aisles and recipes use emoji icons (picked by keyword in `js/store.js`, recipes carry their own in `data/recipes.json`), so there are no image files to manage.
@@ -69,15 +67,12 @@ the method, and **Add N items** to put the ticked ingredients in the trolley (de
 (`buy` + `free`). Specials show first (strip at the top of the Find panel + "All specials"), the cart shows was/now prices,
 savings and a **red reminder** such as "Buy 2 get 1 free – add 2 more" (also as a toast when you add the item).
 Prices include GST. Reward points: earn 1 per ₹10 paid, redeem 100 points for ₹10 off at checkout (demo balance of 320 points,
-kept in the browser). The assistant also knows the deals.
+kept in the browser).
 
 ## Features
 - 3D: orbit/zoom, hover tooltips, search, section chips, animated cart route from the entry, auto-rotate, top view, sliding doors, ambient shoppers.
 - **Self-checkout:** cart panel; add by typing/pasting a barcode or code and pressing Enter, with the 📷 button
   (camera barcode scan, Chrome/Edge via `BarcodeDetector`), from search (+), or by clicking a shelf item.
   Checkout shows savings, points and a **simulated** payment, then the exit gate opens. Cart persists in the browser.
-- **Assistant:** `server/server.mjs` exposes `/api/chat`. With an API key it runs Claude (`claude-opus-5-5`, override with
-  `ANTHROPIC_MODEL`) in a tool-use loop over `search_products`, `list_section`, `add_to_cart`, `show_route`, `get_cart`;
-  the browser applies the returned add/route actions. Without a key it falls back to offline keyword search.
 
 `vendor/` holds Three.js (MIT) so it works offline.
