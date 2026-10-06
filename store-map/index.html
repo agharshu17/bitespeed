@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#12905a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BiteSpeed">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>BiteSpeed Mart</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2312905a'/%3E%3Cpath d='M12 18h6l5 22h24l5-16H21' fill='none' stroke='white' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='48' r='3.5' fill='white'/%3E%3Ccircle cx='44' cy='48' r='3.5' fill='white'/%3E%3C/svg%3E">
 <style>
@@ -66,6 +72,9 @@
   .cat { border: 0; border-radius: 18px; padding: 16px 12px; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-height: 112px; }
   .cat .ce { font-size: 38px; line-height: 1; } .cat b { font-size: 15px; } .cat small { color: var(--muted); font-size: 12px; }
 
+  #installbar { display: flex; align-items: center; gap: 12px; background: #ecfaf3; border: 1px solid #bfe6d2; border-radius: 16px; padding: 12px 14px; margin-bottom: 16px; }
+  #installbar div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; } #installbar span { font-size: 12px; color: var(--muted); }
+  #installbar .x { border: 0; background: none; font-size: 16px; color: var(--muted); cursor: pointer; padding: 4px; }
   /* recipe cards + page */
   .dots { display: inline-flex; gap: 3px; vertical-align: middle; } .dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #b9c4be; display: block; } .dots i.on { background: var(--brand); border-color: var(--brand); }
   .wrow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -288,6 +297,7 @@
 
   <main id="views">
     <section class="view active" id="v-home"><div class="page">
+      <div id="installbar" hidden><div><b>Install BiteSpeed Mart</b><span id="installtxt">Add it to your home screen for quick access, even offline.</span></div><button class="btn" id="installBtn">Install</button><button class="x" id="installX" aria-label="Dismiss">✕</button></div>
       <div class="section"><h2 class="sec"><span>This week's specials</span><a id="spall">See all</a></h2><div class="row" id="h-specials"></div></div>
       <div class="section"><h2 class="sec"><span>Dinner ideas to try this week</span></h2><div class="wrow" id="h-dinner"></div></div>
       <div class="section"><h2 class="sec"><span>Recipe ideas</span></h2><div class="circs" id="h-circs"></div></div>

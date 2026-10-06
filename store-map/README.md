@@ -37,6 +37,14 @@ Each product also has a `price` (₹, **placeholder values – replace with real
 - `3A48` renamed **Fried Moong Dal** (a snack, different from raw Moong Dal 2B02).
 - Frozen codes are now `FRZ-A01 … FRZ-A25`.
 
+## Install it as an app (PWA)
+The site is an installable web app: `manifest.webmanifest`, `sw.js` (offline cache of the whole shell, data and 3D library; the assistant still needs the network) and icons in `icons/`
+(regenerate with `node scripts/make-icons.mjs`). Browsers only allow installing from **https** (or localhost), so deploy it first, e.g. on Railway:
+set the service's *Root Directory* to `store-map`, start command `npm start` (it reads `PORT`), and add `ANTHROPIC_API_KEY` for the Claude assistant.
+- **Android / Chrome / Edge:** a green "Install BiteSpeed Mart" bar appears on Home (or use the browser's install button).
+- **iPhone / Safari:** Share → Add to Home Screen (the bar shows this hint).
+After a change, bump `VERSION` in `sw.js` so installed copies refresh.
+
 ## App layout
 Bottom tabs (top menu on a computer): **Home** (this week's specials, buy again), **Shop** (aisle tiles, product grids with emoji icons,
 sorting, search), a centre **Scan** button, **Map** (3D store with route to any item) and **Trolley** (items, savings, points, checkout).

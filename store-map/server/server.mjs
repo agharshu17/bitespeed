@@ -94,8 +94,8 @@ function chatFallback(text, ctx) {
 }
 
 /* ---------- http ---------- */
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.css': 'text/css' };
-const PUBLIC = ['index.html', 'js', 'data', 'assets', 'vendor'];
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json', '.css': 'text/css' };
+const PUBLIC = ['index.html', 'sw.js', 'manifest.webmanifest', 'icons', 'js', 'data', 'assets', 'vendor'];
 http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   if (req.method === 'POST' && url.pathname === '/api/chat') {
@@ -115,5 +115,5 @@ http.createServer(async (req, res) => {
   let rel = decodeURIComponent(url.pathname).replace(/^\/+/, '') || 'index.html';
   const file = path.resolve(root, rel);
   if (!file.startsWith(root + path.sep) || !PUBLIC.includes(rel.split('/')[0]) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) return res.writeHead(404).end('Not found');
-  res.writeHead(200, { 'content-type': MIME[path.extname(file)] || 'application/octet-stream' }); fs.createReadStream(file).pipe(res);
+  res.writeHead(200, { 'content-type': MIME[path.extname(file)] || 'application/octet-stream', ...(rel === 'sw.js' || rel === 'index.html' ? { 'cache-control': 'no-cache' } : {}) }); fs.createReadStream(file).pipe(res);
 }).listen(process.env.PORT || 8000, () => console.log(`BiteSpeed Mart on http://localhost:${process.env.PORT || 8000}  (assistant: ${useClaude ? 'Claude ' + MODEL : 'offline fallback – set ANTHROPIC_API_KEY'})`));

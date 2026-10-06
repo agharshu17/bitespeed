@@ -263,6 +263,19 @@ $('checkout').onclick = openPay;
 /* ---------- assistant ---------- */
 initChat({ onAction: a => { if (a.type === 'add') add(a.code, a.qty, true); else if (a.type === 'route') locate(a.code); } });
 
+/* ---------- install as an app (PWA) ---------- */
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
+let installEvt = null;
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+let dismissed = false; try { dismissed = localStorage.getItem('bsm-install-x') === '1'; } catch {}
+function showInstall(text, canClick) { if (standalone || dismissed) return; $('installtxt').textContent = text; $('installBtn').hidden = !canClick; $('installbar').hidden = false; }
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; showInstall('Add it to your home screen for quick access, even offline.', true); });
+addEventListener('appinstalled', () => { $('installbar').hidden = true; installEvt = null; });
+$('installBtn').onclick = async () => { if (!installEvt) return; installEvt.prompt(); await installEvt.userChoice; installEvt = null; $('installbar').hidden = true; };
+$('installX').onclick = () => { $('installbar').hidden = true; try { localStorage.setItem('bsm-install-x', '1'); } catch {} };
+if (ios && !standalone) showInstall('On iPhone: tap the Share button, then “Add to Home Screen”.', false);
+
 /* ---------- boot ---------- */
 subscribe(() => { renderCart(); refreshTiles(); document.querySelectorAll('.bm').forEach(b => b.classList.toggle('on', isSaved(b.dataset.save))); const sig = state.favs.join() + '|' + Object.keys(state.bought).join() + '|' + state.saved.join(); if (view === 'home' && sig !== homeSig) renderHome(); });
 renderCart(); renderHome(); renderShop();
