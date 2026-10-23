@@ -43,6 +43,10 @@ set the service's *Root Directory* to `store-map`, start command `npm start` (it
 - **iPhone / Safari:** Share → Add to Home Screen (the bar shows this hint).
 After a change, bump `VERSION` in `sw.js` so installed copies refresh.
 
+### GitHub Pages (free, no server)
+`.github/workflows/pages.yml` publishes the app as a website on every push to `main`. One-time setup: merge this branch into `main`, then repo
+**Settings → Pages → Source: GitHub Actions**. The site appears at `https://<owner>.github.io/<repo>/` (the repo must be public on a free account); install it from there.
+
 ### Railway, step by step
 1. railway.com → **New Project → Deploy from GitHub repo** → pick `agharshu17/bitespeed`, branch `claude/practical-bohr-frok49` (or merge it into your main branch first).
 2. Open the new service → **Settings → Source → Root Directory** → `store-map` (the repo root is an unrelated Java project).
