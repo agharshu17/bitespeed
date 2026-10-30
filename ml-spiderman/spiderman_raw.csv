@@ -1,0 +1,541 @@
+incident_id,universe,spider_person,villain,incident_type,city_damage_score,civilians_affected,anomaly_detected,response_time_min,threat_level
+INC0421,Earth-928,Hobie Brown,Kingpin,Rescue,24.7,?,No,,Low
+INC0182,Earth-928,Gwen Stacy,kingpin,Villain Sighting,57.5,NIL,Yes,23.4,Medium
+INC0474,Earth-1610,pavitr prabhakar,Spot,,61.9,32,No,8.3,Medium
+INC0330,Earth-1610,Miles Morales,Spot,Dimensional Anomaly,43.7,24,Yes,20.6,Medium
+INC0174,,Peter Parker,Mysterio,Dimensional Anomaly,53.2,12,Yes,26,High
+INC0073,EARTH-42,Hobie Brown,spot,,0,24,Yes,29.2,Low
+INC0169,Earth-616,Miles Morales,Kingpin,Portal Instability,34.9,9999,Yes,22.8,Medium
+INC0190,Earth-928,Pavitr Prabhakar,,Tech Theft,44.3,38,No,1.9,Low
+INC0081,Earth-42,Miguel O'Hara,Kingpin,,23.1,23,Yes,19,Low
+INC0290,Earth 928,Peter Parker,Green Goblin,Dimensional Anomaly,0,26,Yes,15.8,Medium
+INC0407,Earth-1610,Miguel O'Hara,Venom,,30.7,26,no,9.7,Medium
+INC0479,Earth-65,Gwen Stacy,Prowler,Dimensional Anomaly,18.3,25,Yes,24,Low
+INC0030,Earth-65,Miguel O'Hara,Spot,Dimensional Anomaly,57.9,30,Yes,ten,Medium
+INC0459,Earth-616,Hobie Brown,Kingpin,Villain Sighting,22.3,,No,7,Low
+INC0491,Earth-928,Peter Parker,KINGPIN,Tech Theft,41.2,23,No,8.3,Low
+INC0407,Earth-1610,Miguel O'Hara,Venom,,30.7,26,no,9.7,Medium
+INC0212,Earth-1610,Gwen Stacy,Unknown,Villain Sighting,47.4,26,No,,Medium
+INC0431,Earth-928,Hobie Brown,doctor octopus,City Attack,35.4,29,,13.5,Low
+INC0245,Earth-616,Gwen Stacy,Spot,,30,36,No,17.1,Medium
+INC0072,Earth-616,,Prowler,Tech Theft,,27,No,1,Low
+INC0476,Earth-616,Peter Parker,Mysterio,Rescue,18.5,27,No,1.7,Low
+INC0229,earth-1610,Gwen Stacy,Kingpin,Rescue,0,36,No,99,Low
+INC0066,E-1610,HOBIE BROWN,Kingpin,Villain Sighting,9.7,27,No,unknown,High
+INC0142,Earth-928,Gwen Stacy,Doctor Octopus,Dimensional Anomaly,,29,Yes,26.5,Medium
+INC0400,Earth-616,Pavitr Prabhakar,Unknown,Tech Theft,,30,No,12 min,Low
+INC0344,Earth-1610,Peter Parker,Unknown,Tech Theft,0,12,No,21.7,Low
+INC0357,Earth-616,Hobie Brown,Green Goblin,dimensional anomaly,0,32,Yes,36.8,Low
+INC0022,Earth-42,Hobie Brown,Venom,Villain Sighting,0,27,No,12.9,Low
+INC0011,Earth-1610,HOBIE BROWN,Venom,PORTAL INSTABILITY,15.2,27,Yes,32,Medium
+INC0104,Earth-65,Miles Morales,Prowler,VILLAIN SIGHTING,12.6,23,No,14.3,Low
+INC0145,Earth-42,Peter Parker,Prowler,City Attack,46.4,31,No,6.1,Low
+INC0347,Earth-928,Pavitr Prabhakar,spot,Dimensional Anomaly,53.5,27,Yes,20.6,High
+INC0389,Earth-928,Miles Morales,Unknown,Villain Sighting,35,43,No,11.1,Medium
+INC0350,Earth-616,Miguel O'Hara,Mysterio,,27.7,39,Yes,99,Medium
+INC0045,Earth-65,Peter Parker,,Villain Sighting,0,26,No,8.2,Low
+INC0315,earth-42,Peter Parker,,City Attack,26.7,22,yes,25.2,Medium
+INC0342,Earth-616,Miles Morales,Spot,Dimensional Anomaly,2.4,26,Yes,26.5,Low
+INC0283,Earth-928,Gwen Stacy,Kingpin,Villain Sighting,48.5,34,,26.3,Medium
+INC0281,earth-42,Pavitr Prabhakar,Prowler,Tech Theft,11.5,26,No,1,Low
+INC0460,Earth-928,Pavitr Prabhakar,Mysterio,City Attack,35.1,22,Yes,27.1,Low
+INC0029,Earth-65,Hobie Brown,Spot,Rescue,52.1,32,No,1.8,Low
+INC0349,Earth-928,Miguel O'Hara,Mysterio,Villain Sighting,40.3,36,Yes,23.2,Medium
+INC0453,E-42,Pavitr  Prabhakar,The Prowler,City Attack,42.5,,No,7.7,Medium
+INC0112,earth-616,Gwen Stacy,kingpin,City Attack,24.5,unknown,No,9.4,Low
+INC0116,Earth-1610,Pavitr Prabhakar,,Tech Theft,7.3,32,N,4.1,Low
+INC0390,Earth-1610,Miles Morales,Doctor Octopus,CITY ATTACK,47.9,25,No,12.9,Low
+INC0120,Earth 928,Gwen Stacy,Prowler,Dimensional Anomaly,0,24,Yes,16.1,Low
+INC0291,Earth-65,Gwen Stacy,Venom,City Attack,25.5,22,No,14,
+INC0336,EARTH-42,Miles Morales,Unknown,Tech Theft,,25,No,14.4,Low
+INC0458,Earth-928,Gwen Stacy,Mysterio,Tech Theft,0,,No,8.5,Low
+INC0135,Earth-928,Pavitr Prabhakar,Mysterio,City Attack,50.8,36,No,12.9,Medium
+INC0114,Earth-65,Pavitr Prabhakar,The Prowler,Portal Instability,58.8,20,Yes,18.5,Medium
+INC0372,Earth-928,,Unknown,Tech Theft,9.7,28,Yes,18.6,Low
+INC0201,Earth-616,Gwen Stacy,Mysterio,Portal Instability,,30,,8.5,Medium
+INC0208,Earth-1610,Pavitr Prabhakar,Unknown,City Attack,29.1,,No,8.2,Low
+INC0051,Earth-616,Miles Morales,Doctor Octopus,Dimensional Anomaly,16.8,30,Yes,25.7,Medium
+INC0261,Earth-42,Miles Morales,Prowler,City Attack,21.4,33,Yes,17.8,Low
+INC0176,Earth 616,Hobie Brown,Doctor Octopus,Portal Instability,23.1,28,Yes,20.6,Medium
+INC0235,Earth-616,Miguel O'Hara,green goblin,Tech Theft,29.3,39,No,8.2,Medium
+INC0262,Earth-616,Hobie Brown,Mysterio,Rescue,16.9,23,No,5,Low
+INC0199,Earth-928,Spider-Punk,Unknown,Portal Instability,16.8,unknown,Yes,24.6,Low
+INC0131,Earth-42,Peter Parker,Mysterio,Rescue,25.8,32,No,9.2,Low
+INC0426,Earth-1610,Gwen Stacy,KINGPIN,Dimensional Anomaly,63,23,Yes,20.5,Medium
+INC0274,Earth 1610,Miguel O'Hara,Doctor Octopus,,12.8,25,No,13.8,Low
+INC0471,Earth-1610,Miguel O'Hara,GREEN GOBLIN,Tech Theft,0,30,No,8.9,Low
+INC0152,Earth-1610,,Green Goblin,City Attack,44.1,30,No,9.5,Medium
+INC0264,Earth-65,Gwen Stacy,Venom,City Attack,10.5,22,,,Low
+INC0462,Earth 65,Peter Parker,KINGPIN,Rescue,61.6,29,No,500,
+INC0323,Earth-928,Pavitr Prabhakar,Venom,Portal Instability,16.3,18,,22.4,Medium
+INC0422,Earth-616,Gwen Stacy,mysterio,Tech Theft,24.8,32,No,6.1,Low
+INC0178,Earth-42,Spider-Man (Miles),Mysterio,Portal Instability,23.7,27,Yes,26.3,Medium
+INC0368,Earth-616,Pavitr Prabhakar,doctor octopus,Villain Sighting,16.5,37,No,7.7,Medium
+INC0200,Earth-42,Pavitr Prabhakar,Green Goblin,Portal Instability,30.2,22,yes,17.9,Medium
+INC0084,Earth-1610,Miles Morales,Spot,Tech Theft,45.6,27,No,1,Low
+INC0248,Earth-42,Hobie Brown,Prowler,,44.6,31,Yes,unknown,Medium
+INC0191,EARTH-928,Gwen Stacy,Mysterio,Portal Instability,14.8,24,Yes,20.1,Medium
+INC0470,EARTH-928,Miguel O'Hara,Prowler,Rescue,30,29,No,5.7,Low
+INC0155,Earth-616,Miguel O'Hara,Kingpin,Rescue,5.4,32,No,7.1,
+INC0404,,Hobie Brown,unknown,Rescue,36.8,25,No,8.5,Low
+INC0487,Earth-42,Pavitr Prabhakar,Doctor Octopus,Rescue,41,32,Yes,28.6,Medium
+INC0454,earth-928,Miles Morales,Mysterio,Rescue,20.7,27,Yes,24.8,Medium
+INC0085,Earth-65,miles morales,,Portal Instability,19.7,22,Yes,17.3,Low
+INC0057,Earth-928,Pavitr Prabhakar,Spot,Portal Instability,N/A,24,yes,23.3,Medium
+INC0055,Earth-65,Gwen Stacy,MYSTERIO,Civilian Rescue,41,26,NO,5,Medium
+INC0062,Earth-42,Miles Morales,mysterio,City Attack,0,-5,No,8.9,Low
+INC0440,Earth-42,Miles Morales,Wilson Fisk,City Attack,unknown,33,Yes,24.7,Medium
+INC0286,Earth-616,Miguel O'Hara,GreenGoblin,Portal Instability,28.3,24,Yes,17.7,Medium
+INC0146,Earth-616,Miguel O'Hara,Spot,Portal Instability,21,33,Yes,19.7,Medium
+INC0122,Earth-65,pavitr prabhakar,Green Goblin,Dimensional Anomaly,14,26,Yes,23.7,Low
+INC0209,Earth-1610,Gwen Stacy,Unknown,Portal Instability,7.7,29,Yes,,Medium
+INC0040,Earth-1610,Pavitr Prabhakar,Mysterio,Portal Instability,16.7,24,Yes,18.1,Low
+INC0079,Earth-928,Peter  Parker,Mysterio,Dimensional Anomaly,17.2,24,Yes,17.3,Low
+INC0038,Earth-928,Miguel O'Hara,Spot,Villain Sighting,28.5,27,No,12,Medium
+INC0031,Earth-42,Miguel O'Hara,PROWLER,Dimensional Anomaly,27.3,31,Yes,21.5,Medium
+INC0087,Earth-65,Peter Parker,Kingpin,CITY ATTACK,,20,No,6.8,Low
+INC0006,Earth-928,Miguel O'Hara,Mysterio,Portal Instability,40.4,35,Yes,,Medium
+INC0465,Earth-1610,Miles Morales,Venom,Rescue,8.9,27,No,3.1,Low
+INC0453,E-42,Pavitr  Prabhakar,The Prowler,City Attack,42.5,,No,7.7,Medium
+INC0166,Earth-928,Pavitr Prabhakar,Venom,City Attack,,38,No,-3,Medium
+INC0376,Earth-616,Miles Morales,Kingpin,Villain Sighting,20.2,35,No,11.4,Low
+INC0331,Earth-616,Hobie  Brown,Doctor Octopus,Dimensional Anomaly,35.6,28,Yes,8.5,Medium
+INC0355,Earth-1610,Gwen Stacy,Green Goblin,Dimensional Anomaly,25.4,25,Yes,23.7,Medium
+INC0009,Earth-616,Miles Morales,Unknown,City Attack,5.5,31,No,18.9,Low
+INC0497,Earth-1610,Gwen Stacy,Green Goblin,Villain Sighting,2.9,28,No,2.4,Low
+INC0042,Earth-1610,Spiderman,Kingpin,City Attack,48.2,30,No,9.5,Medium
+INC0192,Earth-1610,Miles Morales,green goblin,Villain Sighting,27.9,28,No,6.8,Low
+INC0149,Earth-928,Miguel O'Hara,Spot,Dimensional Anomaly,23.3,33,Yes,19.7,Medium
+INC0185,Earth-928,Hobie Brown,Prowler,Dimensional Anomaly,20.4,25,,N/A,Medium
+INC0103,Earth-1610,Miguel O'Hara,Mysterio,Portal Instability,7.4,27,,19.8,Low
+INC0466,earth-42,Miles Morales,Prowler,Tech Theft,37,28,Yes,20.4,Medium
+INC0063,,Gwen Stacy,Spot,Tech Theft,4.9,,No,999,Low
+INC0110,Earth-65,pavitr prabhakar,N/A,Tech Theft,3.2,29,No,8,Low
+INC0206,Earth-1610,Miles Morales,Venom,Tech Theft,,29,No,250,Low
+INC0236,,Gwen Stacy,Doctor Octopus,,32.5,25,Yes,27.1,Low
+INC0056,Earth-42,Peter Parker,Mysterio,Rescue,20.4,29,No,5.8,Low
+INC0219,earth-616,Gwen Stacy,Green Goblin,Rescue,15.2,24,No,,Low
+INC0449,Earth-42,Gwen Stacy,Spot,Portal Instability,25.5,14,Yes,23.3,Medium
+INC0450,Earth-928,Hobie Brown,Prowler,Unstable Portal,39.4,34,Yes,,Medium
+INC0097,Earth-42,Miguel O'Hara,Venom,Dimensional Anomaly,77.3,30,Yes,,High
+INC0024,EARTH-42,MILES MORALES,Green Goblin,Tech Theft,64.8,32,No,1,Medium
+INC0386,Earth-65,Hobie  Brown,Mysterio,Rescue,,34,Yes,24.9,
+INC0016,Earth 928,Miguel O'Hara,Doctor Octopus,City Attack,46.1,22,Yes,13.4,High
+INC0378,Earth-65,Miles Morales,kingpin,Tech Theft,2.1,24,No,5.8,Low
+INC0367,Earth-42,,Spot,Villain Sighting,76.3,26,Yes,16.1,Medium
+INC0105,Earth-928,Gwen Stacy,,City Attack,13.5,19,No,,Low
+INC0477,Earth-1610,Hobie Brown,Doctor Octopus,Rescue,1.5,29,No,1,Low
+INC0243,Earth 65,Pavitr Prabhakar,Venom,Villain Sighting,85 points,31,No,2,Medium
+INC0002,Earth-1610,Peter Parker,Unknown,Villain Sighting,15.8,22,No,2.4,Low
+INC0204,Earth-616,Pavitr Prabhakar,Kingpin,City Attack,28.4,41,No,9.9,Medium
+INC0480,Earth-65,Miles  Morales,,Tech Theft,0,-10,No,,Low
+INC0435,Earth-1610,Miguel O'Hara,Unknown,Villain Sighting,65.1,34,No,unknown,High
+INC0092,Earth-1610,Miguel O'Hara,mysterio,City Attack,6.5,25,No,9.5,Low
+INC0350,Earth-616,Miguel O'Hara,Mysterio,,27.7,39,Yes,24.5,Medium
+INC0375,EARTH-65,Gwen Stacy,Green Goblin,Rescue,58.2,33,No,6.5,Medium
+INC0008,Earth-42,Miles Morales,Green Goblin,Unstable Portal,4.8,20,Yes,19.6,Low
+INC0480,Earth-65,Miles  Morales,,Tech Theft,0,-10,No,,Low
+INC0500,E-616,Peter Parker,Spot,Tech Theft,25,43,No,9.3,Medium
+INC0356,Earth-65,Spiderman,,Rescue,11.2,25,No,11.6,Low
+INC0247,Earth-928,Hobie Brown,Spot,Tech Theft,26.9,24,No,8.1,Low
+INC0276,Earth-1610,Hobie Brown,Mysterio,City Attack,21.5,29,Yes,14.3,Medium
+INC0161,Earth-928,Miguel O'Hara,Unknown,,55.5,28,Yes,27.3,Medium
+INC0234,Earth-1610,gwen stacy,Spot,Villain Sighting,0,23,Yes,8.5,Low
+INC0240,Earth-928,Spider-Man (Miles),Venom,Rescue,6.6,26,No,1,Medium
+INC0237,Earth-1610,Hobie Brown,,Dimensional Anomaly,15.8,29,Yes,24.4,Low
+INC0280,earth-616,Miguel O'Hara,Spot,Rescue,6.8,29,No,15.3,Low
+INC0383,Earth-42,Pavitr  Prabhakar,Spot,Tech Theft,31.7,29,No,1,Low
+INC0211,Earth-42,Miles Morales,Doctor Octopus,Tech Theft,50.3,33,Nope,3.9,Moderate
+INC0310,Earth-616,Peter Parker,Mysterio,CITY ATTACK,25.6,27,,2.8,Low
+INC0411,earth-65,Miguel O'Hara,GREEN GOBLIN,,85 points,28,No,8.1,Low
+INC0244,Earth-65,Peter Parker,Unknown,,39.7,30,No,2.4,Medium
+INC0266,Earth-928,,Spot,Dimensional Anomaly,15.3,49,Yes,31.2,Medium
+INC0303,Earth-42,Hobie Brown,Venom,Unstable Portal,4.7,23,Y,24.4,Medium
+INC0401,,Miguel O'Hara,Unknown,Portal Instability,29.5,39,Yes,30.2,High
+INC0007,Earth-1610,Miles Morales,Unknown,City Attack,48.4,24,Yes,22.4,Low
+INC0187,Earth-616,Peter  Parker,Unknown,Villain Sighting,31.8,21,,2.3,Low
+INC0443,Earth-928,Miguel O'Hara,Spot,Dimensional Anomaly,39.3,19,Yes,16.9,Medium
+INC0388,Earth-1610,Peter Parker,Prowler,RESCUE,0.5,22,Yes,21.9,Low
+INC0144,,pavitr prabhakar,Green Goblin,Dimensional Anomaly,,29,Yes,20.3,Medium
+INC0139,Earth-1610,Pavitr Prabhakar,Doctor Octopus,Rescue,46.9,32,No,3,Low
+INC0012,Earth-1610,miles morales,Unknown,Dimensional Anomaly,,28,Yes,26,Medium
+INC0237,Earth-1610,Hobie Brown,,Dimensional Anomaly,15.8,29,Yes,24.4,Medium
+INC0423,Earth-1610,Hobie Brown,Prowler,Rescue,6,31,Yes,16.4,Low
+INC0256,Earth 65,Miguel O'Hara,Mysterio,Portal Instability,29.8,35,Yes,23.3,Medium
+INC0488,Earth-928,Pavitr Prabhakar,Spot,Villain Sighting,15.4,23,No,11.1,medium
+INC0358,Earth-65,pavitr prabhakar,Mysterio,Dimensional Anomaly,4.2,28,Yes,26.7,Low
+INC0158,Earth-928,Gwen Stacy,Wilson Fisk,City Attack,25,22,Yes,25.6,Medium
+INC0269,Earth 65,Gwen Stacy,mysterio,Portal Instability,26.4,37,Yes,24.9,Medium
+INC0100,Earth-42,Miguel O'Hara,Green Goblin,Dimensional Anomaly,0,23,Yes,28.6,Medium
+INC0134,Earth-65,Pavitr Prabhakar,Doctor Octopus,dimensional anomaly,46.2,20,Yes,23.4,Medium
+INC0159,Earth-42,Peter Parker,Mysterio,Villain Spotted,35.8,23,No,17.5,Low
+INC0043,EARTH-65,Miguel O'Hara,Unknown,Dimensional Anomaly,30.6,24,Yes,28.8,Medium
+INC0351,Earth-928,Miles Morales,Unknown,Villain Sighting,37.4,26,Yes,13.5,Medium
+INC0041,Earth-42,Hobie Brown,N/A,Rescue,8.7,?,Nope,3.8,Low
+INC0019,Earth-1610,Spider-Man India,Mysterio,Dimensional Anomaly,0,25,Yes,28.9,Low
+INC0412,Earth-65,Hobie Brown,Unknown,Dimensional Anomaly,4.6,33,Yes,16.1,Low
+INC0456,Earth-616,Gwen Stacy,Unknown,Dimensional Anomaly,,33,Yes,-3,medium
+INC0013,earth-1610,Gwen Stacy,Venom,Portal Instability,17.9,25,Yes,18.7,Medium
+INC0197,Earth-42,Miguel OHara,,Portal Instability,16.3,23,Yes,ten,Low
+INC0101,EARTH-42,MIGUEL O'HARA,Prowler,Rescue,6.6,,No,10.9,Low
+INC0483,Earth-928,Gwen Stacy,Green Goblin,City Attack,3.7,19,Yes,19.9,Low
+INC0319,,Pavitr Prabhakar,Prowler,Villain Sighting,37.7,29,,8,Low
+INC0207,Earth-42,Miguel O'Hara,Mysterio,Dimensional Anomaly,42.5,23,Yes,17.9,High
+INC0255,Earth-1610,Miguel O'Hara,,tech theft,49.2,29,No,10.4,Low
+INC0434,Earth-42,miguel o'hara,Doctor Octopus,villain sighting,12.3,34,Yes,30.2,Medium
+INC0452,Earth-1610,miguel o'hara,Doctor Octopus,RESCUE,999,31,No,8.4,Low
+INC0408,Earth-1610,Peter Parker,KINGPIN,Tech Theft,37.6,30,No,4,Low
+INC0263,Earth-928,Miles  Morales,The Spot,City Attack,,25,No,12.3,Medium
+INC0115,Earth-616,Pavitr  Prabhakar,Mysterio,Portal Instability,12.9,34,,25.8,Medium
+INC0058,Earth-42,Pavitr Prabhakar,Green Goblin,Villain Sighting,18.4,32,NO,8.5,Low
+INC0205,Earth-1610,Spider-Punk,Venom,Portal Instability,-12,,Yes,24.7,Medium
+INC0437,Earth-65,Miles Morales,Wilson Fisk,Portal Instability,37.5,28,Yes,24.5,Low
+INC0004,Earth-1610,Pavitr Prabhakar,Prowler,VILLAIN SIGHTING,38.6,32,No,1,Low
+INC0451,Earth-42,Peter Parker,Spot,Villain Sighting,0,23,No,7,Low
+INC0401,,Miguel O'Hara,Unknown,Portal Instability,29.5,39,Yes,30.2,High
+INC0301,,Pavitr Prabhakar,The Prowler,City Attack,58.9,27,no,,MEDIUM
+INC0307,Earth-928,Hobie Brown,Mysterio,Dimensional Anomaly,33.6,26,Y,26.2,Low
+INC0128,Earth-65,Miles Morales,GREEN GOBLIN,City Attack,10.9,9999,N,1.5,Low
+INC0446,Earth-1610,Peter Parker,Kingpin,Villain Sighting,33.4,,No,9.4,Low
+INC0155,Earth-616,Miguel O'Hara,Kingpin,Rescue,5.4,32,No,7.1,
+INC0157,Earth-42,Gwen Stacy,Unknown,City Attack,14.3,,Yes,23.7,Low
+INC0285,Earth-1610,Pavitr Prabhakar,Doctor Octopus,Villain Sighting,seventy,34,Yes,31.2,Low
+INC0132,Earth-42,MILES MORALES,Unknown,City Attack,28.9,24,Yes,26.1,Low
+INC0221,Earth-1610,Peter Parker,Mysterio,Rescue,25.1,25,,24.3,Low
+INC0333,Earth-928,Peter Parker,Unknown,City Attack,N/A,29,No,3.7,Low
+INC0332,Earth-928,Peter Parker,Mysterio,Dimensional Anomaly,6.6,30,Yes,29.6,Medium
+INC0137,Earth-42,Pavitr Prabhakar,Prowler,Portal Instability,21.6,29,Yes,unknown,Medium
+INC0032,Earth-616,Miles  Morales,Mysterio,City Attack,30.1,27,No,6.8,Medium
+INC0077,Earth-928,Pavitr Prabhakar,Spot,City Attack,20.5,24,Yes,20.4,Medium
+INC0405,Earth-42,Miguel O'Hara,Doctor Octopus,Tech Theft,59.1,30,,,Medium
+INC0398,EARTH-42,Hobie Brown,Mysterio,Rescue,15.4,20,No,12.2,Low
+INC0313,earth-616,,Unknown,Dimensional Anomaly,15,36,Yes,29.9,High
+INC0455,Earth-1610,,Unknown,Dimensional Anomaly,13,25,Yes,24.1,Medium
+INC0300,EARTH-65,Hobie Brown,Prowler,Portal Instability,32.9,21,Yes,21.2,Medium
+INC0127,Earth-928,Spiderman,,Portal Instability,76.8,30,Yes,19.2,High
+INC0259,Earth-928,Pavitr Prabhakar,Prowler,Portal Instability,10.5,28,Yes,13.7,Low
+INC0231,Earth-65,Miles Morales,Doctor Octopus,Tech Theft,29.7,31,Yes,25.9,Medium
+INC0262,Earth-616,Hobie Brown,Mysterio,Rescue,16.9,23,No,5,Low
+INC0185,Earth-928,Hobie Brown,Prowler,Dimensional Anomaly,20.4,25,,N/A,Medium
+INC0492,EARTH-1610,PETER PARKER,Green Goblin,DIMENSIONAL ANOMALY,38.3,24,Yes,18.8,Low
+INC0429,Earth-616,,Spot,Portal Instability,,20,Yes,24.5,Medium
+INC0173,Earth-616,Miguel O'Hara,Prowler,Rescue,0,25,No,8.8,Low
+INC0380,Earth-42,Hobie Brown,Kingpin,Rescue,40.5,35,yes,31.6,Medium
+INC0108,Earth-42,PAVITR PRABHAKAR,Doctor Octopus,City Attack,12.6,24,Yes,23.9,Low
+INC0017,earth-928,Pavitr Prabhakar,,Portal Instability,85 points,32,Yes,17,Medium
+INC0327,Earth-1610,Gwen Stacy,The Prowler,Rescue,22,29,No,1,Low
+INC0088,Earth-65,Miles Morales,unknown,rescue,27.8,,No,7,Low
+INC0306,,Hobie Brown,Doc Ock,Dimensional Anomaly,28.2,34,Yes,17,Medium
+INC0496,Earth-1610,Miguel O'Hara,,Dimensional Anomaly,40.9,27,Yes,25.5,High
+INC0226,Earth-928,Miguel O'Hara,,City Attack,,28,No,12 min,Medium
+INC0011,Earth-1610,HOBIE BROWN,Venom,PORTAL INSTABILITY,15.2,27,Yes,32,Medium
+INC0448,earth-42,Pavitr Prabhakar,Mysterio,Dimensional Anomaly,55.4,32,Yes,37.4,Medium
+INC0346,Earth-616,Miles Morales,Venom,Dimensional Anomaly,44.1,29,Nope,,Medium
+INC0428,Earth-42,Peter Parker,Kingpin,Rescue,39.4,,yes,20.6,Medium
+INC0198,Earth-65,Hobie Brown,Spot,Portal Instability,22.3,,Yes,13.8,Low
+INC0184,Earth-928,Miles Morales,Quentin Beck,Tech Theft,27.2,22,No,,Low
+INC0095,Earth-928,Gwen Stacy,Doctor Octopus,City Attack,11.8,33,Yes,27.8,Medium
+INC0337,Earth-616,Pavitr Prabhakar,venom,Tech Theft,44.4,26,No,,Medium
+INC0129,Earth-42,Gwen  Stacy,Mysterio,Dimensional Anomaly,0.9,27,Yes,22.9,Low
+INC0214,Earth-928,Pavitr Prabhakar,Venom,Dimensional Anomaly,9.2,19,Yes,29.7,Low
+INC0382,Earth-42,Pavitr Prabhakar,Prowler,City Attack,20.1,25,Yes,26.1,Medium
+INC0284,EARTH-42,Miguel O'Hara,doctor octopus,Dimensional Anomaly,47.3,29,Yes,25.9,Medium
+INC0280,earth-616,Miguel O'Hara,Spot,Rescue,6.8,29,No,15.3,Low
+INC0371,Earth-1610,Peter Parker,Mysterio,Villain Sighting,19.8,12,No,9.2,Medium
+INC0198,Earth-65,Hobie Brown,Spot,Portal Instability,22.3,,Yes,13.8,Low
+INC0415,Earth-928,Miles Morales,Venom,Villain Sighting,26,22,No,17.6,Low
+INC0359,Earth-1610,Hobie  Brown,Venom,Dimensional Anomaly,15.3,38,Yes,26.7,High
+INC0299,Earth-928,Peter Parker,Green Goblin,Tech Theft,12.1,33,No,14.4,LOW
+INC0489,Earth-616,Gwen Stacy,Mysterio,Dimensional Anomaly,23.4,NIL,Yes,18,Low
+INC0025,Earth-1610,Miguel O'Hara,Unknown,City Attack,27.8,29,,6.6,Medium
+INC0254,Earth-42,Gwen Stacy,Unknown,City Attack,28.7,NIL,NO,8.3,Low
+INC0123,Earth-928,Peter Parker,Mysterio,City Attack,33.2,24,No,,Low
+INC0447,Earth-928,Miles Morales,PROWLER,Villain Sighting,29,27,Yes,25,
+INC0328,Earth-616,Gwen Stacy,Venom,City Attack,29.8,33,No,3.1,Medium
+INC0194,EARTH-65,Miguel O'Hara,Prowler,Tech Theft,30.5,29,No,ten,Low
+INC0107,E-928,Miguel O'Hara,Green Goblin,Tech Theft,,27,Yes,29.4,Medium
+INC0435,Earth-1610,Miguel O'Hara,Unknown,Villain Sighting,65.1,34,No,500,Low
+INC0091,Earth-616,Peter Parker,,Dimensional Anomaly,28.2,?,Yes,21.4,Medium
+INC0434,Earth-42,miguel o'hara,Doctor Octopus,villain sighting,12.3,34,Yes,30.2,Medium
+INC0498,Earth-928,Hobie Brown,KINGPIN,Tech Theft,27.3,35 people,No,13.3,Low
+INC0416,Earth-65,Hobie Brown,KINGPIN,Tech Theft,16.8,32,No,7.6,Low
+INC0082,Earth-616,Miguel OHara,Venom,Tech Theft,42.7,38,No,5.4,Medium
+INC0061,Earth-1610,Miguel O'Hara,Spot,Dimensional Anomaly,31.3,24,Yes,17.8,Medium
+INC0106,Earth-928,Spider-Gwen,Venom,Technology Theft,36.2,24,N,11.3,Low
+INC0171,Earth-928,,Unknown,City Attack,41.7,23,Yes,12.4,Medium
+INC0065,Earth-928,Hobie Brown,Green Goblin,Tech Theft,21.7,26,Yes,18.6,Medium
+INC0432,Earth-928,Miguel O'Hara,prowler,tech theft,11.4,23,Yes,15.6,Medium
+INC0316,Earth-616,Gwen Stacy,Unknown,City Attack,36,37,No,9.9,Medium
+INC0075,Earth-928,Hobie  Brown,Prowler,Tech Theft,,22,No,8.2,Low
+INC0126,Earth-616,Miles Morales,Doctor Octopus,City Attack,27.8,26,No,3.9,Medium
+INC0275,Earth-65,Hobie Brown,The Spot,Rescue,29.5,43,No,7.7,Medium
+INC0348,Earth-42,Peter Parker,Green Goblin,Rescue,,,No,13.2,Low
+INC0430,Earth-616,Pavitr Prabhakar,Venom,Villain Sighting,58.4,25,No,2.4,Low
+INC0345,Earth-616,Miguel O'Hara,Mysterio,Tech Theft,6.6,26,No,,Low
+INC0444,Earth-1610,Miguel O'Hara,MYSTERIO,Technology Theft,39.1,21,No,10.7,Low
+INC0249,Earth-1610,Peter Parker,Green Goblin,City Attack,25.8,26,No,11.8,Low
+INC0294,Earth-42,Gwen Stacy,Unknown,City Attack,40,29,No,8.3,Medium
+INC0163,Earth-65,Hobie Brown,Mysterio,City Attack,21.2,29,Yes,19.1,Medium
+INC0251,Earth-42,Hobie Brown,Prowler,City Attack,20.4,23,Yes,23.4,LOW
+INC0089,Earth-65,Gwen Stacy,Venom,Tech Theft,43.7,23,N,6,Low
+INC0053,Earth-65,Miguel O'Hara,DOC OCK,City Attack,41.7,22,No,17.8,Medium
+INC0409,Earth-1610,Gwen Stacy,Prowler,Portal Instability,6.2,25,Yes,,Low
+INC0425,Earth-65,Spider-Man (Miles),Kingpin,Dimensional Anomaly,39.9,30,Yes,20.7,Medium
+INC0322,,Peter Parker,Green Goblin,Dimensional Anomaly,16,19,Yes,23.8,Low
+INC0406,Earth-928,,Green Goblin,Rescue,49.3,24,Yes,29.1,High
+INC0469,E-616,Hobie Brown,Unknown,RESCUE,17.1,24,No,1,Low
+INC0404,,Hobie Brown,unknown,Rescue,36.8,25,No,8.5,Low
+INC0460,Earth-928,Pavitr Prabhakar,Mysterio,City Attack,35.1,22,Yes,27.1,Low
+INC0047,Earth-616,Gwen Stacy,Venom,Tech Theft,29.2,36,No,1,Moderate
+INC0374,E-65,,Mysterio,Villain Sighting,7.8,17,No,10.4,Low
+INC0472,Earth-1610,Hobie Brown,Kingpin,City Attack,24,,No,8.5,Medium
+INC0054,Earth-616,Gwen Stacy,Kingpin,dimensional anomaly,23,26,Yes,27.6,Medium
+INC0141,Earth-616,MILES MORALES,Mysterio,Dimensional Anomaly,20.7,28,Yes,21.1,Low
+INC0181,Earth-42,Miguel O'Hara,Prowler,Urban Attack,46.3,30,No,8.4,Low
+INC0005,Earth-616,Pavitr Prabhakar,Green Goblin,Dimensional Anomaly,33.8,25,Yes,23.8,Medium
+INC0443,Earth-928,Miguel O'Hara,Spot,Dimensional Anomaly,39.3,19,Yes,16.9,Medium
+INC0066,E-1610,HOBIE BROWN,Kingpin,Villain Sighting,9.7,27,No,8.8,Low
+INC0377,Earth-65,Miguel O'Hara,UNKNOWN,Villain Sighting,14,28,No,,low
+INC0170,Earth-65,Gwen Stacy,Venom,villain sighting,64.2,9999,No,,Low
+INC0305,Earth 928,Gwen Stacy,Venom,Tech Theft,39,28,Yes,15.5,Medium
+INC0361,Earth-616,MILES MORALES,Green Goblin,Tech Theft,16.8,26,no,N/A,Low
+INC0279,Earth-616,Peter Parker,Kingpin,Dimensional Anomaly,30.6,32,Yes,-7,Medium
+INC0324,EARTH-42,miguel o'hara,Doctor Octopus,Portal Instability,27.9,30,Yes,13.9,Low
+INC0027,Earth-616,Pavitr Prabhakar,doctor octopus,Dimension Breach,23,38,YES,23.7,MEDIUM
+INC0179,Earth-1610,Pavitr Prabhakar,,Portal Instability,26.3,20,Yes,18.5,Low
+INC0114,Earth-65,Pavitr Prabhakar,The Prowler,Portal Instability,58.8,20,Yes,99,Low
+INC0164,Earth-1610,Peter Parker,Venom,Portal Instability,0,28,Yes,25.5,Low
+INC0092,Earth-1610,Miguel O'Hara,mysterio,City Attack,6.5,25,No,99,High
+INC0101,EARTH-42,MIGUEL O'HARA,Prowler,Rescue,6.6,,No,10.9,Low
+INC0463,Earth-65,Gwen Stacy,Spot,,,27,No,1.4,Low
+INC0218,E-65,Peter Parker,Prowler,Portal Instability,27.5,30,Yes,27.1,Medium
+INC0338,Earth 616,Gwen Stacy,Spot,Portal Instability,44.9,34,Yes,19.6,Medium
+INC0493,Earth-616,Pavitr Prabhakar,Doctor Octopus,Rescue,34.4,30,No,12 min,Low
+INC0484,Earth 616,Hobie Brown,Spot,Villain Sighting,50.7,27,No,8.5,Medium
+INC0385,Earth-42,Miles Morales,Kingpin,Dimensional Anomaly,43.1,21,Yes,,Medium
+INC0150,Earth-42,Gwen Stacy,,City Attack,56.2,25,No,13.4,Medium
+INC0395,Earth-928,Miles Morales,Unknown,PORTAL INSTABILITY,6.3,26,Yes,20.1,Medium
+INC0309,Earth-928,Miles Morales,Venom,City Attack,32.3,25,No,12.8,Low
+INC0299,Earth-928,Peter Parker,Green Goblin,Tech Theft,12.1,33,No,14.4,High
+INC0311,Earth-1610,Spider-Gwen,Prowler,Urban Attack,25.8,26,No,,
+INC0035,earth-1610,Spiderman,Spot,rescue,14,28,No,9.2,Low
+INC0373,Earth-42,Hobie Brown,Spot,Portal Instability,3.3,29,Yes,27,Medium
+INC0111,Earth-616,Miguel O'Hara,Green Goblin,Technology Theft,44.1,28,No,4,Medium
+INC0228,Earth-616,Miles Morales,Unknown,,23.5,30,No,3.5,Low
+INC0190,Earth-928,Pavitr Prabhakar,,Tech Theft,44.3,38,No,unknown,Low
+INC0441,Earth-42,Miguel O'Hara,Green Goblin,Rescue,25.9,28,Yes,30.8,Low
+INC0163,Earth-65,Hobie Brown,Mysterio,City Attack,21.2,29,Yes,19.1,Medium
+INC0457,Earth-1610,pavitr prabhakar,Doctor Octopus,Tech Theft,19.1,25,No,9.7,Low
+INC0151,Earth-65,Pavitr Prabhakar,Venom,City Attack,16.5,21,No,2.7,Low
+INC0143,Earth-928,Miguel O'Hara,Unknown,Tech Theft,29.4,,No,1.5,Low
+INC0296,Earth-65,Peter Parker,Unknown,Dimensional Anomaly,31.5,24,YES,22.5,Medium
+INC0272,Earth-42,Gwen Stacy,Green Goblin,Portal Instability,1.8,29,Yes,20.2,Medium
+INC0396,Earth-928,Spider-Gwen,Doctor Octopus,Tech Theft,3.7,24,No,6.1,Low
+INC0001,Earth-42,Pavitr Prabhakar,Green Goblin,Villain Sighting,10.1,30,Yes,25.9,Medium
+INC0339,Earth-928,Miguel O'Hara,Green Goblin,Urban Attack,4.2,35,,21.8,Medium
+INC0304,Earth-928,Miles Morales,Spot,Tech Theft,,20,No,1,Low
+INC0175,Earth 616,MILES MORALES,,tech theft,6.9,35,No,12.5,Low
+INC0467,Earth-616,Pavitr Prabhakar,green goblin,City Attack,14.3,24,No,6.8,Medium
+INC0177,earth-65,Miguel O'Hara,Venom,Portal Instability,51.3,35 people,Yes,?,Medium
+INC0403,EARTH-928,Pavitr Prabhakar,PROWLER,Rescue,11.9,,Yes,12,Medium
+INC0302,Earth-1610,Peter Parker,Venom,Portal Instability,0,36,Yes,27.4,Medium
+INC0223,Earth-616,Hobie Brown,Green Goblin,Dimensional Anomaly,32.8,31,Yes,24,Medium
+INC0241,,Hobie Brown,Prowler,City Attack,42.3,23,,6,Low
+INC0156,Earth-65,Miguel O'Hara,Kingpin,City Attack,22.8,22,Yes,22.7,Medium
+INC0381,Earth-65,Miguel O'Hara,Mysterio,Dimensional Anomaly,18.4,29,Yes,27.4,Medium
+INC0288,Earth-1610,Gwen Stacy,Prowler,Portal Instability,0,20,Y,29.4,
+INC0445,Earth-42,Miles Morales,Unknown,Portal Instability,,32,Yes,14.9,High
+INC0186,Earth-616,Miles Morales,Kingpin,Tech Theft,36,28,no,8.8,Low
+INC0238,Earth 42,Miles Morales,Doctor Octopus,Villain Sighting,2.1,25,Yes,27.4,Medium
+INC0147,Earth-1610,Miles Morales,Prowler,Tech Theft,30.9,44,No,7.2,Low
+INC0341,Earth-65,Pavitr Prabhakar,Doctor Octopus,Rescue,unknown,21,No,1,Low
+INC0442,Earth-616,Miguel O'Hara,Doctor Octopus,Portal Instability,21.2,29,Yes,31.1,Medium
+INC0343,Earth-42,Pavitr Prabhakar,Mysterio,Portal Instability,46.3,24,Yes,29.3,medium
+INC0105,Earth-928,Gwen Stacy,,City Attack,13.5,19,No,,Low
+INC0010,Earth-42,Gwen Stacy,Kingpin,Dimensional Anomaly,15.5,23,Yes,19.4,Low
+INC0427,Earth-1610,Miles Morales,Venom,City Attack,0,29,No,9.3,Low
+INC0424,Earth-928,Pavitr Prabhakar,Unknown,Tech Theft,24.2,22,Yes,,Low
+INC0167,Earth-1610,HOBIE BROWN,Green Goblin,Villain Sighting,28.4,34,No,3.8,Low
+INC0148,Earth-1610,Miles Morales,Doctor Octopus,Rescue,20.1,22,no,?,Low
+INC0410,Earth-1610,Miguel O'Hara,green goblin,DIMENSIONAL ANOMALY,-20,18,Yes,19.9,Medium
+INC0014,Earth 928,Gwen Stacy,Mysterio,Dimensional Anomaly,16.6,28,,19.5,Medium
+INC0364,Earth-928,Gwen Stacy,Spot,tech theft,39.9,,Yes,23.8,Medium
+INC0121,Earth 616,Gwen Stacy,Unknown,DIMENSIONAL ANOMALY,2.6,24,Yes,18.8,Low
+INC0387,Earth-1610,Peter Parker,Kingpin,CITY ATTACK,39.9,20,No,7.3,Low
+INC0224,Earth-65,Pavitr Prabhakar,Unknown,Rescue,seventy,30,No,8,Medium
+INC0287,,miles morales,Mysterio,Portal Instability,33.4,24,Yes,10.7,
+INC0239,Earth-928,Peter Parker,Green Goblin,Villain Sighting,15.1,,Yes,22.4,Medium
+INC0244,Earth-65,Peter Parker,Unknown,,39.7,30,No,2.4,Medium
+INC0037,Earth-616,Gwen Stacy,Kingpin,Villain Sighting,,32,No,8.2,Low
+INC0229,earth-1610,Gwen Stacy,Kingpin,Rescue,0,36,No,12,Low
+INC0069,,Hobie Brown,Prowler,Portal Instability,55.9,35,Yes,31.3,High
+INC0233,E-928,Pavitr Prabhakar,Green Goblin,Rescue,,35,No,6.9,Medium
+INC0268,Earth-616,Miguel O'Hara,Doctor Octopus,Rescue,,29,No,,Low
+INC0353,Earth-1610,Hobie Brown,Spot,Dimensional Anomaly,18.6,20,Yes,,Low
+INC0079,Earth-928,Peter  Parker,Mysterio,Dimensional Anomaly,17.2,24,Yes,unknown,Low
+INC0282,Earth-42,Miles Morales,Unknown,City Attack,0,20,No,4.9,Low
+INC0119,Earth-42,Peter Parker,Doctor Octopus,Villain Sighting,19.2,30,No,,Medium
+INC0130,Earth-42,Miguel O'Hara,Kingpin,City Attack,1.8,23,,31.6,Low
+INC0314,Earth-1610,Hobie Brown,spot,Tech Theft,29.2,29,No,6.5,Low
+INC0083,Earth-1610,Miguel O'Hara,Kingpin,Villain Sighting,23.5,28,No,11.2,Low
+INC0180,Earth-928,Gwen Stacy,Spot,Portal Instability,24.1,21,Yes,23.9,Medium
+INC0478,EARTH-42,pavitr prabhakar,doctor octopus,Dimensional Anomaly,61.2,33,,24.3,Medium
+INC0475,Earth-616,Miles Morales,Doc Ock,City Attack,20.7,unknown,NO,,Medium
+INC0416,Earth-65,Hobie Brown,KINGPIN,Tech Theft,16.8,32,No,7.6,Low
+INC0046,Earth-616,Hobie Brown,Kingpin,Villain Sighting,17.3,27,No,12.7,Low
+INC0490,Earth-1610,Miles Morales,,Dimensional Anomaly,,16,Yes,25.3,Medium
+INC0298,EARTH-65,Hobie Brown,,City Attack,48.8,26,No,10.9,Medium
+INC0242,Earth-928,Pavitr Prabhakar,Spot,Rescue,44.8,31,Yes,25.1,Medium
+INC0482,Earth-65,Hobie Brown,Mysterio,Tech Theft,31.1,36,No,14.3,Low
+INC0193,Earth-65,Hobie Brown,Doctor Octopus,Dimensional Anomaly,46.2,35 people,Yes,16.5,Medium
+INC0225,Earth-616,Miguel O'Hara,,Portal Instability,19.8,27,Yes,22.5,Medium
+INC0154,Earth-928,Hobie Brown,unknown,Portal Instability,27.4,33,Yes,,Medium
+INC0438,Earth-42,Miguel O'Hara,Spot,Villain Spotted,?,27,,4.9,Low
+INC0363,Earth-616,Peter Parker,Prowler,Rescue,38.8,27,No,13.2,Low
+INC0188,Earth-65,Miles Morales,Venom,Tech Theft,42.3,20,No,14.3,Low
+INC0094,Earth-1610,Miguel O'Hara,Prowler,Dimensional Anomaly,25.1,28,Yes,13,Medium
+INC0369,Earth-616,MILES MORALES,,Dimensional Anomaly,13.7,-5,,30.9,Medium
+INC0124,Earth-65,Gwen Stacy,Kingpin,Rescue,-12,29,No,11.8,Low
+INC0326,Earth-928,Peter Parker,,Dimensional Anomaly,-12,26,Yes,18.3,Medium
+INC0168,Earth-616,Hobie  Brown,Spot,Tech Theft,33.8,31,No,7.3,Low
+INC0060,Earth 928,,MYSTERIO,Tech Theft,32.1,19,No,9.3,Low
+INC0049,Earth-42,,Spot,Rescue,38.2,32,No,13.3,
+INC0393,,Gwen Stacy,,Tech Theft,42.9,,No,11.6,Medium
+INC0232,Earth-928,Pavitr Prabhakar,GreenGoblin,Rescue,36.7,31,No,1,Low
+INC0394,E-616,Gwen Stacy,doctor octopus,Villain Sighting,8.3,27,No,3.4,Low
+INC0203,Earth-42,MIGUEL O'HARA,Green Goblin,CITY ATTACK,33.8,33,No,9.5,Medium
+INC0220,EARTH-65,Miguel O'Hara,Spot,Villain Sighting,72.3,31,YES,13.8,Medium
+INC0052,Earth-616,Miguel O'Hara,Venom,Rescue,32.7,27,No,10.8,Low
+INC0118,Earth-928,Pavitr Prabhakar,Venom,Dimensional Anomaly,5.8,27,Yes,27.3,Medium
+INC0317,Earth-928,Peter Parker,UNKNOWN,RESCUE,unknown,28,Yes,14.5,Low
+INC0071,Earth-42,Pavitr Prabhakar,Venom,Villain Sighting,11.8,39,Yes,,Medium
+INC0320,Earth-928,Peter Parker,,Tech Theft,30.1,40,No,5.5,Low
+INC0379,Earth-65,Miles Morales,Kingpin,Tech Theft,37.9,25,No,5.4,Low
+INC0021,Earth-928,HOBIE BROWN,,Tech Theft,,32,Yes,17.9,Medium
+INC0210,Earth-65,Miles Morales,Unknown,Dimensional Anomaly,0,28,Yes,31.2,Low
+INC0267,Earth-1610,Miles Morales,Mysterio,Rescue,,30,No,8.9,Low
+INC0064,Earth-42,Hobie Brown,The Prowler,Dimensional Anomaly,17.1,34,Yes,24.3,Medium
+INC0446,Earth-1610,Peter Parker,Kingpin,Villain Sighting,33.4,,No,unknown,Low
+INC0098,Earth-928,GWEN STACY,Venom,City Attack,48,31,No,4.7,Medium
+INC0461,Earth-1610,Pavitr Prabhakar,Prowler,Portal Instability,24.3,27,Yes,15,Medium
+INC0172,Earth-65,Miles Morales,Doctor Octopus,Dimensional Anomaly,44.6,28,Yes,21.1,Medium
+INC0273,Earth-1610,Pavitr Prabhakar,mysterio,Rescue,32,22,No,13.8,Low
+INC0329,Earth-42,Pavitr Prabhakar,Unknown,Portal Instability,,26,Yes,33.9,
+INC0384,Earth-1610,Miguel O'Hara,Kingpin,Portal Instability,27.7,22,Yes,25.1,Medium
+INC0109,Earth-928,Peter Parker,Kingpin,Rescue,28.3,32,No,2.8,Low
+INC0033,Earth-42,PAVITR PRABHAKAR,Green Goblin,,45.1,28,Yes,21.3,Medium
+INC0125,earth-616,Hobie Brown,Spot,Dimensional Anomaly,7.5,31,yes,16.6,Medium
+INC0183,Earth 616,miles morales,Mysterio,Villain Sighting,33.4,31,No,11.7,Low
+INC0257,Earth-616,Spider-Punk,Venom,CITY ATTACK,42.2,,No,3.1,Medium
+INC0099,Earth-42,Miguel O'Hara,Spot,City Attack,39.7,34,No,13.7,Low
+INC0495,Earth-42,Miguel O'Hara,Spot,Dimensional Anomaly,999,26,Yes,13.4,Medium
+INC0093,,Miles Morales,Prowler,Villain Sighting,57.8,28,No,11,Medium
+INC0039,Earth-1610,Hobie Brown,Prowler,City Attack,27.9,35,,10.8,Medium
+INC0133,Earth-1610,Hobie Brown,Doctor Octopus,Villain Sighting,33.9,30,No,13.2,Low
+INC0096,Earth-928,Hobie Brown,Mysterio,RESCUE,39.5,29,No,,Low
+INC0494,Earth-65,,Prowler,Rescue,32.6,30,No,10,Low
+INC0354,Earth-1610,Miguel O'Hara,Kingpin,Portal Instability,50.1,30,Yes,27,Medium
+INC0036,Earth-1610,Peter Parker,Green Goblin,City Attack,27.5,2500,No,9.2,Medium
+INC0265,Earth-928,Miles Morales,Prowler,Villain Sighting,999,19,No,8.4,Low
+INC0340,Earth-616,Spider-Punk,Kingpin,Dimensional Anomaly,27.7,,Yes,24.6,Medium
+INC0420,Earth-928,Miles Morales,,VILLAIN SIGHTING,25.5,32,Yes,20.5,Medium
+INC0086,Earth-1610,Hobie Brown,Kingpin,Rescue,,24,No,,Medium
+INC0370,,Miguel O'Hara,Mysterio,Villain Sighting,32.7,36,No,9,Medium
+INC0215,Earth-928,,Spot,Dimensional Anomaly,50.7,28,Nope,19.7,Medium
+INC0270,Earth-928,Miguel O'Hara,Kingpin,Tech Theft,20.8,24,No,14.6,Low
+INC0419,Earth-42,Gwen Stacy,Green Goblin,rescue,23.6,32,Yes,-3,Medium
+INC0402,Earth-1610,Peter Parker,Doctor Octopus,,6.9,19,No,5.6,Low
+INC0222,Earth-928,Hobie Brown,Mysterio,Tech Theft,39.5,22,No,12.4,Medium
+INC0230,E-928,Miles Morales,Kingpin,Dimensional Anomaly,18.1,21,Yes,26.8,
+INC0034,Earth-928,Peter Parker,Spot,Dimensional Anomaly,34.7,twenty,Yes,25.1,Low
+INC0278,Earth-65,Gwen Stacy,Mysterio,Urban Attack,60,32,No,7,Low
+INC0196,Earth-65,Gwen Stacy,Doctor Octopus,Portal Instability,20.1,36,Yes,,Medium
+INC0433,Earth-42,Peter Parker,Spot,rescue,17.8,32,Yes,22.5,Medium
+INC0216,E-42,Miles Morales,Venom,Rescue,38.1,18,Yes,27.3,Medium
+INC0425,Earth-65,Spider-Man (Miles),Kingpin,Dimensional Anomaly,39.9,30,Yes,20.7,Medium
+INC0365,Earth-42,Hobie  Brown,,Villain Sighting,13.2,,Yes,,Medium
+INC0360,EARTH-616,Hobie Brown,Mysterio,,?,33,Yes,23.4,Medium
+INC0271,Earth-1610,Peter Parker,The Prowler,Dimensional Anomaly,32.7,35,Yes,27.3,Medium
+INC0069,,Hobie Brown,Prowler,Portal Instability,55.9,35,Yes,31.3,High
+INC0068,Earth-616,Hobie Brown,Spot,Villain Sighting,1.8,26,Nope,5.8,Low
+INC0070,Earth-616,Gwen Stacy,DOC OCK,Portal Instability,14.1,twenty,Yes,20.5,Low
+INC0090,Earth-928,Pavitr Prabhakar,Kingpin,City Attack,24.6,32,Yes,17.9,Medium
+INC0003,Earth-1610,Gwen Stacy,Green Goblin,Rescue,35.5,31,No,8.2,Low
+INC0020,Earth-65,Peter Parker,Doctor Octopus,Tech Theft,60.2,30,Yes,28.1,Medium
+INC0068,Earth-616,Hobie Brown,Spot,Villain Sighting,1.8,26,Nope,5.8,Low
+INC0189,Earth-1610,Miles  Morales,Unknown,Dimensional Anomaly,42.9,27,Yes,,Medium
+INC0113,EARTH-928,Gwen Stacy,Prowler,Villain Sighting,3,31,Yes,23.7,Low
+INC0308,Earth-65,Gwen Stacy,Spot,City Attack,29.8,29,No,17.1,Medium
+INC0417,Earth-616,Miguel O'Hara,Venom,City Attack,25.6,29,No,13.4,Medium
+INC0253,EARTH-1610,Miguel O'Hara,GREEN GOBLIN,Villain Sighting,7.9,28,,3.2,Low
+INC0335,Earth-65,Gwen Stacy,Unknown,City Attack,1.3,-5,,12.3,Low
+INC0054,Earth-616,Gwen Stacy,Kingpin,dimensional anomaly,23,26,Yes,99,Low
+INC0044,Earth-928,Miles Morales,Unknown,Portal Instability,10.9,23,Yes,19.7,Low
+INC0399,Earth-42,Miguel O'Hara,Unknown,tech theft,31.3,32,Yes,23.9,Medium
+INC0321,Earth-928,Miles Morales,Mysterio,CITY ATTACK,13.7,23,Yes,8.1,Medium
+INC0354,Earth-1610,Miguel O'Hara,Kingpin,Portal Instability,50.1,30,Yes,27,Medium
+INC0067,Earth-928,Gwen Stacy,Venom,Portal Instability,31.8,27,Yes,17.7,Medium
+INC0162,E-928,Miguel O'Hara,Doctor Octopus,City Attack,18.4,22,No,14.6,low
+INC0213,Earth-928,Miles Morales,Doctor Octopus,Villain Sighting,13.7,26,No,4,Low
+INC0485,,Hobie Brown,mysterio,Dimensional Anomaly,49.8,19,Yes,31.7,Medium
+INC0165,E-928,Peter Parker,UNKNOWN,City Attack,39.6,27,No,15.5,Medium
+INC0318,Earth-616,Miguel O'Hara,Mysterio,City Attack,38.6,,no,9.5,Low
+INC0277,Earth-1610,Miles Morales,,Portal Instability,40.1,26,Yes,24.3,Medium
+INC0195,EARTH-1610,Hobie Brown,Green Goblin,City Attack,,30,No,19.2,Low
+INC0486,Earth-616,Peter Parker,THE SPOT,City Attack,36.7,27,No,7,medium
+INC0499,Earth-1610,HOBIE BROWN,,City Attack,14.1,,no,4.7,Low
+INC0392,Earth-1610,Gwen Stacy,Unknown,Villain Sighting,65,27,Yes,23.9,Low
+INC0015,Earth-1610,Gwen Stacy,Doctor Octopus,tech theft,34.2,9999,No,6.9,Medium
+INC0252,Earth-928,Miguel O'Hara,Doctor Octopus,Dimensional Anomaly,24.8,24,Yes,32.5,Low
+INC0397,Earth-65,Peter Parker,Mysterio,Rescue,44.9,30,Nope,5.8,Low
+INC0171,Earth-928,,Unknown,City Attack,41.7,23,Yes,12.4,Medium
+INC0140,Earth-928,Pavitr Prabhakar,,Villain Sighting,8.6,40,No,10.6,Medium
+INC0076,Earth-616,Gwen Stacy,Spot,City Attack,15.4,23,No,10.1,Medium
+INC0080,Earth-1610,Miguel O'Hara,Doctor Octopus,Rescue,2.2,26,Yes,25.7,Low
+INC0473,Earth-616,GWEN STACY,Doctor Octopus,Dimensional Anomaly,18.9,21,Yes,27.1,Medium
+INC0023,Earth-65,Pavitr Prabhakar,Prowler,Tech Theft,45.1,23,No,N/A,Minor
+INC0059,Earth 42,Miles Morales,Mysterio,Tech Theft,23.6,22,Yes,24.6,Low
+INC0102,Earth-1610,Gwen Stacy,Venom,Villain Sighting,7.2,29,No,10.8,Low
+INC0366,Earth 616,Pavitr  Prabhakar,,Tech Theft,4.6,25,No,7.7,low
+INC0289,Earth-42,Pavitr Prabhakar,prowler,DIMENSIONAL ANOMALY,49.2,24,Yes,27.5,Medium
+INC0003,Earth-1610,Gwen Stacy,Green Goblin,Rescue,35.5,31,No,99,Low
+INC0074,Earth-42,HOBIE BROWN,N/A,City Attack,,25,No,19.2,Low
+INC0260,Earth-928,Hobie Brown,Mysterio,,7.1,twenty,Yes,18.6,Low
+INC0312,Earth-65,Gwen Stacy,Green Goblin,Portal Instability,9.5,18,Yes,34,
+INC0160,Earth-1610,Miguel O'Hara,Unknown,Portal Instability,42.1,,yes,23.8,Medium
+INC0217,Earth-65,Peter Parker,,Rescue,23.3,31,Yes,19.9,Low
+INC0292,Earth-928,Miles Morales,Wilson Fisk,Dimensional Anomaly,39.9,33,Yes,22.8,Medium
+INC0227,Earth-616,Pavitr Prabhakar,Spot,City Attack,12.5,29,No,1,Low
+INC0468,Earth-1610,Hobie Brown,Prowler,Tech Theft,11.1,17,No,7.1,Low
+INC0050,Earth-616,Miguel O'Hara,Doctor Octopus,Tech Theft,seventy,27,No,14.2,Minor
+INC0153,Earth-928,Spider-Punk,Green Goblin,Dimensional Anomaly,56.2,23,Yes,24.5,Medium
+INC0138,Earth-42,Hobie Brown,spot,City Attack,,27,No,?,Low
+INC0422,Earth-616,Gwen Stacy,mysterio,Tech Theft,24.8,32,No,6.1,Low
+INC0482,Earth-65,Hobie Brown,Mysterio,Tech Theft,31.1,36,No,14.3,Low
+INC0293,EARTH-928,Miles Morales,,Rescue,35.9,31,Yes,15.5,Medium
+INC0246,EARTH-616,Peter  Parker,Doctor Octopus,Tech Theft,46.4,21,Yes,26.7,Medium
+INC0297,Earth-616,Peter Parker,,Rescue,12.1,28,No,11.7,Low
+INC0250,Earth-616,Miles Morales,Green Goblin,City Attack,N/A,34,No,6.4,Low
+INC0352,Earth-928,Miles Morales,Mysterio,Dimensional Anomaly,52.3,29,Yes,22.8,Medium
+INC0362,Earth-928,Hobie Brown,Green Goblin,Rescue,45.9,37,No,12.8,Medium
+INC0414,Earth-616,Gwen Stacy,green goblin,Portal Instability,31.8,28,Yes,17.5,LOW
+INC0464,Earth-42,HOBIE BROWN,Doctor Octopus,Villain Sighting,52.3,34,No,15.4,Medium
+INC0048,Earth-928,Peter Parker,Venom,Rescue,130,20,Nope,21.6,Low
+INC0117,Earth-1610,Gwen Stacy,Prowler,Villain Sighting,28.6,26,,13.7,low
+INC0202,EARTH-65,Hobie Brown,Mysterio,Rescue,33.1,23,No,2.4,Low
+INC0018,Earth-1610,Peter Parker,Green Goblin,Tech Theft,18.4,25,No,5.5,Low
+INC0325,Earth-928,Peter Parker,Venom,,60.1,22,Yes,500,Low
+INC0026,Earth-65,Pavitr Prabhakar,Green Goblin,City Attack,14.6,31,No,unknown,Low
+INC0295,Earth-65,Miles Morales,Spot,Villain Sighting,7.4,40,No,13.4,Low
+INC0418,Earth-1610,Gwen  Stacy,Prowler,Tech Theft,?,29,No,13.6,Low
+INC0136,Earth-928,Peter Parker,Mysterio,Portal Instability,21,23,Yes,22.6,Medium
+INC0481,Earth-616,Peter Parker,Prowler,Tech Theft,36.5,29,No,2.7,Low
+INC0028,Earth-42,HOBIE BROWN,venom,Dimensional Anomaly,32.6,33,Yes,21.6,Medium
+INC0439,Earth-1610,Peter Parker,,Villain Sighting,43.6,29,No,12.8,Medium
+INC0029,Earth-65,Hobie Brown,Spot,Rescue,52.1,32,No,1.8,Medium
+INC0436,Earth-928,Miguel OHara,Kingpin,Dimensional Anomaly,42.5,26,Yes,24.2,Low
+INC0413,Earth-42,Miguel O'Hara,Mysterio,Villain Sighting,22.5,33,No,8.4,Low
+INC0334,Earth-928,Pavitr Prabhakar,Doctor Octopus,portal instability,37.6,33,Yes,21.4,Low
+INC0078,Earth-65,Hobie Brown,PROWLER,,38.9,25,No,5.5,Low
+INC0391,Earth-1610,Gwen Stacy,Venom,Rescue,999,32,No,5.3,Medium
+INC0258,Earth-42,Pavitr Prabhakar,Wilson Fisk,Villain Sighting,24.5,25,Yes,31.4,Low
