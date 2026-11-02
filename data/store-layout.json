@@ -1,0 +1,22 @@
+{
+  "_readme": "Coordinates are in pixels of assets/floorplan.png (the original floor plan). x grows right, y grows down. The 3D viewer converts 10 px = 1 world unit. 'facing' is the side shoppers pick items from; 'walk' is the walkway line (x for left/right facing, y for down facing) used for cart routing.",
+  "map": { "width": 1016, "height": 690, "originX": 14, "originY": 10, "image": "assets/floorplan.png" },
+  "doors": {
+    "cart":  { "label": "Cart Bay", "rect": { "x": 18,  "y": 614, "w": 304, "h": 86 }, "color": "#8a8f98" },
+    "entry": { "label": "Entry",    "rect": { "x": 359, "y": 649, "w": 289, "h": 51 }, "color": "#27b24f" },
+    "exit":  { "label": "Exit",     "rect": { "x": 719, "y": 647, "w": 279, "h": 53 }, "color": "#27b24f" }
+  },
+  "sections": [
+    { "id": "seafood",       "number": "1", "label": "Seafood",          "icon": "🐟", "rect": { "x": 16,  "y": 115, "w": 91,  "h": 375 }, "facing": "right", "walk": 175, "tiers": 3, "cols": 5,  "color": "#6c8ebf", "fridge": true },
+    { "id": "aisle-2A",      "number": "2A","label": "Aisle 2A",        "icon": "🌾", "rect": { "x": 223, "y": 108, "w": 42,  "h": 376 }, "facing": "left",  "walk": 175, "tiers": 5, "cols": 10, "color": "#b87a56", "blurb": "Rice, flours, sugar, salt, spices, seeds" },
+    { "id": "aisle-2B",      "number": "2B","label": "Aisle 2B",        "icon": "🥜", "rect": { "x": 280, "y": 111, "w": 47,  "h": 370 }, "facing": "right", "walk": 372, "tiers": 5, "cols": 10, "color": "#b87a56", "blurb": "Dals, nuts, cereals, spreads, baking" },
+    { "id": "aisle-3A",      "number": "3A","label": "Aisle 3A",        "icon": "🍿", "rect": { "x": 445, "y": 109, "w": 51,  "h": 371 }, "facing": "left",  "walk": 372, "tiers": 5, "cols": 10, "color": "#b87a56", "blurb": "Chips, namkeen, biscuits, cookies" },
+    { "id": "aisle-3B",      "number": "3B","label": "Aisle 3B",        "icon": "🍝", "rect": { "x": 501, "y": 107, "w": 46,  "h": 372 }, "facing": "right", "walk": 595, "tiers": 5, "cols": 10, "color": "#b87a56", "blurb": "Noodles, pasta, sauces, soups, pickles" },
+    { "id": "aisle-4A",      "number": "4A","label": "Aisle 4A",        "icon": "🥤", "rect": { "x": 639, "y": 111, "w": 52,  "h": 366 }, "facing": "left",  "walk": 595, "tiers": 5, "cols": 10, "color": "#b87a56", "blurb": "Tea, coffee, juices, soft drinks, water" },
+    { "id": "aisle-4B",      "number": "4B","label": "Aisle 4B",        "icon": "🍫", "rect": { "x": 695, "y": 110, "w": 52,  "h": 368 }, "facing": "right", "walk": 820, "tiers": 5, "cols": 10, "color": "#b87a56", "blurb": "Chocolates, candy, bars, cakes, bread" },
+    { "id": "bakery",        "number": "5", "label": "Bakery",          "icon": "🥐", "rect": { "x": 894, "y": 115, "w": 134, "h": 368 }, "facing": "left",  "walk": 820, "tiers": 4, "cols": 10, "color": "#8a0017" },
+    { "id": "frozen",        "number": "6A","label": "Frozen",          "icon": "❄️", "rect": { "x": 115, "y": 15,  "w": 207, "h": 42  }, "facing": "down",  "walk": 85,  "tiers": 5, "cols": 5,  "color": "#9ad8ec", "fridge": true },
+    { "id": "fruits-greens", "number": "6B","label": "Fruits & Greens", "icon": "🍎", "rect": { "x": 322, "y": 15,  "w": 373, "h": 42  }, "facing": "down",  "walk": 85,  "tiers": 5, "cols": 5,  "color": "#9ad8ec" },
+    { "id": "dairy",         "number": "6C","label": "Dairy",           "icon": "🥛", "rect": { "x": 695, "y": 15,  "w": 235, "h": 42  }, "facing": "down",  "walk": 85,  "tiers": 5, "cols": 5,  "color": "#9ad8ec", "fridge": true }
+  ]
+}

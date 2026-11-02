@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12905a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BiteSpeed">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>BiteSpeed Mart</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2312905a'/%3E%3Cpath d='M12 18h6l5 22h24l5-16H21' fill='none' stroke='white' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='48' r='3.5' fill='white'/%3E%3Ccircle cx='44' cy='48' r='3.5' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --brand: #12905a; --brand-dark: #0c6f45; --accent: #12905a; --deal: #d92d20;
+    --ink: #1f2a37; --muted: #667085; --bg: #f3f6f4; --card: #ffffff; --line: rgba(31,42,55,.10);
+    --tabh: 64px; color-scheme: light;
+  }
+  [hidden] { display: none !important; }
+  * { box-sizing: border-box; }
+  input { color: var(--ink); background: #fff; -webkit-text-fill-color: var(--ink); }
+  input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink);
+    font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+  button { font: inherit; color: inherit; }
+  #app { height: 100%; display: flex; flex-direction: column; }
+
+  /* header */
+  #top { order: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); background: var(--brand); color: #fff; }
+  .brand { font-weight: 800; font-size: 17px; white-space: nowrap; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  #gsearch { flex: 1; min-width: 0; padding: 10px 14px; border-radius: 999px; border: 0; font: inherit; font-size: 14px; outline: none; }
+  #ptsChip { border: 0; background: rgba(255,255,255,.18); color: #fff; border-radius: 999px; padding: 8px 12px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
+
+  /* views */
+  #views { order: 2; flex: 1; position: relative; min-height: 0; }
+  .view { position: absolute; inset: 0; overflow-y: auto; display: none; -webkit-overflow-scrolling: touch; }
+  .view.active { display: block; }
+  #v-map.active { overflow: hidden; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 16px 16px 28px; }
+  h2.sec { margin: 6px 0 10px; font-size: 18px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  h2.sec a, .linkbtn { color: var(--brand-dark); font-size: 13px; font-weight: 700; cursor: pointer; background: none; border: 0; padding: 0; }
+  .section { margin-bottom: 22px; }
+  .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 16px; padding: 18px; color: var(--muted); font-size: 13px; text-align: center; width: 100%; }
+
+  /* product tiles */
+  .row { display: flex; gap: 12px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x proximity; }
+  .row .tile { flex: none; width: 158px; scroll-snap-align: start; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 10px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .art { height: 96px; border-radius: 13px; display: grid; place-items: center; font-size: 46px; position: relative; }
+  .badge { z-index: 2; position: absolute; left: 6px; top: 6px; background: var(--deal); color: #fff; font-size: 10px; font-weight: 800; border-radius: 6px; padding: 2px 6px; max-width: 70%; }
+  .fav { z-index: 2; position: absolute; right: 5px; top: 5px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(255,255,255,.85); color: #b8c0cc; font-size: 15px; cursor: pointer; display: grid; place-items: center; padding: 0; }
+  .fav.on { color: #e5484d; }
+  .tn { font-weight: 700; font-size: 13px; line-height: 1.25; min-height: 33px; overflow-wrap: anywhere; }
+  .loc { align-self: flex-start; border: 0; background: none; color: var(--muted); font-size: 11px; padding: 0; cursor: pointer; text-align: left; }
+  .loc:hover { color: var(--brand-dark); text-decoration: underline; }
+  .tp { font-size: 15px; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  .was { color: var(--muted); font-weight: 500; font-size: 11px; } .now { font-weight: 800; }
+  .ctl { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 4px; }
+  .ctl button { border: 0; background: var(--brand); color: #fff; border-radius: 10px; min-width: 34px; height: 34px; font-weight: 800; font-size: 16px; cursor: pointer; }
+  .ctl .addbtn { width: 100%; font-size: 13px; }
+  .ctl span { font-weight: 800; }
+
+  /* shop */
+  #shopbar { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  #shopbar h2 { margin: 0; font-size: 20px; flex: 1; }
+  #shopback { border: 1px solid var(--line); background: #fff; border-radius: 10px; width: 36px; height: 36px; cursor: pointer; font-size: 16px; }
+  #sort { border: 1px solid var(--line); border-radius: 10px; padding: 8px; font: inherit; font-size: 13px; background: #fff; color: var(--ink); }
+  .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .cat { border: 0; border-radius: 18px; padding: 16px 12px; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-height: 112px; }
+  .cat .ce { font-size: 38px; line-height: 1; } .cat b { font-size: 15px; } .cat small { color: var(--muted); font-size: 12px; }
+
+  #installbar { display: flex; align-items: center; gap: 12px; background: #ecfaf3; border: 1px solid #bfe6d2; border-radius: 16px; padding: 12px 14px; margin-bottom: 16px; }
+  #installbar div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; } #installbar span { font-size: 12px; color: var(--muted); }
+  #installbar .x { border: 0; background: none; font-size: 16px; color: var(--muted); cursor: pointer; padding: 4px; }
+  /* recipe cards + page */
+  .dots { display: inline-flex; gap: 3px; vertical-align: middle; } .dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #b9c4be; display: block; } .dots i.on { background: var(--brand); border-color: var(--brand); }
+  .wrow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 899px) { .wrow { display: flex; overflow-x: auto; scroll-snap-type: x proximity; } .wrow .wcard { flex: none; width: 300px; scroll-snap-align: start; } }
+  .wcard { display: flex; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; cursor: pointer; text-align: left; padding: 0; min-height: 150px; }
+  .wcard .wimg { width: 42%; flex: none; position: relative; background: #eef2ef; } .wcard .wimg img, .wcard .wimg .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .wcard .wbody { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; } .wcard .wbody > b { font-size: 15px; line-height: 1.25; }
+  .wfacts { display: flex; gap: 14px; flex-wrap: wrap; } .fx { display: flex; flex-direction: column; gap: 2px; } .fx small { font-size: 11px; color: var(--muted); } .fx b { font-size: 15px; } .fx .dots { margin-top: 4px; }
+  .est { align-self: flex-start; font-size: 12px; background: #f1f4f2; border-radius: 6px; padding: 3px 8px; margin-top: auto; }
+  .circs { display: flex; gap: 18px; overflow-x: auto; padding: 4px 2px 8px; }
+  .circ { flex: none; width: 112px; border: 0; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; text-align: center; line-height: 1.2; }
+  .circ .cimg { position: relative; width: 112px; height: 112px; border-radius: 50%; overflow: hidden; background: #e8eeea; border: 3px solid #fff; box-shadow: 0 0 0 1px var(--line); } .circ img, .circ .ph { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .prow { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; }
+  .pcard { flex: none; width: 210px; position: relative; cursor: pointer; scroll-snap-align: start; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .pcard .pimg { height: 150px; position: relative; background: #eef2ef; } .pcard .pimg img, .pcard .pimg .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .pcard .pb { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; } .pcard .pb b { font-size: 14px; line-height: 1.25; } .pcard .pm { font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+  .bm { position: absolute; right: 8px; top: 8px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); cursor: pointer; display: grid; place-items: center; color: var(--ink); z-index: 2; padding: 0; }
+  .bm svg { width: 18px; height: 18px; } .bm.on { color: var(--brand); } .bm.on svg { fill: currentColor; }
+  #recipepage { max-width: 1000px; }
+  .rback { border: 0; background: none; color: var(--brand-dark); font-weight: 700; cursor: pointer; padding: 4px 0 8px; font-size: 14px; }
+  .rtitle { text-align: center; font-size: 26px; margin: 6px 0 4px; line-height: 1.2; } .rsub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  .rhero { border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 5; background: #eef2ef; position: relative; } .rhero img, .rhero .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; } .rhero .ph svg { width: 56px; height: 56px; }
+  @media (max-width: 899px) { .rhero { aspect-ratio: 4 / 3; } }
+  .rfacts { display: flex; align-items: center; gap: 26px; padding: 12px 18px; margin: -14px 12px 20px; position: relative; box-shadow: 0 6px 18px rgba(31,42,55,.08); flex-wrap: wrap; }
+  .rfacts .racts { margin-left: auto; display: flex; gap: 8px; } .rfacts .bm { position: static; box-shadow: none; background: #f1f4f2; }
+  .rcols { display: grid; grid-template-columns: 1fr; gap: 18px; } @media (min-width: 900px) { .rcols { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .rcols h3 { margin: 0 0 10px; font-size: 20px; }
+  .servrow { display: flex; align-items: center; justify-content: space-between; padding: 6px 0 12px; border-bottom: 1px solid var(--line); font-weight: 700; font-size: 14px; }
+  .stepper { display: flex; align-items: center; gap: 12px; } .stepper button { width: 36px; height: 36px; border-radius: 10px; border: 0; background: #eef2ef; font-size: 18px; cursor: pointer; }
+  .ing { display: grid; grid-template-columns: auto 1fr auto; gap: 2px 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .ing input { width: 20px; height: 20px; accent-color: var(--brand); } .ing .in { font-weight: 700; } .ing .ia { color: var(--muted); font-size: 12px; } .ing .ip { text-align: right; font-size: 13px; } .ing.off { opacity: .45; } .ing .dl { grid-column: 2 / -1; font-size: 11px; }
+  .ing-main { display: flex; align-items: center; min-width: 0; }
+  .radd-wrap { position: sticky; bottom: 8px; padding-top: 12px; } .radd-wrap .btn { width: 100%; padding: 14px; font-size: 15px; box-shadow: 0 8px 20px rgba(18,144,90,.35); }
+  .extras { margin-top: 12px; padding: 10px 12px; background: #f7f9f8; border-radius: 12px; font-size: 13px; } .extras span { color: var(--muted); } .extras b { color: var(--ink); } .extras ul { list-style: none; margin: 6px 0 0; padding: 0; } .extras li { display: flex; justify-content: space-between; padding: 3px 0; border-top: 1px dashed var(--line); } .extras li:first-child { border-top: 0; }
+  .pantry-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .step { margin-bottom: 12px; } .step small { font-weight: 700; font-size: 13px; display: block; margin-bottom: 6px; } .step p { margin: 0; font-size: 14px; line-height: 1.55; }
+  .rdesc { font-size: 14px; line-height: 1.55; color: #3c4756; margin: 0 0 18px; }
+
+  /* recipes */
+  .chips { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 2px; }
+  .chips .chip { background: #fff; padding: 7px 13px; font-size: 13px; }
+  .chips .chip.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .rgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .rcard { border: 1px solid var(--line); background: var(--card); border-radius: 20px; overflow: hidden; text-align: left; cursor: pointer; padding: 0; display: flex; flex-direction: column; }
+  .remo { position: absolute; inset: 0; display: grid; place-items: center; font-size: 60px; }
+  .circ .remo { font-size: 46px; } .rhero .remo { font-size: 96px; } .wcard .remo { font-size: 54px; }
+  .rcard .rtop { height: 104px; display: grid; place-items: center; font-size: 54px; }
+  .rcard .rbody { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .rcard b { font-size: 15px; } .rcard .rmeta { font-size: 12px; color: var(--muted); } .rcard .rblurb { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; background: #ecfaf3; color: var(--brand-dark); border-radius: 6px; padding: 2px 7px; margin-right: 4px; }
+  #recipe, #credits { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; z-index: 22; align-items: flex-end; justify-content: center; }
+  #recipe.show, #credits.show { display: flex; }
+  #recipe .sheet, #credits .sheet { background: #fff; width: min(640px, 100%); max-height: 94vh; overflow-y: auto; border-radius: 22px 22px 0 0; position: relative; }
+  @media (min-width: 900px) { #recipe, #credits { align-items: center; } #recipe .sheet, #credits .sheet { border-radius: 22px; max-height: 90vh; } }
+  #creditsbox { padding: 18px 20px 24px; } #creditsbox h3 { margin: 0 0 6px; } #creditsbox p { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 12px; } #creditsbox ul { list-style: none; padding: 0; margin: 0; font-size: 12px; } #creditsbox li { padding: 6px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 10px; } #creditsbox a { color: var(--brand-dark); }
+  #recipe .rhead { padding: 26px 20px 16px; text-align: center; position: relative; }
+  #recipe .rhead .big { font-size: 60px; line-height: 1; }
+  #recipe .rhead h3 { margin: 8px 0 4px; font-size: 22px; } #recipe .rhead p { margin: 0; color: var(--muted); font-size: 13px; }
+  #recipe .rclose { position: absolute; right: 12px; top: 12px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.9); cursor: pointer; font-size: 16px; }
+  #recipe .rbody { padding: 4px 20px 20px; }
+  .facts { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .fact { background: rgba(255,255,255,.75); border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 700; }
+  .servrow { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); font-weight: 700; }
+  .stepper { display: flex; align-items: center; gap: 12px; } .stepper button { width: 32px; height: 32px; border-radius: 10px; border: 1px solid var(--line); background: #fff; font-size: 17px; cursor: pointer; }
+  .ing { display: grid; grid-template-columns: auto 1fr auto; gap: 2px 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .ing input { width: 20px; height: 20px; accent-color: var(--brand); }
+  .ing .in { font-weight: 700; } .ing .ia { color: var(--muted); font-size: 12px; } .ing .ip { text-align: right; font-size: 13px; }
+  .ing.off { opacity: .45; }
+  .ing .dl { grid-column: 2 / -1; font-size: 11px; }
+  #recipe ol { padding-left: 20px; margin: 8px 0 0; } #recipe ol li { margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+  #recipe h4 { margin: 18px 0 6px; font-size: 15px; }
+  .rfoot { position: sticky; bottom: 0; background: #fff; padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); display: flex; gap: 10px; align-items: center; }
+  .rfoot .btn { flex: 1; }
+  .pantry-note { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  /* photos */
+  .ic { width: 16px; height: 16px; vertical-align: -3px; flex: none; }
+  .logo { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: rgba(255,255,255,.2); } .logo svg { width: 19px; height: 19px; }
+  #ptsChip { display: flex; align-items: center; gap: 5px; } #ptsChip svg { width: 15px; height: 15px; color: #ffd166; }
+  .art { height: 96px; border-radius: 13px; overflow: hidden; display: block; }
+  .emo { position: absolute; inset: 0; display: grid; place-items: center; font-size: 46px; }
+  .th .emo { font-size: 22px; } .th { background: transparent; position: relative; }
+  .ph { width: 100%; height: 100%; display: grid; place-items: center; color: #a9b8b0; background: linear-gradient(145deg, #f4f7f5, #e7eeea); border-radius: 12px; }
+  .ph svg { width: 38px; height: 38px; stroke-width: 1.5; }
+  .fav svg { width: 15px; height: 15px; } .fav.on svg { fill: currentColor; }
+  .loc .ic { width: 12px; height: 12px; vertical-align: -2px; }
+  .th { width: 40px; height: 40px; border-radius: 10px; overflow: hidden; flex: none; display: inline-block; vertical-align: middle; margin-right: 9px; border: 1px solid var(--line); background: #fff; }
+  .th img, .th .ph { width: 100%; height: 100%; object-fit: contain; border-radius: 0; } .th .ph svg { width: 20px; height: 20px; }
+  .line .n { display: flex; align-items: center; }
+  .ing-main { display: flex; align-items: center; min-width: 0; }
+  .cat { background: #fff; border: 1px solid var(--line); min-height: 0; padding: 10px 10px 12px; }
+  .collage { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; aspect-ratio: 16 / 10; margin-bottom: 8px; border-radius: 12px; overflow: hidden; background: #f4f7f5; }
+  .collage img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+  .collage.ph1 { display: grid; place-items: center; color: #a9b8b0; } .collage.ph1 svg, .collage.rc > svg { width: 34px; height: 34px; justify-self: center; align-self: center; grid-column: 1 / -1; }
+  .rcard .rtop { overflow: hidden; } .rcard .rtop img { width: 100%; height: 100%; object-fit: cover; } .rcard .rtop svg { width: 42px; height: 42px; color: #9aa7a0; }
+  #recipe .rhead { padding: 0 0 14px; } #recipe .rhead .hero { width: 100%; height: 200px; object-fit: cover; display: block; border-radius: 22px 22px 0 0; }
+  #recipe .rhead .big svg { width: 54px; height: 54px; color: #9aa7a0; } #recipe .rhead .big { padding-top: 26px; }
+  #recipe .rhead h3, #recipe .rhead p, #recipe .facts { padding: 0 20px; }
+  .ok .tick svg { width: 54px; height: 54px; color: #15803d; stroke-width: 2.4; } .ok p svg { width: 14px; height: 14px; color: #e0a800; }
+  #flash svg { width: 14px; height: 14px; color: #15803d; stroke-width: 3; }
+  .credits { font-size: 12px; color: var(--muted); text-align: center; margin-top: 18px; } .credits button { color: var(--brand-dark); background: none; border: 0; cursor: pointer; font: inherit; text-decoration: underline; }
+
+  /* trolley */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+  #scanrow { display: flex; gap: 8px; margin-bottom: 12px; }
+  #scan { flex: 1; min-width: 0; padding: 11px 13px; border-radius: 12px; border: 1.5px solid var(--line); font: inherit; font-size: 14px; outline: none; }
+  #scan:focus, #gsearch:focus { box-shadow: 0 0 0 3px rgba(18,144,90,.25); }
+  .btn { border: 0; background: var(--brand); color: #fff; border-radius: 12px; padding: 10px 16px; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .iconbtn { width: 50px; flex: none; display: grid; place-items: center; padding: 0; }
+  .iconbtn svg { width: 22px; height: 22px; }
+  .payrow { display: flex; gap: 8px; margin-top: 12px; }
+  #lines { display: flex; flex-direction: column; gap: 8px; }
+  .line { display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; font-size: 14px; padding: 10px 12px; border-radius: 14px; background: #fff; border: 1px solid var(--line); }
+  .line .n { font-weight: 700; cursor: pointer; } .line .c { color: var(--muted); font-size: 12px; }
+  .line .deal-row { grid-column: 1 / -1; font-size: 12px; }
+  .qty { display: flex; align-items: center; gap: 8px; justify-content: flex-end; font-weight: 700; }
+  .qty button { width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 15px; line-height: 1; }
+  .tot { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); padding: 3px 0; }
+  .tot.big { font-size: 20px; font-weight: 800; color: var(--ink); }
+  .tot.save { color: #15803d; font-weight: 700; }
+  #usepts { display: flex; gap: 8px; align-items: center; font-size: 13px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 8px 10px; margin: 6px 0; }
+  .red { color: var(--deal); font-weight: 700; } .green { color: #15803d; font-weight: 700; }
+  #cartgrid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { #cartgrid { grid-template-columns: 1.4fr 1fr; align-items: start; } }
+
+  /* map */
+  #mapwrap { position: absolute; inset: 0; touch-action: none; }
+  #maptop { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 8px; pointer-events: none; z-index: 2; }
+  #maptop > * { pointer-events: auto; }
+  #mapchips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .chip { flex: none; border: 1px solid var(--line); background: rgba(255,255,255,.92); border-radius: 999px; padding: 6px 11px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+  .chip:hover { border-color: var(--brand); }
+  #tools { display: flex; gap: 6px; align-self: flex-end; }
+  #tools button { border: 1px solid var(--line); background: rgba(255,255,255,.92); border-radius: 10px; padding: 7px 11px; font-size: 12px; cursor: pointer; }
+  #tools button.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+  #zoom { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 3; }
+  #zoom button { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.95); font-size: 24px; line-height: 1; cursor: pointer; box-shadow: 0 4px 12px rgba(31,42,55,.15); color: var(--ink); }
+  #zoom button:active { background: #eef2ef; }
+  #info { position: absolute; left: 12px; bottom: 12px; width: min(380px, calc(100% - 24px)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; display: none; z-index: 3; box-shadow: 0 10px 30px rgba(31,42,55,.15); }
+  #info.show { display: block; }
+  #info .t { font-size: 16px; font-weight: 800; display: flex; justify-content: space-between; gap: 8px; }
+  #info .m { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.55; }
+  #info .acts { display: flex; gap: 8px; margin-top: 10px; }
+  #info .acts button { padding: 8px 12px; font-size: 13px; }
+
+  /* tabs */
+  #tabs { order: 3; display: flex; justify-content: space-around; align-items: flex-end; height: var(--tabh); padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); box-sizing: content-box; background: #fff; border-top: 1px solid var(--line); z-index: 6; }
+  #tabs button { border: 0; background: none; font-size: 11px; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 10px; position: relative; cursor: pointer; flex: 1; max-width: 120px; }
+  #tabs button svg { width: 23px; height: 23px; }
+  #tabs button.on { color: var(--brand); }
+  #tabs .scanfab { flex: none; background: var(--brand); color: #fff; width: 62px; height: 62px; max-width: none; border-radius: 50%; margin-top: -24px; justify-content: center; box-shadow: 0 8px 20px rgba(18,144,90,.45); border: 4px solid #fff; }
+  #tabs .scanfab svg { width: 27px; height: 27px; }
+  #tabs .badge2 { position: absolute; top: -1px; right: 18px; background: var(--deal); color: #fff; border-radius: 999px; font-size: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
+  @media (min-width: 900px) {
+    #tabs { order: 1; height: auto; padding: 0 16px; justify-content: center; gap: 4px; border-top: 0; border-bottom: 1px solid var(--line); }
+    #tabs button { flex-direction: row; gap: 7px; font-size: 14px; padding: 12px 18px; max-width: none; flex: none; border-bottom: 3px solid transparent; }
+    #tabs button.on { border-bottom-color: var(--brand); }
+    #tabs button svg { width: 20px; height: 20px; }
+    #tabs .scanfab { width: auto; height: auto; border-radius: 12px; margin: 6px 10px; padding: 8px 16px; border: 0; box-shadow: none; flex-direction: row; }
+    #tabs .scanfab svg { width: 20px; height: 20px; }
+    #tabs .scanfab::after { content: 'Scan'; font-size: 14px; }
+    #tabs .badge2 { right: 4px; top: 6px; }
+  }
+
+  /* overlays */
+  #cam { position: fixed; inset: 0; background: rgba(15,20,28,.8); display: none; place-items: center; z-index: 20; }
+  #cam.show { display: grid; } #cam .box { background: #fff; border-radius: 18px; padding: 14px; width: min(440px, 92vw); text-align: center; }
+  #cam video { width: 100%; border-radius: 12px; background: #000; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  .vwrap { position: relative; border-radius: 12px; overflow: hidden; }
+  .reticle { position: absolute; left: 14%; right: 14%; top: 34%; height: 24%; border: 2px solid rgba(255,255,255,.85); border-radius: 12px; box-shadow: 0 0 0 999px rgba(0,0,0,.25); pointer-events: none; }
+  #camstat { font-size: 13px; color: var(--muted); margin: 8px 0; min-height: 36px; } #camstat b { color: var(--ink); }
+  #camrow { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; } #camrow label.btn { display: inline-block; }
+  #pay { position: fixed; inset: 0; background: rgba(15,20,28,.55); display: none; place-items: center; z-index: 25; }
+  #pay.show { display: grid; }
+  #pay .box { background: #fff; border-radius: 20px; padding: 20px; width: min(420px, 92vw); max-height: 90vh; overflow: auto; }
+  #pay h3 { margin: 0 0 10px; } .methods { display: flex; gap: 8px; margin: 12px 0; } .methods button { flex: 1; padding: 12px 6px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; font-size: 13px; cursor: pointer; }
+  .methods button.on { border-color: var(--brand); background: #ecfaf3; font-weight: 700; }
+  .rline { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .ok { text-align: center; } .ok .tick { font-size: 46px; }
+  #flash { position: fixed; left: 50%; top: 70px; transform: translateX(-50%); background: #15803d; color: #fff; padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: 13px; z-index: 30; opacity: 0; transition: opacity .25s; pointer-events: none; width: max-content; max-width: 88vw; text-align: center; }
+  #flash.show { opacity: 1; }
+  #flash.deal { border-radius: 16px; background: #fff; color: var(--ink); border: 1px solid #f7c6c2; box-shadow: 0 8px 24px rgba(31,42,55,.18); line-height: 1.45; }
+  #tip { position: fixed; pointer-events: none; padding: 6px 10px; border-radius: 10px; background: rgba(31,42,55,.92); color: #fff; font-size: 12px; line-height: 1.4; display: none; transform: translate(12px, 12px); z-index: 5; white-space: nowrap; }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); font-weight: 700; color: var(--muted); z-index: 40; transition: opacity .5s; }
+  #loading.hide { opacity: 0; pointer-events: none; }
+
+  @media (max-width: 899px) {
+    #info { right: 12px; width: auto; }
+    .brand span { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="loading">Stocking the shelves…</div>
+
+<div id="app">
+  <header id="top">
+    <div class="brand" id="brand"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2.5l2.2 11h10.6l2-8H6.5"/></svg></span><span>BiteSpeed Mart</span></div>
+    <input id="gsearch" type="search" placeholder="Search products or codes…" autocomplete="off" aria-label="Search products">
+    <button id="ptsChip" title="Reward points"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></svg><span id="ptsval">0</span></button>
+  </header>
+
+  <main id="views">
+    <section class="view active" id="v-home"><div class="page">
+      <div id="installbar" hidden><div><b>Install BiteSpeed Mart</b><span id="installtxt">Add it to your home screen for quick access, even offline.</span></div><button class="btn" id="installBtn">Install</button><button class="x" id="installX" aria-label="Dismiss">✕</button></div>
+      <div class="section"><h2 class="sec"><span>This week's specials</span><a id="spall">See all</a></h2><div class="row" id="h-specials"></div></div>
+      <div class="section"><h2 class="sec"><span>Dinner ideas to try this week</span></h2><div class="wrow" id="h-dinner"></div></div>
+      <div class="section"><h2 class="sec"><span>Recipe ideas</span></h2><div class="circs" id="h-circs"></div></div>
+      <div class="section"><h2 class="sec"><span>Popular recipes</span></h2><div class="prow" id="h-popular"></div></div>
+      <div class="section" id="h-saved-sec" hidden><h2 class="sec"><span>Your saved recipes</span></h2><div class="prow" id="h-saved"></div></div>
+      <div class="section"><h2 class="sec"><span>Buy again</span></h2><div class="row" id="h-again"></div></div>
+    </div></section>
+
+    <section class="view" id="v-shop"><div class="page">
+      <div id="shopbar"><button id="shopback" hidden aria-label="Back to aisles">←</button><h2 id="shoptitle">Shop by aisle</h2>
+        <select id="sort" hidden aria-label="Sort"><option value="default">Sort: Default</option><option value="deals">Specials first</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="az">Name A–Z</option></select></div>
+      <div id="shopbody"></div>
+    </div></section>
+
+    <section class="view" id="v-map">
+      <div id="mapwrap"></div>
+      <div id="maptop">
+        <div id="tools"><button id="b-rotate">⟳ Auto-rotate</button><button id="b-top">⬒ Top view</button><button id="b-reset">⌂ Reset</button></div>
+        <div id="mapchips"></div>
+      </div>
+      <div id="zoom"><button id="z-in" aria-label="Zoom in">+</button><button id="z-out" aria-label="Zoom out">−</button></div>
+      <div id="info">
+        <div class="t"><span id="i-name"></span><span id="i-code" style="font-size:12px;color:var(--brand)"></span></div>
+        <div class="m" id="i-meta"></div>
+        <div class="acts"><button class="btn" id="i-add">+ Add to trolley</button><button class="btn ghost" id="i-clear">Clear route</button></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-recipe"><div class="page" id="recipepage"></div></section>
+
+    <section class="view" id="v-cart"><div class="page"><div id="cartgrid">
+      <div class="card">
+        <h2 class="sec" style="margin-top:0"><span>My trolley <small id="ccount" style="color:var(--muted);font-weight:600;font-size:13px"></small></span><button class="linkbtn" id="cclear">Clear</button></h2>
+        <div id="scanrow"><input id="scan" placeholder="Type barcode or item code…" autocomplete="off" inputmode="text"><button class="btn" id="scanAdd">Add</button></div>
+        <div id="lines"></div>
+      </div>
+      <div class="card">
+        <div class="tot"><span>Subtotal</span><span id="csub">₹0</span></div>
+        <div class="tot save" id="csaverow" hidden><span>Specials savings</span><span id="csave">−₹0</span></div>
+        <label id="usepts" hidden><input type="checkbox" id="usepts-cb"><span id="usepts-t"></span></label>
+        <div class="tot big"><span>Total</span><span id="ctot">₹0</span></div>
+        <div class="tot" style="font-size:12px"><span>Prices include GST</span><span id="cgst"></span></div>
+        <div class="tot" style="font-size:12px"><span>Points earned on this shop</span><span id="cearn"></span></div>
+        <div class="payrow"><button class="btn iconbtn" id="camBtn" title="Scan items with the camera" aria-label="Scan items with the camera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button><button class="btn" id="checkout" disabled style="flex:1">Checkout</button></div>
+        <button class="btn ghost" id="route" disabled style="width:100%;margin-top:8px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7"/></svg> Plan my route</button>
+      </div>
+    </div></div></section>
+  </main>
+
+  <nav id="tabs" aria-label="Main">
+    <button data-go="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</button>
+    <button data-go="shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Shop</button>
+    <button id="n-scan" class="scanfab" aria-label="Scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h1.5l1.2-1.6A1 1 0 0 1 9.5 4h5a1 1 0 0 1 .8.4L16.5 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg></button>
+    <button data-go="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Map</button>
+    <button data-go="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2.5l2.2 11h10.6l2-8H6.5"/></svg>Trolley<span class="badge2" id="nbadge" hidden>0</span></button>
+  </nav>
+</div>
+
+
+<div id="cam"><div class="box"><div class="vwrap"><video id="camv" playsinline muted></video><div class="reticle"></div></div><div id="camstat">Point the camera at a product barcode</div><div id="camrow"><label class="btn ghost" for="camfile" style="cursor:pointer">Take / choose photo</label><input id="camfile" type="file" accept="image/*" capture="environment" hidden><button class="btn" id="camClose">Done</button></div></div></div>
+<div id="pay"><div class="box" id="paybox"></div></div>
+<div id="flash"></div>
+<div id="tip"></div>
+
+<script src="vendor/zxing.min.js"></script>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

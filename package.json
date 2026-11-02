@@ -1,0 +1,14 @@
+{
+  "name": "bitespeed-store-map",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/server.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
